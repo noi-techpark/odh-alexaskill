@@ -1,46 +1,30 @@
 {
   "deploy_settings": {
     "default": {
-      "skill_id": "amzn1.ask.skill.ab340a06-74aa-444d-882b-a12d80bf89c9",
+      "skill_id": "amzn1.ask.skill.9ecc7aed-47f9-401f-a91c-cc0c4943918a",
       "was_cloned": false,
-      "merge": {
-        "manifest": {
-          "apis": {
-            "custom": {
-              "endpoint": {
-                "uri": "ask-custom-odh-va-default"
-              }
-            }
-          }
-        }
-      },
+      "merge": {},
       "resources": {
         "manifest": {
-          "eTag": "6b5321eabe536418ede252caf94c6c8c"
+          "eTag": "c7f2141dbf8eabf907292d400799c6d2"
         },
         "interactionModel": {
           "de-DE": {
-            "eTag": "7118b1aa8112d1835e21234ab49d7221"
+            "eTag": "8f45d2d59f991fa95dd9d9176ad648a0"
           }
         },
         "lambda": [
           {
-            "arn": "arn:aws:lambda:us-east-1:985174267190:function:ask-custom-odh-va-default",
-            "functionName": "arn:aws:lambda:us-east-1:985174267190:function:ask-custom-odh-va-default",
-            "awsRegion": "us-east-1",
             "alexaUsage": [
               "custom/default"
             ],
-            "revisionId": "d79ba469-778f-43b6-8db9-4cd835ea8703"
-          },
-          {
-            "arn": "arn:aws:lambda:us-east-1:049823840226:function:ask-custom-odh-va-default",
-            "functionName": "arn:aws:lambda:us-east-1:049823840226:function:ask-custom-odh-va-default",
-            "awsRegion": "us-east-1",
-            "alexaUsage": [
-              "custom/default"
-            ],
-            "revisionId": "ebc0d43e-1184-4ed2-b67a-d60025ac4703"
+            "arn": "arn:aws:lambda:eu-west-1:450729012604:function:ask-odh-voice-assistant",
+            "awsRegion": "eu-west-1",
+            "codeUri": "dist/custom",
+            "functionName": "ask-odh-voice-assistant",
+            "handler": "index.handler",
+            "revisionId": "79be4a27-47c8-4712-9534-c8050ac793cf",
+            "runtime": "nodejs8.10"
           }
         ]
       }

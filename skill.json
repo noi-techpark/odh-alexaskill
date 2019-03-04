@@ -21,7 +21,8 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "sourceDir": "dist/custom"
+          "sourceDir": "dist/custom",
+          "uri": "ask-odh-voice-assistant"
         }
       }
     },

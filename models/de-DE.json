@@ -1,41 +1,71 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "open data hub",
-      "types": [
-
-      ],
-      "intents": [
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": [
-
-          ]
-        },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": [
-
-          ]
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": [
-
-          ]
-        },
-        {
-          "name": "HelloWorldIntent",
-          "slots": [
-
-          ],
-          "samples": [
-            "hello",
-            "say hello",
-            "say hello world"
-          ]
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "data hub",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [],
+                    "samples": [
+                        "hello",
+                        "say hello",
+                        "say hello world"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "EventIntent",
+                    "slots": [
+                        {
+                            "name": "period",
+                            "type": "AMAZON.DATE"
+                        }
+                    ],
+                    "samples": [
+                        "Welche Events sind {period}",
+                        "Welche Veranstaltungen sind in meiner Nähe",
+                        "Welche Events sind in meiner Nähe"
+                    ]
+                },
+                {
+                    "name": "PharmacyIntent",
+                    "slots": [
+                        {
+                            "name": "starttime",
+                            "type": "AMAZON.TIME"
+                        },
+                        {
+                            "name": "endtime",
+                            "type": "AMAZON.TIME"
+                        },
+                        {
+                            "name": "period",
+                            "type": "AMAZON.DATE"
+                        }
+                    ],
+                    "samples": [
+                        "Welche Apotheken haben {period} geöffnet",
+                        "Welche Apotheken sind in meiner Nähe",
+                        "Welche Apotheken haben  von {starttime} bis {endtime} geöffnet"
+                    ]
+                }
+            ],
+            "types": []
         }
-      ]
     }
-  }
 }
