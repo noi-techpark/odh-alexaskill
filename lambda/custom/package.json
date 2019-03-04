@@ -9,13 +9,18 @@
   "author": "IDM Südtirol",
   "license": "MIT",
   "dependencies": {
+    "amazon-date-parser": "^0.2.0",
     "ask-sdk-core": "^2.3.0",
     "ask-sdk-model": "^1.11.2",
+    "dateformat": "^3.0.3",
+    "es6-promise": "^4.2.6",
     "i18next": "^11.3.5",
-    "i18next-sprintf-postprocessor": "^0.2.2"
+    "i18next-sprintf-postprocessor": "^0.2.2",
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.19",
+    "@types/dateformat": "^3.0.0",
     "@types/i18next": "^12.1.0",
     "@types/i18next-sprintf-postprocessor": "0.0.29",
     "@types/node": "^11.10.4",

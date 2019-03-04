@@ -1,7 +1,9 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest, services } from "ask-sdk-model";
-import { RequestTypes } from "./constants";
+import { RequestTypes, ApiUrl, AuthToken } from "./constants";
 import * as Interface from "./../interfaces";
+import "isomorphic-fetch";
+
 /**
  * Checks if the request matches any of the given intents.
  * 
@@ -180,7 +182,7 @@ export function GetSlotValues(filledSlots?: Interface.ISlots): Interface.ISlotVa
                         const valueWrappers = filledSlots[item].resolutions!.resolutionsPerAuthority![0].values;
 
                         if (valueWrappers.length > 1) {
-                          
+
                             slotValues[name] = {
                                 name,
                                 value: value || "",
@@ -229,3 +231,22 @@ export function GetSlotValues(filledSlots?: Interface.ISlots): Interface.ISlotVa
 
     return slotValues;
 }
+
+/*
+* Make an api request to the desired route
+* @param route
+*/
+export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> => {
+    try {
+        let response = await fetch(`${ApiUrl}/api/${route.url}`, {
+            "headers": {
+                "Authorization": `Bearer ${AuthToken}`,
+                "Content-Type": "application/json"
+            }
+        });
+        response = await response.json();
+        route.onSuccess(response);
+    } catch (error) {
+        route.onError(error);
+    }
+};

@@ -16,8 +16,8 @@ export const strings: Resource = {
                 "Frage mich nach einem Restaurant in der Nähe, der nächstgelegenen, geöffneten Apotheke oder nach Einkaufsgeschäften."
             ],
             GOODBYE_MSG: [
-                "Tschüss, bis zum nächsten Mal.",
-                "Servus, bis zum nächsten Mal"
+                "Tschüss, bis zum nächsten Mal. Dein Team von IDM Südtirol.",
+                "Servus, bis zum nächsten Mal. Dein Team von IDM Südtirol."
             ],
             ERROR_MSG: "Sorry, I can't understand the command. Please say again.",
             ERROR_UNEXPECTED_MSG: "Sorry, an unexpected error has occured. Please try again later.",

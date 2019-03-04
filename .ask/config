@@ -10,7 +10,7 @@
         },
         "interactionModel": {
           "de-DE": {
-            "eTag": "8f45d2d59f991fa95dd9d9176ad648a0"
+            "eTag": "5e78673d77c6ee435cbebe4f5f179763"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "dist/custom",
             "functionName": "ask-odh-voice-assistant",
             "handler": "index.handler",
-            "revisionId": "79be4a27-47c8-4712-9534-c8050ac793cf",
+            "revisionId": "110a5c6f-59d6-4ec0-bcd7-52cc3d50e74e",
             "runtime": "nodejs8.10"
           }
         ]

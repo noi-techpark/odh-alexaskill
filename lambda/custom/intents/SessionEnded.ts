@@ -10,7 +10,7 @@ export const SessionEndedHandler: RequestHandler = {
     handle(handlerInput: HandlerInput) {
         const request = <SessionEndedRequest>handlerInput.requestEnvelope.request;
 
-        console.log(`Session ended with reason: ${request.reason}`);
+        console.log(`Session ended with reason: ${JSON.stringify(request)}`);
 
         return handlerInput.responseBuilder.getResponse();
     }

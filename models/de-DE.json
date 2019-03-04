@@ -34,9 +34,19 @@
                         {
                             "name": "period",
                             "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "fromdate",
+                            "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "todate",
+                            "type": "AMAZON.DATE"
                         }
                     ],
                     "samples": [
+                        "Welche Events sind vom  {fromdate} bis zum {todate}",
+                        "Welche Events sind von {fromdate} bis {todate}",
                         "Welche Events sind {period}",
                         "Welche Veranstaltungen sind in meiner Nähe",
                         "Welche Events sind in meiner Nähe"
