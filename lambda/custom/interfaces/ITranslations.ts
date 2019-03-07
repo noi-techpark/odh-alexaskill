@@ -6,6 +6,6 @@ export interface ITranslations {
     [TranslationTypes.GREETING_MSG]: Array<string>;
     [TranslationTypes.HELP_MSG]: Array<string>;
     [TranslationTypes.GOODBYE_MSG]: Array<string>;
-    [TranslationTypes.ERROR_MSG]: string;
+    [TranslationTypes.ERROR_MSG]: Array<string>;
     [TranslationTypes.ERROR_UNEXPECTED_MSG]: string;
 }

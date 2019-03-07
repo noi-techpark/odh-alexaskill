@@ -3,7 +3,8 @@ export enum RequestTypes {
     Intent = "IntentRequest",
     SessionEnded = "SessionEndedRequest",
     HelloWorld = "HelloWorldIntent",
-    Event = "EventIntent"
+    Event = "EventIntent",
+    LoadMore = "LoadMoreIntent"
 }
 
 export enum IntentTypes {
@@ -28,6 +29,13 @@ export enum TranslationTypes {
     SKILL_NAME = "SKILL_NAME",
     HELLO_MSG = "HELLO_MSG",
     GREETING_MSG = "GREETING_MSG",
+    EVENT_MSG_SINGLE_DATE = "EVENT_MSG_SINGLE_DATE",
+    EVENT_MSG_MULTIPLE_DATES = "EVENT_MSG_MULTIPLE_DATES",
+    EVENT_REPROMPT = "EVENT_REPROMPT",
+    EVENT_MORE_INFO = "EVENT_MORE_INFO",
+    EVENT_MAX_EXCEEDED = "EVENT_MAX_EXCEEDED",
+    NO_EVENTS_FOUND = "NO_EVENTS_FOUND",
+    AND_MSG = "AND_MSG",
     HELP_MSG = "HELP_MSG",
     GOODBYE_MSG = "GOODBYE_MSG",
     ERROR_MSG = "ERROR_MSG",
@@ -40,4 +48,9 @@ export const AuthToken = "eXDo_Jp27wdPwPAywjflO7a-kmpT97CanNSiYHVl8_0me1sB5ra7OS
 export enum ApiCallTypes {
     EVENT_REDUCED = "EventReduced",
     EVENT_LOCALIZED = "EventLocalized"
+}
+
+export enum HandlerResponseStatus {
+    Success = 1,
+    Failure = 0
 }

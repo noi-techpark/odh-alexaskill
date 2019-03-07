@@ -10,14 +10,7 @@ export interface IRequestAttributes {
      */
     t(key: string, ...args: any[]): any;
 
-    /**
-     * Randomly picks a translation for the given key and returns it.
-     * 
-     * Note: The value for the key must be an array.
-     * 
-     * @param key 
-     */
-    tr(key: string): string;
+    language(): string;
 
     /**
      * The slot values for the current request.

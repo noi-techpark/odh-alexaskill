@@ -3,6 +3,8 @@ import * as i18n from "i18next";
 import * as sprintf from "i18next-sprintf-postprocessor";
 import { strings } from "../lib/strings";
 import * as Interfaces from "../interfaces";
+// @ts-ignore no types available for this module
+import * as date from 'date-and-time';
 
 /**
  * Adds translation functions to the RequestAttributes.
@@ -39,5 +41,14 @@ export const LocalizationInterceptor: RequestInterceptor = {
         attributes.t = function (...args: any[]) {
             return localizationClient.localize(...args);
         };
+        attributes.language = () => {
+          let language = "de";
+          if(handlerInput.requestEnvelope.request.locale !== undefined){
+            // split the alexa language format de-DE to de
+            language = handlerInput.requestEnvelope.request.locale.split("-")[0];
+          }
+
+          return language;
+        }
     },
 };

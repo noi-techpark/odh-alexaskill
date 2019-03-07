@@ -15,8 +15,8 @@ export const handler = SkillBuilders.custom()
     Intents.SessionEndedHandler,
 
     // Event intents
-    Intents.HelloWorldHandler,
-    Intents.EventHandler
+    Intents.EventHandler,
+    Intents.LoadMoreHandler
   )
   .addRequestInterceptors(
     Interceptor.LocalizationInterceptor,

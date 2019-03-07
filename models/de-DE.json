@@ -16,15 +16,6 @@
                     "samples": []
                 },
                 {
-                    "name": "HelloWorldIntent",
-                    "slots": [],
-                    "samples": [
-                        "hello",
-                        "say hello",
-                        "say hello world"
-                    ]
-                },
-                {
                     "name": "AMAZON.NavigateHomeIntent",
                     "samples": []
                 },
@@ -47,6 +38,7 @@
                     "samples": [
                         "Welche Events sind vom  {fromdate} bis zum {todate}",
                         "Welche Events sind von {fromdate} bis {todate}",
+                        "Welche Events sind am {period}",
                         "Welche Events sind {period}",
                         "Welche Veranstaltungen sind in meiner Nähe",
                         "Welche Events sind in meiner Nähe"
@@ -72,6 +64,19 @@
                         "Welche Apotheken haben {period} geöffnet",
                         "Welche Apotheken sind in meiner Nähe",
                         "Welche Apotheken haben  von {starttime} bis {endtime} geöffnet"
+                    ]
+                },
+                {
+                    "name": "LoadMoreIntent",
+                    "slots": [],
+                    "samples": [
+                        "Zeig mir mehr",
+                        "Lade weitere",
+                        "Lad mehr Events",
+                        "Mehr",
+                        "Mehr Events",
+                        "Weitere Events",
+                        "Weitere"
                     ]
                 }
             ],

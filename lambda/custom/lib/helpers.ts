@@ -1,9 +1,11 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest, services } from "ask-sdk-model";
-import { RequestTypes, ApiUrl, AuthToken } from "./constants";
+import { RequestTypes, ApiUrl, AuthToken, TranslationTypes } from "./constants";
 import * as Interface from "./../interfaces";
 import "isomorphic-fetch";
-
+// @ts-ignore no types available for this module
+import * as date from 'date-and-time';
+import {URL, URLSearchParams } from "url";
 /**
  * Checks if the request matches any of the given intents.
  * 
@@ -232,13 +234,18 @@ export function GetSlotValues(filledSlots?: Interface.ISlots): Interface.ISlotVa
     return slotValues;
 }
 
-/*
+/**
 * Make an api request to the desired route
-* @param route
+* @param route object where the api endpoint and the different callbacks are defined
 */
 export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> => {
     try {
-        let response = await fetch(`${ApiUrl}/api/${route.url}`, {
+        const url = new URL(`${ApiUrl}/api/${route.url}`);
+        //@ts-ignore
+        const searchParams = new URLSearchParams(route.data)
+        
+        console.log(`${url}?${searchParams}`);
+        let response = await fetch(`${url}?${searchParams}`, {
             "headers": {
                 "Authorization": `Bearer ${AuthToken}`,
                 "Content-Type": "application/json"
@@ -250,3 +257,26 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
         route.onError(error);
     }
 };
+
+
+/**
+* Parse the date string to the desired format
+*/
+export const dateFormat = (input: { date: string, lang?: string, format?: string }): string => {
+
+    const lang = input.lang || "de";
+    const format = input.format || "YYYY-MM-DD";
+
+    require("date-and-time/locale/" + lang);
+    date.locale(lang);
+    return date.format(new Date(input.date), format);
+}
+
+/**
+ * Clean input string from invalid characters
+ * @param input string that should be validated
+ * @param t translation function
+ */
+export const cleanSssmlResponseFromInvalidChars = (input: string, t: any): string =>{
+    return input.replace(/&/g, t(TranslationTypes.AND_MSG))
+}

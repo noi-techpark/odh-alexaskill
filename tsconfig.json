@@ -6,6 +6,7 @@
       "es6",
       "dom"
     ],
+    "types": ["node"],
     "moduleResolution": "node",
     "rootDir": "lambda/custom",
     "outDir": "dist",
