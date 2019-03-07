@@ -26,16 +26,29 @@ export const EventHandler: RequestHandler = {
         const periodSlot = requestAttributes.slots.period;
         const fromdateSlot = requestAttributes.slots.fromdate;
         const todateSlot = requestAttributes.slots.todate;
+        const topicSlot = requestAttributes.slots.topic;
 
+
+        console.log("SLot values: " + JSON.stringify(requestAttributes.slots));
         let fromdate: any;
         let todate: any;
         let fromdateSpeech: any;
         let todateSpeech: any;
 
         const page: number = 1;
-        const limit: number = 10;
+        const limit: number = 5;
 
-        if (periodSlot.value !== "") {
+        let data: IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] = {
+            "language": lang,
+            "pagenumber": page,
+            "pagesize": limit,
+        };
+
+        // If the user asked for a specific topic
+        if (topicSlot.value !== "") {
+            data.topicfilter = topicSlot.id;
+        }
+        else if (periodSlot.value !== "") {
             // parse the amazon date to a valid date range
             const awsDate = AmazonDateParser(periodSlot.value);
 
@@ -57,6 +70,10 @@ export const EventHandler: RequestHandler = {
                 lang,
                 format: "dddd, DD MMMM YYYY"
             });
+
+            // Save params for the following api call
+            data.begindate = fromdate;
+            data.enddate = todate;
         }
         // get the events that are in a certain period of time
         else if (fromdateSlot.value !== "" && todateSlot.value !== "") {
@@ -74,22 +91,11 @@ export const EventHandler: RequestHandler = {
                 lang,
                 format: "dddd, DD MMMM YYYY"
             });
-        }
-        else {
-            return handlerInput.responseBuilder
-                .speak("no date passed")
-                .reprompt("no date passed")
-                .getResponse();
-        }
 
-        // data params for the api call
-        let data: IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] = {
-            "begindate": fromdate,
-            "enddate": todate,
-            "language": lang,
-            "pagenumber": page,
-            "pagesize": limit,
-        };
+            // Save params for the following api call
+            data.begindate = fromdate;
+            data.enddate = todate;
+        }
 
         await RouteGenerate({
             url: ApiCallTypes.EVENT_LOCALIZED,
@@ -102,23 +108,38 @@ export const EventHandler: RequestHandler = {
                         return event.Shortname;
                     }).join(", "), t);
 
-                    let msg;
-                    // If from- and todate are the same
-                    if (data.begindate === data.enddate) {
-                        msg = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, todateSpeech, events)}.</p>`;
+                    if (data.begindate !== undefined || data.enddate !== undefined) {
+                        // when no topic filter is selected
+                        if (data.topicfilter !== undefined) {
+                            // If from- and todate are the same
+                            if (data.begindate === data.enddate) {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, todateSpeech, topicSlot.resolved)}.</p>`;
+                            }
+                            else {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, fromdateSpeech, todateSpeech, topicSlot.resolved)}.</p>`;
+                            }
+                        }
+                        else {
+                            // If from- and todate are the same
+                            if (data.begindate === data.enddate) {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, todateSpeech)}.</p>`;
+                            }
+                            else {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, fromdateSpeech, todateSpeech)}.</p>`;
+                            }
+                        }
                     }
-                    else {
-                        msg = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, fromdateSpeech, todateSpeech, events)}.</p>`;
+                    else if(data.topicfilter !== undefined){
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, topicSlot.resolved)}.</p>`;
                     }
-
+                   
                     // If the last page was reached, don't show the message that there are more events available    
                     if (data.pagenumber === response.TotalPages) {
                         responseSpeech.promptText = t(TranslationTypes.EVENT_MORE_INFO);
                     }
 
-                    msg += `<p>${responseSpeech.promptText}</p>`;
-
-                    responseSpeech.speechText = msg;
+                    responseSpeech.speechText += `<p>${events}</p>`;
+                    responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
 
                     // If the response is successful, save the session attributes for the next request
                     if (responseSpeech.status = HandlerResponseStatus.Success) {

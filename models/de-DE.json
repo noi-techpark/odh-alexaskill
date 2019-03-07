@@ -33,9 +33,18 @@
                         {
                             "name": "todate",
                             "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "topic",
+                            "type": "EventTopics"
                         }
                     ],
                     "samples": [
+                        "Welche Events hast du zum Thema {topic}",
+                        "Welche Events gibt es zum Thema {topic}",
+                        "Zeig mir Events zum Thema {topic}",
+                        "Schlag mir Events zum Thema {topic} vor",
+                        "Welche Events sind vom  {fromdate} bis zum {todate} zum Thema {topic}",
                         "Welche Events sind vom  {fromdate} bis zum {todate}",
                         "Welche Events sind von {fromdate} bis {todate}",
                         "Welche Events sind am {period}",
@@ -74,13 +83,172 @@
                         "Lade weitere",
                         "Lad mehr Events",
                         "Mehr",
+                        "Mehr Vorschläge",
                         "Mehr Events",
                         "Weitere Events",
                         "Weitere"
                     ]
                 }
             ],
-            "types": []
+            "types": [
+                {
+                    "name": "EventTopics",
+                    "values": [
+                        {
+                            "id": "1",
+                            "name": {
+                                "value": "Tagungen",
+                                "synonyms": [
+                                    "Vorträge"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "name": {
+                                "value": "Sport",
+                                "synonyms": [
+                                    "Fitness",
+                                    "Hobby",
+                                    "Freizeitbeschäfigung"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "4",
+                            "name": {
+                                "value": "Gastronomie",
+                                "synonyms": [
+                                    "Mahlzeiten",
+                                    "Getränke",
+                                    "schlemmen",
+                                    "essen",
+                                    "trinken",
+                                    "feine Küche",
+                                    "kochen",
+                                    "Schlemmerküche",
+                                    "gute Küche",
+                                    "Küche",
+                                    "typische Produkte"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "8",
+                            "name": {
+                                "value": "Brauchtum",
+                                "synonyms": [
+                                    "Gedenkfeier",
+                                    "Handwerk",
+                                    "Krampus",
+                                    "Törggelen",
+                                    "Feste",
+                                    "Alm"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "16",
+                            "name": {
+                                "value": "Messen",
+                                "synonyms": [
+                                    "Bergmesse",
+                                    "Weihnachtsmarkt",
+                                    "Bauernmarkt",
+                                    "Markt",
+                                    "Märkte"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "32",
+                            "name": {
+                                "value": "Theater",
+                                "synonyms": [
+                                    "Film",
+                                    "Buchvorstellung",
+                                    "Festival",
+                                    "Bergfilmfestival",
+                                    "Benefizkonzert",
+                                    "Abendkonzert",
+                                    "Theateraufführungen",
+                                    "Vorstellungen",
+                                    "Vorführungen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "64",
+                            "name": {
+                                "value": "Musik",
+                                "synonyms": [
+                                    "Tanz",
+                                    "Klang",
+                                    "Ton",
+                                    "Geräusch"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "256",
+                            "name": {
+                                "value": "Festivals",
+                                "synonyms": [
+                                    "Volksfeste",
+                                    "Veranstaltungen",
+                                    "Festspiele",
+                                    "Oktoberfest",
+                                    "Apfelfest",
+                                    "Almfest",
+                                    "Oldtimertreffen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "512",
+                            "name": {
+                                "value": "Wanderungen",
+                                "synonyms": [
+                                    "Ausflüge",
+                                    "geführte Wanderungen",
+                                    "Wandertag",
+                                    "Almenwanderung",
+                                    "anspruchsvolle Wanderungen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "1024",
+                            "name": {
+                                "value": "Führungen",
+                                "synonyms": [
+                                    "Besichtigungen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2048",
+                            "name": {
+                                "value": "Ausstellungen",
+                                "synonyms": [
+                                    "Kunst"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "4096",
+                            "name": {
+                                "value": "Familie",
+                                "synonyms": [
+                                    "Almabtrieb",
+                                    "Familien",
+                                    "Familienfest"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     }
 }

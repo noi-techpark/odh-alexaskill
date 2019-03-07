@@ -263,7 +263,6 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
 * Parse the date string to the desired format
 */
 export const dateFormat = (input: { date: string, lang?: string, format?: string }): string => {
-
     const lang = input.lang || "de";
     const format = input.format || "YYYY-MM-DD";
 
