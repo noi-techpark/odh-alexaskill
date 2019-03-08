@@ -10,7 +10,7 @@ export const LaunchHandler: RequestHandler = {
     handle(handlerInput: HandlerInput): Response {
         const { t } = GetRequestAttributes(handlerInput);
 
-        const speechText = t(TranslationTypes.GREETING_MSG, t(TranslationTypes.SKILL_NAME));
+        const speechText = t(TranslationTypes.GREETING_MSG, {"skill": t(TranslationTypes.SKILL_NAME)});
         const repromptText = t(TranslationTypes.HELP_MSG);
 
         return handlerInput.responseBuilder

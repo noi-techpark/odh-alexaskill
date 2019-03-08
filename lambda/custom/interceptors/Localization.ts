@@ -17,29 +17,28 @@ export const LocalizationInterceptor: RequestInterceptor = {
             resources: strings,
             returnObjects: true,
         }),
-        localize(...args: string[]) {
-            let values: string[] = [];
-    
-            for (let i = 1; i < args.length; i++) {
-              values.push(args[i]);
-            }
-            const value = i18n.t(args[0], {
-              returnObjects: true,
-              postProcess: "sprintf",
-              sprintf: values
+        localize(key: string, attributes?: {[key: string]: string | number}) {
+            let value = i18n.t(key, {
+              returnObjects: true
             });
     
-            if (Array.isArray(value)) {
-              return value[Math.floor(Math.random() * value.length)];
-            } else {
-              return value;
+            value = Array.isArray(value) ? value[Math.floor(Math.random() * value.length)] : value;
+
+            console.log("Attributes:"+ JSON.stringify(attributes))
+            if(attributes !== undefined){
+                Object.keys(attributes).forEach(attr =>{
+                  const reg = new RegExp(`%${attr}%`,"g");
+                  value = value.replace(reg, attributes[attr]);
+                  console.log(value);
+                });
             }
+              return value;
           }
         };
 
         const attributes = handlerInput.attributesManager.getRequestAttributes() as Interfaces.IRequestAttributes;
-        attributes.t = function (...args: any[]) {
-            return localizationClient.localize(...args);
+        attributes.t = (key: string, attributes?: {[key: string]: string | number}) => {
+            return localizationClient.localize(key, attributes);
         };
         attributes.language = () => {
           let language = "de";

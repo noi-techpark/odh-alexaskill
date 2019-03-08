@@ -8,25 +8,25 @@ export const strings: Resource = {
         translation: {
             SKILL_NAME: "data hub",
             GREETING_MSG: [
-                "Herzlich willkommen im %s Alexa Skill. Ich kann dir Informationen zu Restaurants, Events, Geschäften, Car sharing, Busfahrzeiten und Apotheken geben. Wie kann ich dir behilflich sein?",
-                "Hallo, willkommen im %s Alexa Skill. Wie kann ich dir behilflich sein? Ich kann dir Informationen zu Restaurants, Events, Geschäften, Car sharing, Busfahrzeiten und Apotheken geben. Was möchtest du wissen?"
+                "Herzlich willkommen im %skill% Alexa Skill. Ich kann dir Informationen zu Restaurants, Events, Geschäften, Car sharing, Busfahrzeiten und Apotheken geben. Wie kann ich dir behilflich sein?",
+                "Hallo, willkommen im %skill% Alexa Skill. Wie kann ich dir behilflich sein? Ich kann dir Informationen zu Restaurants, Events, Geschäften, Car sharing, Busfahrzeiten und Apotheken geben. Was möchtest du wissen?"
             ],
             EVENT_TOPIC: [
-                "Zum Theme %s konnte ich folgende Einträge finden:",
+                "Zum Theme %topic% konnte ich folgende Einträge finden:",
             ],
             EVENT_MSG_SINGLE_DATE: [
-                "Am %s finden folgenden Events statt:",
-                "Folgende Events finden am %s statt:"
+                "Am %date% finden folgenden Events statt:",
+                "Folgende Events finden am %date% statt:"
             ],
             EVENT_MSG_SINGLE_DATE_WITH_TOPIC: [
-                "Am %s finden folgenden Events statt:",
-                "Folgende Events finden am %s statt:"
+                "Am %date% finden folgenden Events statt:",
+                "Folgende Events finden am %date% statt:"
             ],
             EVENT_MSG_MULTIPLE_DATES: [
-                "Vom %s bis zum %s finden folgende Events statt:"
+                "Vom %fromdate% bis zum %todate% finden folgende Events statt:"
             ],
             EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC: [
-                "Vom %s bis zum %s finden folgende Events zum Thema %s statt:"
+                "Vom %fromdate% bis zum %todate% finden folgende Events zum Thema %topic% statt:"
             ],
             EVENT_REPROMPT: [
                 "Möchten Sie mehr Event Vorschläge erhalten oder mehr Informationen zu einem Event bekommen?",

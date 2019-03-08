@@ -6,9 +6,9 @@ export interface IRequestAttributes {
      * and returns the result.
      * 
      * @param key 
-     * @param args 
+     * @param attributes 
      */
-    t(key: string, ...args: any[]): any;
+    t(key: string, attributes?: {[key: string]: string | number}): any;
 
     language(): string;
 

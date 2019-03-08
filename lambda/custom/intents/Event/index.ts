@@ -28,8 +28,6 @@ export const EventHandler: RequestHandler = {
         const todateSlot = requestAttributes.slots.todate;
         const topicSlot = requestAttributes.slots.topic;
 
-
-        console.log("SLot values: " + JSON.stringify(requestAttributes.slots));
         let fromdate: any;
         let todate: any;
         let fromdateSpeech: any;
@@ -113,32 +111,32 @@ export const EventHandler: RequestHandler = {
                         if (data.topicfilter !== undefined) {
                             // If from- and todate are the same
                             if (data.begindate === data.enddate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, todateSpeech, topicSlot.resolved)}.</p>`;
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, {"date": todateSpeech, "topic": topicSlot.resolved})}.</p>`;
                             }
                             else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, fromdateSpeech, todateSpeech, topicSlot.resolved)}.</p>`;
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, {"fromdate": fromdateSpeech, "todate": todateSpeech, "topic": topicSlot.resolved})}.</p>`;
                             }
                         }
                         else {
                             // If from- and todate are the same
                             if (data.begindate === data.enddate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, todateSpeech)}.</p>`;
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, {"date": todateSpeech})}.</p>`;
                             }
                             else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, fromdateSpeech, todateSpeech)}.</p>`;
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, {"fromdate":fromdateSpeech, "todate":todateSpeech})}.</p>`;
                             }
                         }
                     }
                     else if(data.topicfilter !== undefined){
-                        responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, topicSlot.resolved)}.</p>`;
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, {"topic": topicSlot.resolved})}.</p>`;
                     }
-                   
+
                     // If the last page was reached, don't show the message that there are more events available    
                     if (data.pagenumber === response.TotalPages) {
                         responseSpeech.promptText = t(TranslationTypes.EVENT_MORE_INFO);
                     }
 
-                    responseSpeech.speechText += `<p>${events}</p>`;
+                    responseSpeech.speechText += `<p>${events}.</p>`;
                     responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
 
                     // If the response is successful, save the session attributes for the next request
@@ -170,7 +168,7 @@ export const EventHandler: RequestHandler = {
                 }
             }
         });
-
+       
         let response = handlerInput.responseBuilder
             .speak(responseSpeech.speechText);
 
