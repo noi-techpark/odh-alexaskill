@@ -16,7 +16,9 @@ export const handler = SkillBuilders.custom()
 
     // Event intents
     Intents.EventHandler,
-    Intents.LoadMoreHandler
+    Intents.PharmacyHandler,
+    Intents.LoadMoreHandler,
+    Intents.FindMunicipalityHandler
   )
   .addRequestInterceptors(
     Interceptor.LocalizationInterceptor,

@@ -14,8 +14,8 @@ export interface IParamsApiStructure {
         "odhactive"?: boolean,
         "begindate": string,
         "enddate": string,
-        "latitude"?: string,
-        "longitude"?: string,
+        "latitude"?: number,
+        "longitude"?: number,
         "radius"?: number
     },
     // https://tourism.opendatahub.bz.it/swagger/ui/index#!/Event/Event_GetEventsLocalized
@@ -35,8 +35,45 @@ export interface IParamsApiStructure {
         "begindate"?: string,
         "enddate"?: string,
         "seed"?: number,
-        "latitude"?: string,
-        "longitude"?: string,
+        "latitude"?: number,
+        "longitude"?: number,
+        "radius"?: number
+    }
+    // https://tourism.opendatahub.bz.it/swagger/ui/index#!/Common/Common_GetDistrictLocalized
+    [ApiCallTypes.DISTRICT_LOCALIZED]: {
+        "language": string,
+        "elements": number,
+        "visibleinsearch"?: boolean,
+        "latitude"?: number,
+        "longitude"?: number,
+        "radius"?: number
+    },
+    // https://tourism.opendatahub.bz.it/swagger/ui/index#!/Common/Common_GetMunicipalityReduced
+    [ApiCallTypes.MUNICIPALITY_REDUCED]: {
+        "language": string,
+        "elements": number,
+        "visibleinsearch"?: boolean,
+        "latitude"?: number,
+        "longitude"?: number,
+        "radius"?: number
+    },
+    // https://tourism.opendatahub.bz.it/swagger/ui/index#!/Poi/Poi_GetPoiLocalized
+    [ApiCallTypes.POI_LOCALIZED]: {
+        "language": string,
+        "pagenumber"?: number,
+        "pagesize"?: number,
+        "poitype"?: string,
+        "subtype"?: string,
+        "idlist"?: string,
+        "locfilter"?: string,
+        "areafilter"?: string,
+        "highlight"?: string,
+        "odhtagfilter"?: string,
+        "active"?: boolean,
+        "odhactive"?: boolean,
+        "seed"?: number,
+        "latitude"?: number,
+        "longitude"?: number,
         "radius"?: number
     }
 }
@@ -69,7 +106,7 @@ export interface IResponseApiStructure {
             "Type": string,
             "DistrictId": string,
             "DistrictIds": Array<string>,
-            "Detail" : {
+            "Detail": {
                 "Header": string | null,
                 "SubHeader": string | null,
                 "IntroText": string | null,
@@ -89,12 +126,172 @@ export interface IResponseApiStructure {
                 "MaxPersons": number
             }>
         }>
+    },
+    [ApiCallTypes.DISTRICT_LOCALIZED]: Array<{
+        "IsComune": boolean | null,
+        "RegionId": string,
+        "TourismvereinId": string,
+        "MunicipalityId": string,
+        "SiagId": string,
+        "VisibleInSearch": boolean,
+        "Id": string,
+        "Active": boolean,
+        "CustomId": string,
+        "Shortname": string,
+        "Gpstype": string,
+        "Latitude": number,
+        "Longitude": number,
+        "Altitude": number,
+        "AltitudeUnitofMeasure": string,
+        "Detail": {
+            "Header": string | null,
+            "SubHeader": string | null,
+            "IntroText": string | null,
+            "BaseText": string | null,
+            "Title": string,
+            "AdditionalText": string | null,
+            "MetaTitle": string | null,
+            "MetaDesc": string | null,
+            "GetThereText": string | null,
+            "Language": string,
+            "Keywords": [string] | null
+        },
+        "ContactInfos": {
+            "Address": string | null,
+            "City": string | null,
+            "ZipCode": string | null,
+            "CountryCode": string | null,
+            "CountryName": string | null,
+            "Surname": string | null,
+            "Givenname": string | null,
+            "NamePrefix": string | null,
+            "Email": string | null,
+            "Phonenumber": string | null,
+            "Faxnumber": string | null,
+            "Url": string | null,
+            "Language": string,
+            "CompanyName": string | null,
+            "Vat": string | null,
+            "Tax": string | null,
+            "LogoUrl": string | null
+        } | null,
+        "SmgTags": [
+            string
+        ] | null,
+        "SmgActive": boolean
+    }>,
+    [ApiCallTypes.MUNICIPALITY_REDUCED]: Array<{
+        "Id": string,
+        "Name": string
+    }>,
+    [ApiCallTypes.POI_LOCALIZED]: {
+        "TotalResults": number,
+        "TotalPages": number,
+        "CurrentPages": number,
+        "Seed": string,
+        "Items": Array<{
+            "Id": string,
+            "Active": boolean | null,
+            "Shortname": string | null,
+            "SmgId": string | null,
+            "Highlight": boolean | null,
+            "Difficulty": string | null,
+            "Type": string | null,
+            "SubType": string | null,
+            "FirstImport": Date,
+            "LastChange": Date,
+            "SmgActive": boolean | null,
+            "TourismorganizationId": string | null,
+            "AreaId": Array<string> | null,
+            "AltitudeDifference": number,
+            "AltitudeHighestPoint": number,
+            "AltitudeLowestPoint": number,
+            "AltitudeSumUp": number,
+            "AltitudeSumDown": number,
+            "DistanceDuration": number,
+            "DistanceLength": number,
+            "IsOpen": boolean | null,
+            "IsPrepared": boolean | null,
+            "RunToValley": boolean | null,
+            "IsWithLigth": boolean | null,
+            "HasRentals": boolean | null,
+            "HasFreeEntrance": boolean | null,
+            "LiftAvailable": boolean | null,
+            "FeetClimb": boolean | null,
+            "BikeTransport": boolean | null,
+            "OperationSchedule": Array<{
+                "Start": Date,
+                "Stop": Date,
+                "Type": string | null,
+                "ClosedonPublicHolidays": boolean | null,
+                "OperationScheduleTime": Array<{
+                    "Start": string,
+                    "End": string,
+                    "Monday": boolean,
+                    "Tuesday": boolean,
+                    "Wednesday": boolean,
+                    "Thuresday": boolean,
+                    "Friday": boolean,
+                    "Saturday": boolean,
+                    "Sunday": boolean,
+                    "State": number,
+                    "Timecode": number
+                }>
+            }> | null,
+            "Detail": {
+                "Header": string | null,
+                "SubHeader": string | null,
+                "IntroText": string | null,
+                "BaseText": string | null,
+                "Title": string | null,
+                "AdditionalText": string | null,
+                "MetaTitle": string | null,
+                "MetaDesc": string | null,
+                "GetThereText": string | null,
+                "Language": string | null
+            },
+            "ContactInfos": {
+                "Address": string | null,
+                "City": string | null,
+                "ZipCode": string | null,
+                "CountryCode": string | null,
+                "CountryName": string | null,
+                "Surname": string | null,
+                "Givenname": string | null,
+                "NamePrefix": string | null,
+                "Email": string | null,
+                "Phonenumber": string | null,
+                "Faxnumber": string | null,
+                "Url": string | null,
+                "Language": string | null,
+                "CompanyName": string | null,
+                "Vat": string | null,
+                "Tax": string | null,
+                "LogoUrl": string | null
+            },
+            "AdditionalPoiInfos": {
+                "Novelty": string | null,
+                "MainType": string | null,
+                "SubType": string | null,
+                "PoiType": string | null,
+                "Language": string | null
+            },
+            "Ratings": {
+                "Stamina": string | null,
+                "Experience": string | null,
+                "Landscape": string | null,
+                "Difficulty": string | null,
+                "Technique": string | null
+            },
+            "Exposition": Array<string>,
+            "SmgTags": Array<string>
+        }>
     }
 }
 
 export interface IApiCall {
     url: ApiCallTypes,
-    data: IParamsApiStructure[ApiCallTypes.EVENT_REDUCED] | IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED],
+    data: IParamsApiStructure[ApiCallTypes.EVENT_REDUCED] | IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED],
     onSuccess(response: any): any,
     onError(message: string): any
 };

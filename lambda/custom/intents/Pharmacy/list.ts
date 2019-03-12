@@ -1,19 +1,18 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
-import { IsIntent, RouteGenerate, GetRequestAttributes, dateFormat, cleanSssmlResponseFromInvalidChars } from "../../lib/helpers";
+import { IsIntent, RouteGenerate, GetRequestAttributes, dateFormat, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
 import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus } from "../../lib/constants";
 import { IResponseApiStructure, IHandlerResponse, IParamsApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as AmazonDateParser from "amazon-date-parser";
 
-export const EventHandler: RequestHandler = {
+export const PharmacyHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
-        return IsIntent(handlerInput, RequestTypes.Event);
+        return IsIntent(handlerInput, RequestTypes.Pharmacy);
     },
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
         const { t, language } = GetRequestAttributes(handlerInput);
-        //const { selectedMunicipality } = handlerInput.attributesManager.getSessionAttributes();
 
         const lang = language();
 
@@ -28,7 +27,6 @@ export const EventHandler: RequestHandler = {
         const periodSlot = requestAttributes.slots.period;
         const fromdateSlot = requestAttributes.slots.fromdate;
         const todateSlot = requestAttributes.slots.todate;
-        const topicSlot = requestAttributes.slots.topic;
         const districtSlot = requestAttributes.slots.district;
 
         let fromdate: any;
@@ -37,33 +35,26 @@ export const EventHandler: RequestHandler = {
         let todateSpeech: any;
 
         const page: number = 1;
-        const limit: number = 5;
+        const limit: number = 99999;
 
-        let data: IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] = {
+        // Poitype 1 are the pharmacies
+        let data: IParamsApiStructure[ApiCallTypes.POI_LOCALIZED] = {
             "language": lang,
+            "poitype": "1",
+            "subtype": "1",
             "pagenumber": page,
             "active": true,
             "pagesize": limit,
         };
 
+        // Create fake pagination due to no native api support for getting pharmacies that have opened in a certain range
+        const pagenumber: number = 1;
+        const pagesize: number = 5;
+
         let municipality: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED][0];
 
-        // If the user asked for a specific topic
-        if (topicSlot.value !== "") {
-            if (topicSlot.isMatch) {
-                data.topicfilter = topicSlot.id;
-            }
-            else {
-                responseSpeech = {
-                    "speechText": t(TranslationTypes.ERROR_NO_TOPIC_FOUND),
-                    "promptText": t(TranslationTypes.HELP_MSG),
-                    "status": HandlerResponseStatus.Failure
-                }
-            }
-        }
+        console.log(JSON.stringify(requestAttributes));
 
-        // Previously multiple municipalities matched with the search pattern and user finally choosed one of them
-        // if (selectedMunicipality === undefined) {
         // If the user want events from a specific district
         if (districtSlot.value !== "") {
             const districtParams: IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] = {
@@ -202,7 +193,7 @@ export const EventHandler: RequestHandler = {
                 return response.getResponse();
             }
             else if (responseSpeech.status === HandlerResponseStatus.Delegate && responseSpeech.delegateIntent) {
-                // TODO: Configure intent for selecting a specific municiapality
+                // TODO:
                 // return handlerInput.responseBuilder
                 //     .addElicitSlotDirective('municipality', {
                 //         name: responseSpeech.delegateIntent,
@@ -213,11 +204,6 @@ export const EventHandler: RequestHandler = {
                 //     .getResponse();
             }
         }
-        // }
-        // else {
-        //     data.locfilter = `mun${selectedMunicipality.Id}`;
-        //     municipality = selectedMunicipality;
-        // }
 
         if (periodSlot.value !== "") {
             // parse the amazon date to a valid date range
@@ -242,9 +228,6 @@ export const EventHandler: RequestHandler = {
                 format: "dddd, DD MMMM YYYY"
             });
 
-            // Save params for the following api call
-            data.begindate = fromdate;
-            data.enddate = todate;
         }
         // get the events that are in a certain period of time
         else if (fromdateSlot.value !== "" && todateSlot.value !== "") {
@@ -263,79 +246,73 @@ export const EventHandler: RequestHandler = {
                 format: "dddd, DD MMMM YYYY"
             });
 
-            // Save params for the following api call
-            data.begindate = fromdate;
-            data.enddate = todate;
         }
 
         await RouteGenerate({
-            url: ApiCallTypes.EVENT_LOCALIZED,
+            url: ApiCallTypes.POI_LOCALIZED,
             data,
-            onSuccess: (response: IResponseApiStructure[ApiCallTypes.EVENT_LOCALIZED]) => {
+            onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                 // If records exists
                 if (response.Items[0] !== null && response.Items.length) {
-                    // Get the names from the events
-                    const events = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
-                        return event.Shortname;
-                    }).join(", "), t);
-
-                    if (data.begindate !== undefined || data.enddate !== undefined) {
-                        // when no topic filter is selected
-                        if (data.topicfilter !== undefined) {
+                    if (fromdate !== undefined || todate !== undefined) {
+                        response = removeUnopenedPharmacies(response, new Date(fromdate), new Date(todate));
+                        if (response.Items.length) {
                             // If from- and todate are the same
-                            if (data.begindate === data.enddate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, { "date": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                            if (fromdate === todate) {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_SINGLE_DATE, { "date": todateSpeech })}</p>`;
                             }
                             else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, { "fromdate": fromdateSpeech, "todate": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}</p>`;
                             }
                         }
                         else {
-                            // If from- and todate are the same
-                            if (data.begindate === data.enddate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, { "date": todateSpeech })}.</p>`;
+                            responseSpeech = {
+                                speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
+                                promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
+                                status: HandlerResponseStatus.Failure
                             }
-                            else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}.</p>`;
-                            }
-                        }
-                    }
-                    else if (data.topicfilter !== undefined) {
-                        if (data.locfilter !== undefined) {
-                            responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC_WITH_MUNICIPALITY, { "topic": topicSlot.resolved, "municipality": municipality.Name })}</p>`;
-                        }
-                        else {
-                            responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, { "topic": topicSlot.resolved })}</p>`;
                         }
                     }
                     else if (data.locfilter !== undefined) {
-                        responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_LOCATION, { "municipality": municipality.Name })}</p>`;
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_LOCATION, { "municipality": municipality.Name })}</p>`;
                     }
 
-                    // If the last page was reached, don't show the message that there are more events available    
-                    if (data.pagenumber === response.TotalPages) {
-                        responseSpeech.promptText = t(TranslationTypes.EVENT_MORE_INFO);
-                    }
-                    else {
-                        responseSpeech.promptText = t(TranslationTypes.EVENT_REPROMPT);
-                    }
-
-                    responseSpeech.speechText += `<p>${events}.</p>`;
-                    responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
-
-
-                    // Save session for next request
-                    handlerInput.attributesManager.setSessionAttributes({
-                        event: {
-                            "totalPages": response.TotalPages,
-                            "params": data
+                    if (responseSpeech.status === HandlerResponseStatus.Success) {
+                        // When more than one page exists, don't show the message that there are more pharmacies available    
+                        if ((response.Items.length / pagesize) < pagenumber) {
+                            responseSpeech.promptText = t(TranslationTypes.PHARMACY_MORE_INFO);
                         }
-                    });
+                        else {
+                            responseSpeech.promptText = t(TranslationTypes.PHARMACY_REPROMPT);
+                        }
+
+                        // Create fake pagination
+                        const pharmacies = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
+                            return event.Shortname;
+                        }).splice((pagenumber - 1) * pagesize, pagenumber * pagesize).join(", "), t);
+
+                        responseSpeech.speechText += `<p>${pharmacies}.</p>`;
+                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+
+                        // Save session for next request
+                        // Create fake pagination due to no native support
+                        handlerInput.attributesManager.setSessionAttributes({
+                            pharmacy: {
+                                "totalPages": Math.ceil(response.Items.length / pagesize),
+                                "pagenumber": pagenumber,
+                                "pagesize": pagesize,
+                                "data": data,
+                                fromdate,
+                                todate
+                            }
+                        });
+                    }
+
                 }
                 else {
                     responseSpeech = {
-                        speechText: t(TranslationTypes.NO_EVENTS_FOUND),
-                        promptText: t(TranslationTypes.NO_EVENTS_FOUND),
+                        speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
+                        promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
                         status: HandlerResponseStatus.Failure
                     }
                 }

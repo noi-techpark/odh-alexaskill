@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
+    "dialog": "ask dialog --locale=de-DE",
     "build": "npm run clean && gulp",
     "deploy": "npm run build && ask deploy"
   },

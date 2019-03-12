@@ -1,6 +1,6 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
-import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromInvalidChars } from "../../lib/helpers";
+import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
 import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes } from "../../lib/constants";
 import { IHandlerResponse, IParamsApiStructure, IResponseApiStructure } from "../../interfaces";
 
@@ -11,7 +11,7 @@ export const LoadMoreHandler: RequestHandler = {
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
         const { t } = GetRequestAttributes(handlerInput);
-        const { event } = handlerInput.attributesManager.getSessionAttributes();
+        const { event, pharmacy } = handlerInput.attributesManager.getSessionAttributes();
 
         let responseSpeech: IHandlerResponse = {
             speechText: t(TranslationTypes.ERROR_MSG),
@@ -73,10 +73,66 @@ export const LoadMoreHandler: RequestHandler = {
                 }
             });
         }
+        else if (pharmacy !== undefined) {
 
-        let response = handlerInput.responseBuilder
-            .speak(responseSpeech.speechText);
+            if (pharmacy.pagenumber) {
+                // Get the next page
+                pharmacy.pagenumber++;
+                // Notify the user when no more events are available
+                if (pharmacy.pagenumber > pharmacy.totalPages) {
+                    return handlerInput.responseBuilder
+                        .speak(t(TranslationTypes.PHARMACY_MAX_EXCEEDED))
+                        .reprompt(t(TranslationTypes.HELP_MSG))
+                        .getResponse();
+                }
+            }
 
+            await RouteGenerate({
+                url: ApiCallTypes.POI_LOCALIZED,
+                data: pharmacy.data,
+                onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
+                    // If records exists
+                    if (response.Items[0] !== null) {
+                        if (pharmacy.fromdate !== undefined || pharmacy.todate !== undefined) {
+                            response = removeUnopenedPharmacies(response, new Date(pharmacy.fromdate), new Date(pharmacy.todate));
+                        }
+                        // Create fake pagination
+                        const pharmacies = cleanSssmlResponseFromInvalidChars(response.Items.map((event: any) => {
+                            return event.Shortname;
+                        }).splice((pharmacy.pagenumber - 1) * pharmacy.pagesize, pharmacy.pagenumber * pharmacy.pagesize).join(", "), t);
+
+                        responseSpeech.speechText = `<p>${pharmacies}.</p>`;
+
+                        // If last page is reached, show a different prompt message
+                        responseSpeech.promptText = t(pharmacy.pagenumber === pharmacy.totalPages ? TranslationTypes.PHARMACY_MORE_INFO : TranslationTypes.PHARMACY_REPROMPT)
+
+                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+
+                    }
+                    else {
+                        responseSpeech = {
+                            speechText: t(TranslationTypes.NO_EVENTS_FOUND),
+                            promptText: t(TranslationTypes.NO_EVENTS_FOUND),
+                            status: HandlerResponseStatus.Failure
+                        }
+                    }
+                },
+                onError: (error) => {
+                    console.error(error);
+                    responseSpeech = {
+                        speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        status: HandlerResponseStatus.Failure
+                    }
+                }
+            });
+        }
+
+        let response = handlerInput.responseBuilder;
+
+        if (responseSpeech.speechText) {
+            response.speak(responseSpeech.speechText);
+        }
         // Return also a prompt text if necessary
         if (responseSpeech.promptText) {
             response.reprompt(responseSpeech.promptText);

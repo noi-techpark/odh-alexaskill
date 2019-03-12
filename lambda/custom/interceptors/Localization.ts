@@ -24,12 +24,10 @@ export const LocalizationInterceptor: RequestInterceptor = {
     
             value = Array.isArray(value) ? value[Math.floor(Math.random() * value.length)] : value;
 
-            console.log("Attributes:"+ JSON.stringify(attributes))
             if(attributes !== undefined){
                 Object.keys(attributes).forEach(attr =>{
                   const reg = new RegExp(`%${attr}%`,"g");
                   value = value.replace(reg, attributes[attr]);
-                  console.log(value);
                 });
             }
               return value;

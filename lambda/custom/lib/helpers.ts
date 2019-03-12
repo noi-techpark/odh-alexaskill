@@ -1,11 +1,13 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest, services } from "ask-sdk-model";
-import { RequestTypes, ApiUrl, AuthToken, TranslationTypes } from "./constants";
+import { RequestTypes, ApiUrl, AuthToken, TranslationTypes, ApiCallTypes, WeekDays } from "./constants";
 import * as Interface from "./../interfaces";
 import "isomorphic-fetch";
 // @ts-ignore no types available for this module
 import * as date from 'date-and-time';
-import {URL, URLSearchParams } from "url";
+import { URL, URLSearchParams } from "url";
+import { IResponseApiStructure } from "./../interfaces";
+
 /**
  * Checks if the request matches any of the given intents.
  * 
@@ -243,8 +245,8 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
         const url = new URL(`${ApiUrl}/api/${route.url}`);
         //@ts-ignore
         const searchParams = new URLSearchParams(route.data)
-        
-        console.log(`${url}?${searchParams}`);
+
+        console.info(`API Request: ${url}?${searchParams}`)
         let response = await fetch(`${url}?${searchParams}`, {
             "headers": {
                 "Authorization": `Bearer ${AuthToken}`,
@@ -252,6 +254,7 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
             }
         });
         response = await response.json();
+        console.info(`API Response: ${JSON.stringify(response)}`)
         route.onSuccess(response);
     } catch (error) {
         route.onError(error);
@@ -276,6 +279,86 @@ export const dateFormat = (input: { date: string, lang?: string, format?: string
  * @param input string that should be validated
  * @param t translation function
  */
-export const cleanSssmlResponseFromInvalidChars = (input: string, t: any): string =>{
+export const cleanSssmlResponseFromInvalidChars = (input: string, t: any): string => {
     return input.replace(/&/g, t(TranslationTypes.AND_MSG))
+}
+
+export const removeUnopenedPharmacies = (records: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED], fromdate: Date, todate: Date): IResponseApiStructure[ApiCallTypes.POI_LOCALIZED] => {
+
+    records.Items = records.Items.filter(pharmacy => {
+        if (pharmacy.OperationSchedule !== null) {
+            // Remove inactive opening schedules
+            pharmacy.OperationSchedule = pharmacy.OperationSchedule.filter(schedule => {
+                const start = new Date(schedule.Start);
+                const stop = new Date(schedule.Stop);
+
+                var copyFromdate = new Date(fromdate);
+                let scheduleRangeValid: boolean = false;
+
+                // Check if current schedule range is valid
+                while (copyFromdate.getTime() <= todate.getTime() && scheduleRangeValid === false) {
+                    if (start.getTime() <= copyFromdate.getTime() && copyFromdate.getTime() <= stop.getTime()) {
+                        scheduleRangeValid = true;
+                    }
+
+                    copyFromdate.setDate(copyFromdate.getDate() + 1);
+                }
+                if (scheduleRangeValid) {
+                    // Check if an opening hour for this pharmacy exists
+                    // TODO: Add feature where user can ask for currently opened pharmacies
+                    if (schedule.OperationScheduleTime.length) {
+                        schedule.OperationScheduleTime = schedule.OperationScheduleTime.filter(operationSchedule => {
+
+                            let pharmacyOpenedForThisPeriod: boolean = false;
+                            // Reset fromdate for each iteration or the next opening hours will not be crawled
+                            copyFromdate = new Date(fromdate);
+
+                            // If the pharmacy has opened on at least one day
+                            while (copyFromdate.getTime() <= todate.getTime() && pharmacyOpenedForThisPeriod === false) {
+                                const weekDay = copyFromdate.toLocaleString("en", { weekday: 'long' });
+
+                                switch (weekDay) {
+                                    case WeekDays.MONDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Monday;
+                                        break;
+                                    case WeekDays.TUESDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Tuesday;
+                                        break;
+                                    case WeekDays.WEDNESDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Wednesday;
+                                        break;
+                                    case WeekDays.THURSDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Thuresday;
+                                        break;
+                                    case WeekDays.FRIDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Friday;
+                                        break;
+                                    case WeekDays.SATURDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Saturday;
+                                        break;
+                                    case WeekDays.SUNDAY:
+                                        pharmacyOpenedForThisPeriod = operationSchedule.Sunday;
+                                        break;
+                                }
+
+                                copyFromdate.setDate(copyFromdate.getDate() + 1);
+                            }
+
+                            return pharmacyOpenedForThisPeriod;
+                        });
+
+                        return schedule.OperationScheduleTime.length > 0;
+                    }
+                }
+
+                return false;
+            });
+
+            return pharmacy.OperationSchedule.length > 0;
+        }
+
+        return false;
+    });
+    console.log("Valid pharmacies"+ records.Items.length);
+    return records;
 }

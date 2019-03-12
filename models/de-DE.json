@@ -37,15 +37,28 @@
                         {
                             "name": "topic",
                             "type": "EventTopics"
+                        },
+                        {
+                            "name": "district",
+                            "type": "Districts"
                         }
                     ],
                     "samples": [
+                        "Welche Events sind in {district}",
+                        "Welche Events sind in {district} zum Thema {topic}",
+                        "Welche Events zu {topic} hast du am {period} ",
+                        "Welche Events hast du am {period} zu {topic}",
+                        "Welche Events hast du am {period} zum Thema {topic}",
+                        "Welche Events sind am {period} zum Thema {topic}",
                         "Welche Events hast du zum Thema {topic}",
+                        "Welche Events hast du zum Gebiet {topic}",
                         "Welche Events gibt es zum Thema {topic}",
+                        "Welche Events gibt es zum Gebiet {topic}",
                         "Zeig mir Events zum Thema {topic}",
+                        "Zeig mir Events zum Gebiet {topic}",
                         "Schlag mir Events zum Thema {topic} vor",
-                        "Welche Events sind vom  {fromdate} bis zum {todate} zum Thema {topic}",
-                        "Welche Events sind vom  {fromdate} bis zum {todate}",
+                        "Welche Events sind vom {fromdate} bis zum {todate} zum Thema {topic}",
+                        "Welche Events sind vom {fromdate} bis zum {todate}",
                         "Welche Events sind von {fromdate} bis {todate}",
                         "Welche Events sind am {period}",
                         "Welche Events sind {period}",
@@ -57,22 +70,29 @@
                     "name": "PharmacyIntent",
                     "slots": [
                         {
-                            "name": "starttime",
-                            "type": "AMAZON.TIME"
+                            "name": "fromdate",
+                            "type": "AMAZON.DATE"
                         },
                         {
-                            "name": "endtime",
-                            "type": "AMAZON.TIME"
+                            "name": "todate",
+                            "type": "AMAZON.DATE"
                         },
                         {
                             "name": "period",
                             "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "district",
+                            "type": "Districts"
                         }
                     ],
                     "samples": [
+                        "Welche Apotheken haben  von {fromdate} bis {todate} in {district} geöffnet",
+                        "Welche Apotheken haben {period} in {district} geöffnet",
+                        "Welche Apotheken gibt es in {district} ",
                         "Welche Apotheken haben {period} geöffnet",
                         "Welche Apotheken sind in meiner Nähe",
-                        "Welche Apotheken haben  von {starttime} bis {endtime} geöffnet"
+                        "Welche Apotheken haben  von {fromdate} bis {todate} geöffnet"
                     ]
                 },
                 {
@@ -87,6 +107,37 @@
                         "Mehr Events",
                         "Weitere Events",
                         "Weitere"
+                    ]
+                },
+                {
+                    "name": "FindMunicipalityIntent",
+                    "slots": [
+                        {
+                            "name": "municipality",
+                            "type": "Municipalities",
+                            "samples": [
+                                "{municipality}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{municipality}"
+                    ]
+                },
+                {
+                    "name": "PharmacyDetailIntent",
+                    "slots": [
+                        {
+                            "name": "query",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "Gib mir mehr Informationen zu der Apotheke {query}",
+                        "Mehr Infos zu der Apotheke {query}",
+                        "Mehr Informationen zur Apotheke {query}",
+                        "Welche Informationen hast du zu der Apotheke {query}",
+                        "Zeig mir mehr Informationen zu der Apotheke {query}"
                     ]
                 }
             ],
@@ -167,7 +218,6 @@
                                 "synonyms": [
                                     "Film",
                                     "Buchvorstellung",
-                                    "Festival",
                                     "Bergfilmfestival",
                                     "Benefizkonzert",
                                     "Abendkonzert",
@@ -247,8 +297,3366 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "Districts",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Garn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberfennberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Giggelberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Untertall"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Buchholz "
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ackpfeif"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Essenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Flans"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pontigl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Riedelsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Windlahn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vormeswald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Getzenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Glern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sill"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Litschbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberlana"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kastelruth"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lana"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rabenstein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Algund"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Reinswald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Alttoblach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Walburg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Innichen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Leifers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Obertall"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Ulrich/Urtijëi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Galsaun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Industriezone"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Neutoblach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Jaufental"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Veit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Auer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Nikolaus in Ulten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wahlen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schenna"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "San Cassiano"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "La Villa"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "S.Cristina Gherdëina/St.Christina in Gröden"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gries"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sexten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Partschins"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kiens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Naturns"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bruneck"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schlanders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stegen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kastelbell"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bozen Zentrum"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Astfeld"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Niederdorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Neustift"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Radein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schluderns"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sand in Taufers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mitterolang"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mühlbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Jenesien"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vahrn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pichl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ridnaun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wolkenstein/Sëlva"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Luttach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Johann"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Niederrasen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hafling Oberdorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tscherms"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Burgeis"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hafling Dorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Seis"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Terenten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Reschen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Martell"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberrasen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stilfes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mauls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Flains"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Georgen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ried"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Trens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sterzing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Goldrain"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Deutschnofen Dorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Seiseralm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Obereggen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Moos in Sexten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ried"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sulden"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfalzen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rein in Taufers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Antholz-Niedertal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Forst"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "U.L. Frau i.W."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberbozen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schnauders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Feldthurns"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hofern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ehrenburg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Verdings"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Verdins"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lajen Dorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Natz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Corvara"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Brixen Stadt"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Welschnofen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kurzras"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unser Frau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Andrä"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lüsen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Antholz-Obertal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ausserprags"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Haselsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Girlan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Viums"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Innerpens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kematen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Reischach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Montiggl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Völlan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Altrei"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pigeno"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vezzan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Latsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Weissenbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kematen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Plose"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Josef am See"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tirol"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vill"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Petersberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kohlern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Steinmannwald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Badia"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stefansdorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tschars"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterinn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schlinig"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mals"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Karthaus"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Eggen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Welsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sureghes/Überwasser"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Saalen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "La Val"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Glurns"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vernagt"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mittewald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Prissian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Grissian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Peter"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kasern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Jakob"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Steinhaus"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mitterdorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kaltern Dorf"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Meran"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Falzeben"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Colfosco"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schennaberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Terlan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Videgg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vöran"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Albions"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Marling"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Klobenstein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Taufers i. M."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Altenburg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Nikolaus"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schreckbichl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Prösels"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Christl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Laas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Innerratschings"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Innerprags"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Magdalena"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Proveis"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Antholz-Mittertal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterplanitzing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sarnthein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kuens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Missian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Montan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Meransen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gossensaß"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Plaus"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aufkirchen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Valentin auf der Haide"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Konstantin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Siebeneich"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Michael"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mühlwald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Pauls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Albeins"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Brixen Umland"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Geiselsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Barbian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Weissenbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Langtaufers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vintl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tiers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Nals"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hörschwang"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Georgen (Schenna)"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Michael"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Martin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Raas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aicha"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schabs"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Töll"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tramin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Pankraz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Gertraud"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pflersch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Burgstall"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Peter"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Saltaus"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Flon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gargazon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schrambach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Völs"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vierschach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Niederolang"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Veit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stilfs"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vilpian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Pauls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aschbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Andrian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberplanitzing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Obervintl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Leonhard i.P."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bula/Pufels"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Runggaditsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Percha"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberplars"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Prey-Klavenz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Anton-Pfuss"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Villanders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Prettau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Weitental"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfulters"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Afens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Thuins"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gand"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rentsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Martin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tartsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tschirland"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Taisten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Telfes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mühlbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vals"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Spinges"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sigmundskron"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Uttenheim"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gais"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberolang"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Steinegg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Riffian"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ennewasser"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Saubach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Breitbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Eppan Berg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Magdalena"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kurtatsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tarsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kurtinig"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Truden"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Graun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Entiklar"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Margreid a.d.W."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Villanderer Alm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ahornach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kardaun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hintermartell"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ums"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Nobls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lengmoos"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sonnenburg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ellen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Karersee"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfeffersberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mareit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vellau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Laatsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Planeil"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Staben"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tesselberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Sigmund"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Martin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Jakob"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Morter"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gummer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Graun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Kathrein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mühlbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Nauders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schweinsteg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Eyrs"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Allitz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Katharinaberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Valentin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tschöfas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Freins"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Issing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St.Anton"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Winnebach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Walten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rungg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Quadrat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterwielenbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rauth"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Barleit-Lavardi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Matsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Völser Aicha"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tisens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Elzenbaum"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Brennerbad"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Prad"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gufidaun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Latzfons"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stange"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schlaneid"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gand"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Juval"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Grasstein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mühlen in Taufers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stuls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Dick"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Platt"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Vigil"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Trafoi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tabland"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aldein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Quellenhof"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gifen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Afing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lichtenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mitterplars"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tisens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Naraun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ausserratschings"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Martin i.P."
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Neumarkt"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Putzen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gomagoi"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Onach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Frangart"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberinn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Greinwalden"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tagusens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Oswald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lengstein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Außermühlwald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterrain"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wiesen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Montal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ennetal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Branzoll"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wielenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Guln"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tschiffnon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Atzwang"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Breien"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lappach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aschl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rungg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vill"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Raminges"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gasteig"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Verschneid"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Söll"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Luns"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "San Lugano"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kalterer Klughammer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Signat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Jakob"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Fröllerberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Glaning"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aufhofen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Runggen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Perdonig"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Nordheim"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Oberwielenbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Dietenheim"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tschengls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Auen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mölten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Flaas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tabland"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Fassing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stilfserjoch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Waldberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Aberstückl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Salurn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Latschinig"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Trumsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gschnon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfatten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pinzon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Wangen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Penon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Seit"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kortsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mendelpass"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Nördersberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sonnenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Felix"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Steet"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Spiluck"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Neunhäusern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Spisses"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Moos in Passeier"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kalmtal"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterreinswald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tanas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gfrill"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Durnholz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Trienbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Don Bosco"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Weissenstein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kollmann"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Untrum"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Egg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Matatz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Nasen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Klausen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Platzers"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schleis"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schalders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Franzensfeste"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Niederlana"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ahnerberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Agratsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Platten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Lorenzen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Brenner"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pflaurenz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ratsberg/Mellaten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tschöfs"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterackern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Valgenäun"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rizzail"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Niederried"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Birchabruck"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vertigen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kühberg-Alm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Stein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rodenecker Alm"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Öttenbach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Göflan"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ulten Alsack"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Jakob"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schmuders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kandellen-Frondeigen-Stadlern"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Freiberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vernuer"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Haslach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Laurein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Vigiljoch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Prenn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sonnenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Waidbruck"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mittelberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Blumau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tomberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Magdfeld"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Moritzing"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfelders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfunders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Muls"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Platten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Niederwangen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Unterfennberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Dreikirchen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ausserpens"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rotwand"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lothen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Magdalena"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Peter"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Valentin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Koll"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Jakob"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Teis"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pawigl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Sonnenberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Tanirz"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bozner Boden"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Versein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kaltenbrunn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Rabland"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Matzes"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mitterlana"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Moos"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Runggaditsch"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "St. Oswald"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Karneid"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kandelsberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pescosta"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gissmann"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Elvas"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Hofstatt"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mazon"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Glen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Welschellen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Untermoj"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Campill"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Enneberg Pfarre"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Zwischenwasser"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pikolein"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gfrill"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Kofl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schernag"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gebracksberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Laag"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gentersberg"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Virgl"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Plawenn"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Gaid"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Blumau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "San Martin"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "San Vigilio"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Municipalities",
+                    "values": [
+                        {
+                            "id": "D302C1721EAA47608676456529E7FEA9",
+                            "name": {
+                                "value": "Sarntal"
+                            }
+                        },
+                        {
+                            "id": "2FA50B592A1B4F04BACEC021405B36CA",
+                            "name": {
+                                "value": "Leifers"
+                            }
+                        },
+                        {
+                            "id": "A5D89B8D0E084C6280B176790C0E3D19",
+                            "name": {
+                                "value": "Kastelbell-Tschars"
+                            }
+                        },
+                        {
+                            "id": "1864ECD1366E49ED9429F51784D8AEA2",
+                            "name": {
+                                "value": "Ratschings"
+                            }
+                        },
+                        {
+                            "id": "5D4D46A9754B4332B73B0274380617E9",
+                            "name": {
+                                "value": "Auer"
+                            }
+                        },
+                        {
+                            "id": "A9DD8986C362423893A5047F9027A10E",
+                            "name": {
+                                "value": "Naturns"
+                            }
+                        },
+                        {
+                            "id": "11DE1E602F294B44AE36F185E71CC363",
+                            "name": {
+                                "value": "Schlanders"
+                            }
+                        },
+                        {
+                            "id": "DC13D675C3224FA2ADCC387AC970C0A3",
+                            "name": {
+                                "value": "Vahrn"
+                            }
+                        },
+                        {
+                            "id": "413FBCB36CEB423A8F3BA3334CFC6B98",
+                            "name": {
+                                "value": "Aldein"
+                            }
+                        },
+                        {
+                            "id": "9F875BCD7916450E9EBB53A1EAB9607C",
+                            "name": {
+                                "value": "Schluderns"
+                            }
+                        },
+                        {
+                            "id": "58956B90EBF743278012A8083764345B",
+                            "name": {
+                                "value": "Jenesien"
+                            }
+                        },
+                        {
+                            "id": "9E675919E17F4F71820CE23CA7138EA1",
+                            "name": {
+                                "value": "Tscherms"
+                            }
+                        },
+                        {
+                            "id": "523476D90D1143FFA85D5EDCDE21225F",
+                            "name": {
+                                "value": "Martell"
+                            }
+                        },
+                        {
+                            "id": "C2F074577B894247A7F521F622FDB090",
+                            "name": {
+                                "value": "Freienfeld"
+                            }
+                        },
+                        {
+                            "id": "F5ACB333279F42A58DC65C7466B02E5F",
+                            "name": {
+                                "value": "Pfitsch"
+                            }
+                        },
+                        {
+                            "id": "D5671C5993B9400788AB1CF604939D24",
+                            "name": {
+                                "value": "Latsch"
+                            }
+                        },
+                        {
+                            "id": "9FF0DA1AE73E4B6F824709734DEE43B0",
+                            "name": {
+                                "value": "Stilfs"
+                            }
+                        },
+                        {
+                            "id": "BFFC358F683D435C96975102F188B3C2",
+                            "name": {
+                                "value": "Pfalzen"
+                            }
+                        },
+                        {
+                            "id": "2B6B8F6A17534563ADFAE74D3D6AC8CA",
+                            "name": {
+                                "value": "U.L. Frau i.W.-St. Felix"
+                            }
+                        },
+                        {
+                            "id": "DFE9B747E3DE4BE49E048CC2D4A0CCDD",
+                            "name": {
+                                "value": "Feldthurns"
+                            }
+                        },
+                        {
+                            "id": "5A83FD5D8DCE42939EA4AF037FE0197B",
+                            "name": {
+                                "value": "Schnals"
+                            }
+                        },
+                        {
+                            "id": "AEEEC940C2684D679CE0F611929BC46E",
+                            "name": {
+                                "value": "Altrei"
+                            }
+                        },
+                        {
+                            "id": "19A599F239024DD9A455E7A414297D72",
+                            "name": {
+                                "value": "Rodeneck"
+                            }
+                        },
+                        {
+                            "id": "BCAFBACB231F410D832FAD3AB25C9A83",
+                            "name": {
+                                "value": "St. Lorenzen"
+                            }
+                        },
+                        {
+                            "id": "516EF5F9F7794997B874828DBE157E6E",
+                            "name": {
+                                "value": "Glurns"
+                            }
+                        },
+                        {
+                            "id": "DAE58150057D440FAB3903EC9ADCEA2C",
+                            "name": {
+                                "value": "Franzensfeste"
+                            }
+                        },
+                        {
+                            "id": "B7148CE7D5104C579D5ECE6684B3B35B",
+                            "name": {
+                                "value": "Tisens"
+                            }
+                        },
+                        {
+                            "id": "9390298788614912B01D7C592D5FAD92",
+                            "name": {
+                                "value": "Prettau"
+                            }
+                        },
+                        {
+                            "id": "14C64A5225104BCD89D7FE57130DBA7D",
+                            "name": {
+                                "value": "Vöran"
+                            }
+                        },
+                        {
+                            "id": "6BAB38D3BCB84F01BB1D4573E7028EA8",
+                            "name": {
+                                "value": "Laas"
+                            }
+                        },
+                        {
+                            "id": "A7CA017FF0424503827BCD0E552F4648",
+                            "name": {
+                                "value": "Proveis"
+                            }
+                        },
+                        {
+                            "id": "16B18CD0EB894C839795A3A28DE34978",
+                            "name": {
+                                "value": "Kuens"
+                            }
+                        },
+                        {
+                            "id": "E17020E4C5204781AABAF04587B0ADD5",
+                            "name": {
+                                "value": "Mühlbach"
+                            }
+                        },
+                        {
+                            "id": "2B138D40992744BDBD38F56B73F45183",
+                            "name": {
+                                "value": "Brenner"
+                            }
+                        },
+                        {
+                            "id": "F5C4E9883054483AB9AB011688B64E6F",
+                            "name": {
+                                "value": "Barbian"
+                            }
+                        },
+                        {
+                            "id": "5568A7BEB57244938CE6462E0304B4FE",
+                            "name": {
+                                "value": "Nals"
+                            }
+                        },
+                        {
+                            "id": "0E7639D5CB704C7BA750A9060D63D795",
+                            "name": {
+                                "value": "St. Pankraz"
+                            }
+                        },
+                        {
+                            "id": "26E24DDA5DE84E088977E5FBA2DE23C7",
+                            "name": {
+                                "value": "Burgstall"
+                            }
+                        },
+                        {
+                            "id": "1EC64CED24C9472BBD81C82A7A5D2070",
+                            "name": {
+                                "value": "Gargazon"
+                            }
+                        },
+                        {
+                            "id": "8E3F9CD82D9D460582CCC36B272E7E65",
+                            "name": {
+                                "value": "Andrian"
+                            }
+                        },
+                        {
+                            "id": "5640C4FD39C44B0DBAF0E8AC1E89A6A8",
+                            "name": {
+                                "value": "Percha"
+                            }
+                        },
+                        {
+                            "id": "07A38CBBB96D4550A6D55B48F22E224F",
+                            "name": {
+                                "value": "Villanders"
+                            }
+                        },
+                        {
+                            "id": "D8255FDA405E43CFA2804D06FFA097FA",
+                            "name": {
+                                "value": "Kurtatsch a.d.W."
+                            }
+                        },
+                        {
+                            "id": "A9DF76FB2A2C4FD5A0420A09090F8F29",
+                            "name": {
+                                "value": "Truden"
+                            }
+                        },
+                        {
+                            "id": "3E526A0688DC422FBC97CB503C5BFC1C",
+                            "name": {
+                                "value": "Margreid a.d.W."
+                            }
+                        },
+                        {
+                            "id": "0D67D21F08C84567A350370D1819F035",
+                            "name": {
+                                "value": "Branzoll"
+                            }
+                        },
+                        {
+                            "id": "831F50375B3640A79E7B21C39E767C03",
+                            "name": {
+                                "value": "Salurn"
+                            }
+                        },
+                        {
+                            "id": "5FC1C83029224AD0AD2A6D79EAB96702",
+                            "name": {
+                                "value": "Pfatten"
+                            }
+                        },
+                        {
+                            "id": "98BD0DE3DF044756A00AFB8F1878DD7B",
+                            "name": {
+                                "value": "Laurein"
+                            }
+                        },
+                        {
+                            "id": "BB0043517A57498683B2F997B7B68D5F",
+                            "name": {
+                                "value": "Waidbruck"
+                            }
+                        },
+                        {
+                            "id": "B8B229D4245344D1AB274A938F9D35E4",
+                            "name": {
+                                "value": "Villnöß"
+                            }
+                        },
+                        {
+                            "id": "64868F530C314597B0A5A9B2FBBD5730",
+                            "name": {
+                                "value": "Neumarkt"
+                            }
+                        },
+                        {
+                            "id": "CBC29A5630B94AB984AF85F9662FD13D",
+                            "name": {
+                                "value": "Kurtinig"
+                            }
+                        },
+                        {
+                            "id": "0EFA5D32D84D4D3DAFD366F9D6EF0CBF",
+                            "name": {
+                                "value": "Völs am Schlern"
+                            }
+                        },
+                        {
+                            "id": "99A8B1D4A8D64303B1B965AA7C20FA60",
+                            "name": {
+                                "value": "Algund"
+                            }
+                        },
+                        {
+                            "id": "50FCFD4334A04DB087C1FD10ED864018",
+                            "name": {
+                                "value": "Bozen"
+                            }
+                        },
+                        {
+                            "id": "2B2B22E275734BB990DE4A3FC98C6A18",
+                            "name": {
+                                "value": "Brixen"
+                            }
+                        },
+                        {
+                            "id": "F6504AD16C294686A65F310809E80E1F",
+                            "name": {
+                                "value": "Bruneck"
+                            }
+                        },
+                        {
+                            "id": "7D76788DFB264AE6A8FF8F4A064ADDE4",
+                            "name": {
+                                "value": "Deutschnofen"
+                            }
+                        },
+                        {
+                            "id": "C1E7ED81E2AE4371BE15921F1BF9BE88",
+                            "name": {
+                                "value": "Eppan a. d. W."
+                            }
+                        },
+                        {
+                            "id": "FAB945D539FB47E485EB05AD33034190",
+                            "name": {
+                                "value": "Gais"
+                            }
+                        },
+                        {
+                            "id": "FD746CCBD5484A84AA09A75C8ACBA35D",
+                            "name": {
+                                "value": "Hafling"
+                            }
+                        },
+                        {
+                            "id": "6A255B413B63486EB6C58CCA73EBC068",
+                            "name": {
+                                "value": "Kaltern a.d.W."
+                            }
+                        },
+                        {
+                            "id": "1E84922B82234EE682A341531E1D1925",
+                            "name": {
+                                "value": "Kiens"
+                            }
+                        },
+                        {
+                            "id": "1292EAF0E46B49A4A56A75C0EEA4EDC3",
+                            "name": {
+                                "value": "La Val"
+                            }
+                        },
+                        {
+                            "id": "97087B1501394665B4FEA6ECB5B29B37",
+                            "name": {
+                                "value": "Lajen"
+                            }
+                        },
+                        {
+                            "id": "8B13353D5123495DA53CEC4F7555B789",
+                            "name": {
+                                "value": "Lüsen"
+                            }
+                        },
+                        {
+                            "id": "8C1F2F4D6D4448409EADAFD3100A3548",
+                            "name": {
+                                "value": "Mals"
+                            }
+                        },
+                        {
+                            "id": "418E5CC913764648802DD2BE30AD91AC",
+                            "name": {
+                                "value": "Meran"
+                            }
+                        },
+                        {
+                            "id": "2C342673DCCF467BB0CC3B16F8FBBAE2",
+                            "name": {
+                                "value": "Montan"
+                            }
+                        },
+                        {
+                            "id": "F8D50DFDDAD34539897FED76E1500784",
+                            "name": {
+                                "value": "Moos in Passeier"
+                            }
+                        },
+                        {
+                            "id": "6261F92FC0254903AE1199FDD97837BF",
+                            "name": {
+                                "value": "Mölten"
+                            }
+                        },
+                        {
+                            "id": "00D33A4ACA17485E843C31580E36B2A8",
+                            "name": {
+                                "value": "Mühlwald"
+                            }
+                        },
+                        {
+                            "id": "E55B34E51B2F4BE9BF0C9EF605BD3547",
+                            "name": {
+                                "value": "Natz-Schabs"
+                            }
+                        },
+                        {
+                            "id": "01D4DD1D1DE545C38EDF9B74387DEFCE",
+                            "name": {
+                                "value": "Niederdorf"
+                            }
+                        },
+                        {
+                            "id": "9E8CABBF64454408BBEAF255317FC750",
+                            "name": {
+                                "value": "Olang"
+                            }
+                        },
+                        {
+                            "id": "4A3968C94AED49219A08575619C1EB77",
+                            "name": {
+                                "value": "Partschins"
+                            }
+                        },
+                        {
+                            "id": "6C84D98E18F7402CB748D4068D322ED5",
+                            "name": {
+                                "value": "Plaus"
+                            }
+                        },
+                        {
+                            "id": "D9300718A9E3418DAB95ABF1E88736DA",
+                            "name": {
+                                "value": "Prad am Stilfser Joch"
+                            }
+                        },
+                        {
+                            "id": "81A76A9381CD4A5D92C5DA51F0E9CEEB",
+                            "name": {
+                                "value": "Prags"
+                            }
+                        },
+                        {
+                            "id": "788CDC56BCD54A1DA9595325219E13BB",
+                            "name": {
+                                "value": "Ritten"
+                            }
+                        },
+                        {
+                            "id": "6A5FF36917FA48D2B1996B76C7AA8BC6",
+                            "name": {
+                                "value": "Sand in Taufers"
+                            }
+                        },
+                        {
+                            "id": "2AB3F9655E6948169A3D72F2C2F0F1C7",
+                            "name": {
+                                "value": "Sexten"
+                            }
+                        },
+                        {
+                            "id": "4D5CF7C479D644D4B5C4FCCFAA049684",
+                            "name": {
+                                "value": "St. Leonhard i.P."
+                            }
+                        },
+                        {
+                            "id": "D980695AB09F4616A64A9A1794C15077",
+                            "name": {
+                                "value": "St. Martin i.P"
+                            }
+                        },
+                        {
+                            "id": "427E3B55E37D4E918AB861DEAC0C3493",
+                            "name": {
+                                "value": "Sterzing"
+                            }
+                        },
+                        {
+                            "id": "D8086690DBD64C9BBB7F6C870D9741D5",
+                            "name": {
+                                "value": "Taufers i.M."
+                            }
+                        },
+                        {
+                            "id": "A678EF835E034C9181C6A8135E28D311",
+                            "name": {
+                                "value": "Terlan"
+                            }
+                        },
+                        {
+                            "id": "8895C4442AB14373945875B1CBE037A7",
+                            "name": {
+                                "value": "Tirol"
+                            }
+                        },
+                        {
+                            "id": "4F97133F32724CA599FEDAFED08C7773",
+                            "name": {
+                                "value": "Toblach"
+                            }
+                        },
+                        {
+                            "id": "73F7700CAF344DDFAD46B4A296DBEC77",
+                            "name": {
+                                "value": "Vintl"
+                            }
+                        },
+                        {
+                            "id": "B3FD0D642BD74AE6AE952DC2548963A2",
+                            "name": {
+                                "value": "Welschnofen"
+                            }
+                        },
+                        {
+                            "id": "EFE24BA73A744CBB980186693578AF8C",
+                            "name": {
+                                "value": "Terenten"
+                            }
+                        },
+                        {
+                            "id": "2119D9D1C4744C4E9701BF837DF63FFD",
+                            "name": {
+                                "value": "Kastelruth"
+                            }
+                        },
+                        {
+                            "id": "1C75AFF3EA414FCF91B9299247DE6C32",
+                            "name": {
+                                "value": "Tiers"
+                            }
+                        },
+                        {
+                            "id": "A4ADE30BDEE043E992555E7EC3A0F043",
+                            "name": {
+                                "value": "Badia"
+                            }
+                        },
+                        {
+                            "id": "4340DD4ADA4843F7857B3AC3CD1F997C",
+                            "name": {
+                                "value": "Corvara"
+                            }
+                        },
+                        {
+                            "id": "C9F8EA73E9DC456A8DB9914F0CB29324",
+                            "name": {
+                                "value": "Innichen"
+                            }
+                        },
+                        {
+                            "id": "0FE7C964B20B403C9491B9A0C9CA2BD3",
+                            "name": {
+                                "value": "Karneid"
+                            }
+                        },
+                        {
+                            "id": "64542726402740118771E58AA75D6428",
+                            "name": {
+                                "value": "Ahrntal"
+                            }
+                        },
+                        {
+                            "id": "F27E773C3D334208B21F67148ADA1A04",
+                            "name": {
+                                "value": "Rasen-Antholz"
+                            }
+                        },
+                        {
+                            "id": "005525D80BA44D66A9CF4788FCACB763",
+                            "name": {
+                                "value": "Klausen"
+                            }
+                        },
+                        {
+                            "id": "6BF6D72D15284508B71179A6E458C18D",
+                            "name": {
+                                "value": "Tramin a. d. W."
+                            }
+                        },
+                        {
+                            "id": "68D736A09AE0484FB36B35B0AEEBA219",
+                            "name": {
+                                "value": "Ulten"
+                            }
+                        },
+                        {
+                            "id": "1307FF7CBDF943A692FAAEB32FA827C4",
+                            "name": {
+                                "value": "St.Ulrich"
+                            }
+                        },
+                        {
+                            "id": "C8EC77F20F4D4F3884E1B3BC77D5D699",
+                            "name": {
+                                "value": "Wolkenstein"
+                            }
+                        },
+                        {
+                            "id": "F0A9687C8AC347D988A77B7BE19EEA06",
+                            "name": {
+                                "value": "St.Christina in Gröden"
+                            }
+                        },
+                        {
+                            "id": "1465A460C04946EFAD3D479EDC3329EB",
+                            "name": {
+                                "value": "San Vigilio"
+                            }
+                        },
+                        {
+                            "id": "30F534A4D2FC4E78998EED517F788D7C",
+                            "name": {
+                                "value": "Marling"
+                            }
+                        },
+                        {
+                            "id": "0EECEC93283E42488CBE0EB3B94CD339",
+                            "name": {
+                                "value": "Lana"
+                            }
+                        },
+                        {
+                            "id": "27025658D62349A1BB4CE01208A42C79",
+                            "name": {
+                                "value": "Schenna"
+                            }
+                        },
+                        {
+                            "id": "0EB9C7C089F54852830D7ECE17A90C37",
+                            "name": {
+                                "value": "Gsies"
+                            }
+                        },
+                        {
+                            "id": "CCD5827195AD4CA98B17D837EAAA4723",
+                            "name": {
+                                "value": "Welsberg-Taisten"
+                            }
+                        },
+                        {
+                            "id": "D02121B3BA8743629DB083E73219B549",
+                            "name": {
+                                "value": "Graun im Vinschgau"
+                            }
+                        },
+                        {
+                            "id": "1BED14B9F37B44628C341FBC921E1F20",
+                            "name": {
+                                "value": "San Martin"
+                            }
+                        },
+                        {
+                            "id": "DA6754A7C6DE42D0BA1D4702301186FA",
+                            "name": {
+                                "value": "Riffia"
+                            }
+                        }
+                    ]
                 }
             ]
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "FindMunicipalityIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "municipality",
+                            "type": "Municipalities",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.558052350761.920289827446"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.558052350761.920289827446",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Welche Gemeinde haben sie gemeint?"
+                    }
+                ]
+            }
+        ]
     }
 }

@@ -4,7 +4,9 @@ export enum RequestTypes {
     SessionEnded = "SessionEndedRequest",
     HelloWorld = "HelloWorldIntent",
     Event = "EventIntent",
-    LoadMore = "LoadMoreIntent"
+    Pharmacy = "PharmacyIntent",
+    LoadMore = "LoadMoreIntent",
+    FindMunicipality = "FindMunicipalityIntent"
 }
 
 export enum IntentTypes {
@@ -27,20 +29,32 @@ export enum LocaleTypes {
 
 export enum TranslationTypes {
     SKILL_NAME = "SKILL_NAME",
-    HELLO_MSG = "HELLO_MSG",
     GREETING_MSG = "GREETING_MSG",
     EVENT_MSG_SINGLE_DATE = "EVENT_MSG_SINGLE_DATE",
     EVENT_MSG_SINGLE_DATE_WITH_TOPIC = "EVENT_MSG_SINGLE_DATE_WITH_TOPIC",
     EVENT_MSG_MULTIPLE_DATES = "EVENT_MSG_MULTIPLE_DATES",
     EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC = "EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC",
+    EVENT_TOPIC_WITH_MUNICIPALITY = "EVENT_TOPIC_WITH_MUNICIPALITY",
+    EVENT_MUNICIPALITY_CHOOSE = "EVENT_MUNICIPALITY_CHOOSE",
     EVENT_TOPIC = "EVENT_TOPIC",
+    EVENT_LOCATION = "EVENT_LOCATION",
     EVENT_REPROMPT = "EVENT_REPROMPT",
     EVENT_MORE_INFO = "EVENT_MORE_INFO",
     EVENT_MAX_EXCEEDED = "EVENT_MAX_EXCEEDED",
     NO_EVENTS_FOUND = "NO_EVENTS_FOUND",
+    PHARMACY_MSG_SINGLE_DATE = "PHARMACY_MSG_SINGLE_DATE",
+    PHARMACY_MSG_MULTIPLE_DATES = "PHARMACY_MSG_MULTIPLE_DATES",
+    PHARMACY_REPROMPT = "PHARMACY_REPROMPT",
+    PHARMACY_MORE_INFO = "PHARMACY_MORE_INFO",
+    PHARMACY_LOCATION = "PHARMACY_LOCATION",
+    NO_PHARMACIES_FOUND = "NO_PHARMACIES_FOUND",
+    PHARMACY_MAX_EXCEEDED = "PHARMACY_MAX_EXCEEDED",
     AND_MSG = "AND_MSG",
     HELP_MSG = "HELP_MSG",
     GOODBYE_MSG = "GOODBYE_MSG",
+    ERROR_INVALID_MUNICIPALITY = "ERROR_INVALID_MUNICIPALITY",
+    ERROR_NO_TOPIC_FOUND = "ERROR_NO_TOPIC_FOUND",
+    ERROR_NO_DISTRICTS_FOUND = "ERROR_NO_DISTRICTS_FOUND",
     ERROR_MSG = "ERROR_MSG",
     ERROR_UNEXPECTED_MSG = "ERROR_UNEXPECTED_MSG",
 }
@@ -50,10 +64,24 @@ export const AuthToken = "8x0XpxnVP7B8MFyPLM64RZQjfTsAPlX1Y8NwnMA1WiXhXMZq35Y1ZM
 
 export enum ApiCallTypes {
     EVENT_REDUCED = "EventReduced",
-    EVENT_LOCALIZED = "EventLocalized"
+    EVENT_LOCALIZED = "EventLocalized",
+    DISTRICT_LOCALIZED = "DistrictLocalized",
+    MUNICIPALITY_REDUCED = "MunicipalityReduced",
+    POI_LOCALIZED = "PoiLocalized"
 }
 
 export enum HandlerResponseStatus {
+    Delegate = 2,
     Success = 1,
     Failure = 0
+}
+
+export enum WeekDays {
+    MONDAY = "Monday",
+    TUESDAY = "Tuesday",
+    WEDNESDAY = "Wednesday",
+    THURSDAY = "Thursday",
+    FRIDAY = "Friday",
+    SATURDAY = "Saturday",
+    SUNDAY = "Sunday"
 }
