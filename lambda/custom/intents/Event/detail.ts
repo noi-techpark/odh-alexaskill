@@ -4,9 +4,9 @@ import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromIn
 import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes } from "../../lib/constants";
 import { IHandlerResponse, IParamsApiStructure, IResponseApiStructure } from "../../interfaces";
 
-export const PharmacyDetailHandler: RequestHandler = {
+export const EventDetailHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
-        return IsIntent(handlerInput, RequestTypes.PharmacyDetail);
+        return IsIntent(handlerInput, RequestTypes.EventDetail);
     },
     async handle(handlerInput: HandlerInput): Promise<Response> {
 

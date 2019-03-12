@@ -4,7 +4,9 @@ export enum RequestTypes {
     SessionEnded = "SessionEndedRequest",
     HelloWorld = "HelloWorldIntent",
     Event = "EventIntent",
+    EventDetail = "EventDetailIntent",
     Pharmacy = "PharmacyIntent",
+    PharmacyDetail = "PharmacyDetailIntent",
     LoadMore = "LoadMoreIntent",
     FindMunicipality = "FindMunicipalityIntent"
 }

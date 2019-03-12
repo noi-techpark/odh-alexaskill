@@ -2,7 +2,7 @@ import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
 import { IsIntent, GetRequestAttributes } from "../../lib/helpers";
 import { RequestTypes, TranslationTypes } from "../../lib/constants";
-import { EventHandler } from "./../Event";
+import { EventHandler } from "../Event/list";
 
 export const FindMunicipalityHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {

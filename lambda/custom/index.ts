@@ -1,6 +1,8 @@
 import { SkillBuilders } from "ask-sdk-core";
 
 import * as Intents from "./intents";
+import * as Event from "./intents/Event";
+import * as Pharmacy from "./intents/Pharmacy";
 import * as Interceptor from "./interceptors";
 import * as Errors from "./errors";
 
@@ -15,8 +17,10 @@ export const handler = SkillBuilders.custom()
     Intents.SessionEndedHandler,
 
     // Event intents
-    Intents.EventHandler,
-    Intents.PharmacyHandler,
+    Event.EventListHandler,
+    // Event.EventDetailHandler,
+    Pharmacy.PharmacyListHandler,
+    Pharmacy.PharmacyDetailHandler,
     Intents.LoadMoreHandler,
     Intents.FindMunicipalityHandler
   )
