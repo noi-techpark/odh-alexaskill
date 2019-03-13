@@ -1,18 +1,19 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
-import { IsIntent, RouteGenerate, GetRequestAttributes, dateFormat, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
-import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus } from "../../lib/constants";
+import { IsIntent, RouteGenerate, GetRequestAttributes, cleanSssmlResponseFromInvalidChars } from "../../lib/helpers";
+import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus, GastronomyType } from "../../lib/constants";
 import { IResponseApiStructure, IHandlerResponse, IParamsApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as AmazonDateParser from "amazon-date-parser";
 
-export const PharmacyListHandler: RequestHandler = {
+export const GastronomyListHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
-        return IsIntent(handlerInput, RequestTypes.Pharmacy);
+        return IsIntent(handlerInput, RequestTypes.GastronomyList);
     },
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
         const { t, language } = GetRequestAttributes(handlerInput);
+        //const { selectedMunicipality } = handlerInput.attributesManager.getSessionAttributes();
 
         const lang = language();
 
@@ -24,35 +25,67 @@ export const PharmacyListHandler: RequestHandler = {
 
         // get slots
         const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-        const periodSlot = requestAttributes.slots.period;
-        const fromdateSlot = requestAttributes.slots.fromdate;
-        const todateSlot = requestAttributes.slots.todate;
+        const gastronomyTypeSlot = requestAttributes.slots.gastronomyType;
+        const ceremonyTypeSlot = requestAttributes.slots.ceremonyType;
         const districtSlot = requestAttributes.slots.district;
 
-        let fromdate: any;
-        let todate: any;
-        let fromdateSpeech: any;
-        let todateSpeech: any;
-
         const page: number = 1;
-        const limit: number = 99999;
+        const limit: number = 5;
 
-        // Poitype 1 are the pharmacies
-        let data: IParamsApiStructure[ApiCallTypes.POI_LOCALIZED] = {
+        let data: IParamsApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED] = {
             "language": lang,
-            "poitype": "1",
-            "subtype": "1",
             "pagenumber": page,
+            // Get only restaurants
+            "categorycodefilter": 1,
             "active": true,
             "pagesize": limit,
         };
 
-        // Create fake pagination due to no native api support for getting pharmacies that have opened in a certain range
-        const pagenumber: number = 1;
-        const pagesize: number = 5;
-
         let municipality: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED][0];
 
+        if (gastronomyTypeSlot.value !== "") {
+            if (gastronomyTypeSlot.isMatch) {
+                const gastronomyType = gastronomyTypeSlot.id.split("_");
+                // First entry is the filter type and second one is the identifier for the gastronomy type
+                if (gastronomyType.length === 2) {
+                    switch (gastronomyType[0]) {
+                        case GastronomyType.FACILITY_CODE:
+                            data.facilitycodefilter = gastronomyType[1];
+                            break;
+                        case GastronomyType.CUISINE_CODE:
+                            data.cuisinecodefilter = gastronomyType[1];
+                            break;
+                    }
+                }
+                else {
+                    return handlerInput.responseBuilder
+                        .speak(t(TranslationTypes.GASTRONOMY_NO_KITCHENTYPE_FOUND))
+                        .reprompt(t(TranslationTypes.HELP_MSG))
+                        .getResponse();
+                }
+            }
+            else {
+                return handlerInput.responseBuilder
+                    .speak(t(TranslationTypes.GASTRONOMY_NO_KITCHENTYPE_FOUND))
+                    .reprompt(t(TranslationTypes.HELP_MSG))
+                    .getResponse();
+            }
+        }
+
+        if (ceremonyTypeSlot.value !== "") {
+            if (ceremonyTypeSlot.isMatch) {
+                data.ceremonycodefilter = ceremonyTypeSlot.id;
+            }
+            else {
+                return handlerInput.responseBuilder
+                    .speak(t(TranslationTypes.GASTRONOMY_NO_KITCHENTYPE_FOUND))
+                    .reprompt(t(TranslationTypes.HELP_MSG))
+                    .getResponse();
+            }
+        }
+
+        // Previously multiple municipalities matched with the search pattern and user finally choosed one of them
+        // if (selectedMunicipality === undefined) {
         // If the user want events from a specific district
         if (districtSlot.value !== "") {
             const districtParams: IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] = {
@@ -191,7 +224,7 @@ export const PharmacyListHandler: RequestHandler = {
                 return response.getResponse();
             }
             else if (responseSpeech.status === HandlerResponseStatus.Delegate && responseSpeech.delegateIntent) {
-                // TODO:
+                // TODO: Configure intent for selecting a specific municiapality
                 // return handlerInput.responseBuilder
                 //     .addElicitSlotDirective('municipality', {
                 //         name: responseSpeech.delegateIntent,
@@ -202,115 +235,71 @@ export const PharmacyListHandler: RequestHandler = {
                 //     .getResponse();
             }
         }
-
-        if (periodSlot.value !== "") {
-            // parse the amazon date to a valid date range
-            const awsDate = AmazonDateParser(periodSlot.value);
-
-            fromdate = dateFormat({
-                date: awsDate.startDate,
-                lang
-            });
-            todate = dateFormat({
-                date: awsDate.endDate,
-                lang
-            });
-            fromdateSpeech = dateFormat({
-                date: awsDate.startDate,
-                lang,
-                format: "dddd, DD MMMM"
-            });
-            todateSpeech = dateFormat({
-                date: awsDate.endDate,
-                lang,
-                format: "dddd, DD MMMM YYYY"
-            });
-
-        }
-        // get the events that are in a certain period of time
-        else if (fromdateSlot.value !== "" && todateSlot.value !== "") {
-            fromdate = fromdateSlot.value;
-            todate = todateSlot.value;
-
-            // parse the date
-            fromdateSpeech = dateFormat({
-                date: fromdateSlot.value,
-                lang,
-                format: "dddd, DD MMMM"
-            });
-            todateSpeech = dateFormat({
-                date: todateSlot.value,
-                lang,
-                format: "dddd, DD MMMM YYYY"
-            });
-
-        }
+        // }
+        // else {
+        //     data.locfilter = `mun${selectedMunicipality.Id}`;
+        //     municipality = selectedMunicipality;
+        // }
 
         await RouteGenerate({
-            url: ApiCallTypes.POI_LOCALIZED,
+            url: ApiCallTypes.GASTRONOMY_LOCALIZED,
             data,
-            onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
+            onSuccess: (response: IResponseApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED]) => {
                 // If records exists
                 if (response.Items[0] !== null && response.Items.length) {
-                    if (fromdate !== undefined || todate !== undefined) {
-                        response = removeUnopenedPharmacies(response, new Date(fromdate), new Date(todate));
-                        if (response.Items.length) {
-                            // If from- and todate are the same
-                            if (fromdate === todate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_SINGLE_DATE, { "date": todateSpeech })}</p>`;
-                            }
-                            else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}</p>`;
-                            }
+                    // Get the names from the events
+                    const gastronomies = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
+                        return event.Shortname;
+                    }).join(", "), t);
+
+                    if (data.cuisinecodefilter !== undefined || data.facilitycodefilter !== undefined) {
+                        console.log("Type"+ JSON.stringify(gastronomyTypeSlot));
+                        console.log("municipality"+ JSON.stringify(municipality));
+                        console.log("ceremonyTypeSlot"+ JSON.stringify(ceremonyTypeSlot));
+                        if (data.locfilter !== undefined && data.ceremonycodefilter !== undefined) {
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_TYPE_WITH_MUNICIPALITY_AND_CEREMONY, { "type": gastronomyTypeSlot.resolved, "municipality": municipality.Name,  "ceremony": ceremonyTypeSlot.resolved })}</p>`;
+                        }
+                        else if (data.locfilter !== undefined) {
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_TYPE_WITH_MUNICIPALITY, { "type": gastronomyTypeSlot.resolved, "municipality": municipality.Name })}</p>`;
+                        }
+                        else if (data.ceremonycodefilter !== undefined) {
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_TYPE_WITH_CEREMONY, { "type": gastronomyTypeSlot.resolved, "ceremony": ceremonyTypeSlot.resolved })}</p>`;
                         }
                         else {
-                            responseSpeech = {
-                                speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                                promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                                status: HandlerResponseStatus.Failure
-                            }
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_KITCHENTYPE, { "type": gastronomyTypeSlot.resolved })}</p>`;
                         }
                     }
                     else if (data.locfilter !== undefined) {
-                        responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_LOCATION, { "municipality": municipality.Name })}</p>`;
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_LOCATION, { "municipality": municipality.Name })}</p>`;
+                    }
+                    else if (data.ceremonycodefilter !== undefined) {
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_CEREMONY, { "ceremony": ceremonyTypeSlot.resolved })}</p>`;
                     }
 
-                    if (responseSpeech.status === HandlerResponseStatus.Success) {
-                        // When more than one page exists, don't show the message that there are more pharmacies available    
-                        if ((response.Items.length / pagesize) < pagenumber) {
-                            responseSpeech.promptText = t(TranslationTypes.PHARMACY_MORE_INFO);
-                        }
-                        else {
-                            responseSpeech.promptText = t(TranslationTypes.PHARMACY_REPROMPT);
-                        }
-
-                        // Create fake pagination
-                        const pharmacies = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
-                            return event.Shortname;
-                        }).splice((pagenumber - 1) * pagesize, pagenumber * pagesize).join(", "), t);
-
-                        responseSpeech.speechText += `<p>${pharmacies}.</p>`;
-                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
-
-                        // Save session for next request
-                        // Create fake pagination due to no native support
-                        handlerInput.attributesManager.setSessionAttributes({
-                            pharmacy: {
-                                "totalPages": Math.ceil(response.Items.length / pagesize),
-                                "pagenumber": pagenumber,
-                                "pagesize": pagesize,
-                                "data": data,
-                                fromdate,
-                                todate
-                            }
-                        });
+                    // If the last page was reached, don't show the message that there are more gastronomies available    
+                    if (data.pagenumber === response.TotalPages) {
+                        responseSpeech.promptText = t(TranslationTypes.GASTRONOMY_MORE_INFO);
+                    }
+                    else {
+                        responseSpeech.promptText = t(TranslationTypes.GASTRONOMY_REPROMPT);
                     }
 
+                    responseSpeech.speechText += `<p>${gastronomies}.</p>`;
+                    responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+
+
+                    // Save session for next request
+                    handlerInput.attributesManager.setSessionAttributes({
+                        gastronomy: {
+                            "totalPages": response.TotalPages,
+                            "params": data
+                        }
+                    });
                 }
                 else {
                     responseSpeech = {
-                        speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                        promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
+                        speechText: t(TranslationTypes.NO_GASTRONOMY_FOUND),
+                        promptText: t(TranslationTypes.NO_GASTRONOMY_FOUND),
                         status: HandlerResponseStatus.Failure
                     }
                 }

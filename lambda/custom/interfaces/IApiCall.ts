@@ -75,6 +75,26 @@ export interface IParamsApiStructure {
         "latitude"?: number,
         "longitude"?: number,
         "radius"?: number
+    },
+    // https://tourism.opendatahub.bz.it/swagger/ui/index#!/Gastronomy/Gastronomy_GetGastronomyListLocalized
+    [ApiCallTypes.GASTRONOMY_LOCALIZED]: {
+        "language": string,
+        "pagenumber"?: number,
+        "pagesize"?: number,
+        "idlist"?: string,
+        "locfilter"?: string,
+        "dishcodefilter"?: string,
+        "ceremonycodefilter"?: number,
+        "categorycodefilter"?: number,
+        "facilitycodefilter"?: number,
+        "cuisinecodefilter"?: number,
+        "odhtagfilter"?: string,
+        "active"?: boolean,
+        "odhactive"?: boolean,
+        "seed"?: number,
+        "latitude"?: number,
+        "longitude"?: number,
+        "radius"?: number
     }
 }
 
@@ -91,8 +111,8 @@ export interface IResponseApiStructure {
         "Items": Array<{
             "Id": string,
             "Shortname": string,
-            "DateBegin": Date,
-            "DateEnd": Date,
+            "DateBegin": string,
+            "DateEnd": string,
             "Gpstype": string,
             "Latitude": number,
             "Longitude": number,
@@ -198,8 +218,8 @@ export interface IResponseApiStructure {
             "Difficulty": string | null,
             "Type": string | null,
             "SubType": string | null,
-            "FirstImport": Date,
-            "LastChange": Date,
+            "FirstImport": string,
+            "LastChange": string,
             "SmgActive": boolean | null,
             "TourismorganizationId": string | null,
             "AreaId": Array<string> | null,
@@ -220,10 +240,20 @@ export interface IResponseApiStructure {
             "FeetClimb": boolean | null,
             "BikeTransport": boolean | null,
             "OperationSchedule": Array<{
-                "Start": Date,
-                "Stop": Date,
+                "Start": string,
+                "Stop": string,
                 "Type": string | null,
                 "ClosedonPublicHolidays": boolean | null,
+                // The key below will be generated on the detailpage for better reading the opening times
+                "OpeningTimes": {
+                    [key: string]: {
+                        "periods": Array<{
+                            "start": Date,
+                            "end": Date
+                        }>,
+                        "days": Array<number>
+                    }
+                },
                 "OperationScheduleTime": Array<{
                     "Start": string,
                     "End": string,
@@ -243,7 +273,7 @@ export interface IResponseApiStructure {
                 "SubHeader": string | null,
                 "IntroText": string | null,
                 "BaseText": string | null,
-                "Title": string | null,
+                "Title": string,
                 "AdditionalText": string | null,
                 "MetaTitle": string | null,
                 "MetaDesc": string | null,
@@ -285,6 +315,127 @@ export interface IResponseApiStructure {
             },
             "Exposition": Array<string>,
             "SmgTags": Array<string>
+        }>
+    },
+    [ApiCallTypes.GASTRONOMY_LOCALIZED]: {
+        "TotalResults": number,
+        "TotalPages": number,
+        "CurrentPages": number,
+        "Seed": string,
+        "Items": Array<{
+            "Id": string,
+            "Active": boolean,
+            "Shortname": string,
+            "Type": string | null,
+            "DistrictId": string | null,
+            "FirstImport": string,
+            "LastChange": string | null,
+            "Gpstype": string,
+            "Latitude": number,
+            "Longitude": number,
+            "Altitude": number,
+            "AltitudeUnitofMeasure": string | null,
+            "OperationSchedule": Array<{
+                "OperationscheduleName": {},
+                "Start": string,
+                "Stop": string,
+                "Type": string | null,
+                "ClosedonPublicHolidays": boolean,
+                "OperationScheduleTime": [
+                    {
+                        "Start": string,
+                        "End": string,
+                        "Monday": boolean,
+                        "Tuesday": boolean,
+                        "Wednesday": boolean,
+                        "Thuresday": boolean,
+                        "Friday": boolean,
+                        "Saturday": boolean,
+                        "Sunday": boolean,
+                        "State": number,
+                        "Timecode": number
+                    }
+                ]
+            }> | null,
+            "MaxSeatingCapacity": number,
+            "Detail": {
+                "Header": string,
+                "SubHeader": string | null,
+                "IntroText": string | null,
+                "BaseText": string | null,
+                "Title": string,
+                "AdditionalText": string | null,
+                "MetaTitle": string | null,
+                "MetaDesc": string | null,
+                "GetThereText": string | null,
+                "Language": string,
+                "Keywords": Array<string> | null
+            },
+            "ContactInfos": {
+                "Address": string | null,
+                "City": string | null,
+                "ZipCode": string | null,
+                "CountryCode": string | null,
+                "CountryName": string | null,
+                "Surname": string | null,
+                "Givenname": string | null,
+                "NamePrefix": string | null,
+                "Email": string | null,
+                "Phonenumber": string | null,
+                "Faxnumber": string | null,
+                "Url": string | null,
+                "Language": string,
+                "CompanyName": string | null,
+                "Vat": string | null,
+                "Tax": string | null,
+                "LogoUrl": string | null
+            },
+            "CategoryCodes": Array<{
+                "Id": string,
+                "Shortname": string
+            }> | null,
+            "DishRates": Array<{
+                "Id": string,
+                "Shortname": string,
+                "MinAmount": number,
+                "MaxAmount": number,
+                "CurrencyCode": string | null
+            }> | null,
+            "CapacityCeremony": Array<{
+                "Id": string,
+                "Shortname": string,
+                "MaxSeatingCapacity": number
+            }> | null,
+            "Facilities": Array<{
+                "Id": string,
+                "Shortname": string
+            }> | null,
+            "MarketinggroupId": Array<string>,
+            "LocationInfo": {
+                "RegionInfo": {
+                    "Id": string,
+                    "Name": string
+                },
+                "TvInfo": {
+                    "Id": string,
+                    "Name": string
+                },
+                "MunicipalityInfo": {
+                    "Id": string,
+                    "Name": string
+                },
+                "DistrictInfo": {
+                    "Id": string,
+                    "Name": string
+                },
+                "AreaInfo": {
+                    "Id": string,
+                    "Name": string
+                }
+            },
+            "AccommodationId": string,
+            "SmgTags": Array<string> | null,
+            "SmgActive": boolean
         }>
     }
 }

@@ -1,6 +1,6 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest, services } from "ask-sdk-model";
-import { RequestTypes, ApiUrl, AuthToken, TranslationTypes, ApiCallTypes, WeekDays } from "./constants";
+import { RequestTypes, ApiUrl, AuthToken, TranslationTypes, ApiCallTypes, WeekDays, WeekDaysNumber } from "./constants";
 import * as Interface from "./../interfaces";
 import "isomorphic-fetch";
 // @ts-ignore no types available for this module
@@ -265,7 +265,7 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
 /**
 * Parse the date string to the desired format
 */
-export const dateFormat = (input: { date: string, lang?: string, format?: string }): string => {
+export const dateFormat = (input: { date: string | Date, lang?: string, format?: string }): string => {
     const lang = input.lang || "de";
     const format = input.format || "YYYY-MM-DD";
 
@@ -283,8 +283,13 @@ export const cleanSssmlResponseFromInvalidChars = (input: string, t: any): strin
     return input.replace(/&/g, t(TranslationTypes.AND_MSG))
 }
 
+/**
+ * Remove all pharmacies from the list where no valid schedule exists
+ * @param records Pharmacy list
+ * @param fromdate startdate
+ * @param todate enddate
+ */
 export const removeUnopenedPharmacies = (records: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED], fromdate: Date, todate: Date): IResponseApiStructure[ApiCallTypes.POI_LOCALIZED] => {
-
     records.Items = records.Items.filter(pharmacy => {
         if (pharmacy.OperationSchedule !== null) {
             // Remove inactive opening schedules
@@ -359,6 +364,95 @@ export const removeUnopenedPharmacies = (records: IResponseApiStructure[ApiCallT
 
         return false;
     });
-    console.log("Valid pharmacies"+ records.Items.length);
+    return records;
+}
+
+/**
+ * Remove all pharmacies from the list where no valid schedule exists
+ * @param records Pharmacy list
+ * @param fromdate startdate
+ * @param todate enddate
+ */
+export const removeOldPharmacySchedule = (records: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]): IResponseApiStructure[ApiCallTypes.POI_LOCALIZED] => {
+    records.Items.forEach(pharmacy => {
+        if (pharmacy.OperationSchedule !== null) {
+            // Remove inactive opening schedules
+            pharmacy.OperationSchedule = pharmacy.OperationSchedule.filter(schedule => {
+
+                let startTime = new Date(schedule.Start);
+                let endTime = new Date(schedule.Stop);
+
+                const d = new Date(),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                const start = new Date(`${year}-${month}-${day}`);
+
+                let validSchedule: boolean = false;
+
+                console.log("Staert" + start);
+                console.log("startTime" + startTime);
+                console.log("endTime" + endTime);
+                if (startTime.getTime() >= start.getTime() || start.getTime() <= endTime.getTime()) {
+                    validSchedule = true;
+                }
+
+                if (validSchedule) {
+                    schedule.OpeningTimes = {};
+
+                    schedule.OperationScheduleTime.forEach(scheduleTime => {
+                       
+
+                        let identifier: string = "";
+                        let k: { "periods": Array<{ "start": string, "end": string }>, "days": Array<number> } = {
+                            periods: [],
+                            days: []
+                        };
+
+                        if (scheduleTime.Monday) {
+                            identifier += WeekDaysNumber.MONDAY;
+                            k.days.push(WeekDaysNumber.MONDAY);
+                        }
+                        if (scheduleTime.Tuesday) {
+                            identifier += WeekDaysNumber.TUESDAY;
+                            k.days.push(WeekDaysNumber.TUESDAY);
+                        }
+                        if (scheduleTime.Wednesday) {
+                            identifier += WeekDaysNumber.WEDNESDAY;
+                            k.days.push(WeekDaysNumber.WEDNESDAY);
+                        }
+                        if (scheduleTime.Thuresday) {
+                            identifier += WeekDaysNumber.THURSDAY;
+                            k.days.push(WeekDaysNumber.THURSDAY);
+                        }
+                        if (scheduleTime.Friday) {
+                            identifier += WeekDaysNumber.FRIDAY;
+                            k.days.push(WeekDaysNumber.FRIDAY);
+                        }
+                        if (scheduleTime.Saturday) {
+                            identifier += WeekDaysNumber.SATURDAY;
+                            k.days.push(WeekDaysNumber.SATURDAY);
+                        }
+                        if (scheduleTime.Sunday) {
+                            identifier += WeekDaysNumber.SUNDAY;
+                            k.days.push(WeekDaysNumber.SUNDAY);
+                        }
+
+                        schedule.OpeningTimes[identifier] = schedule.OpeningTimes[identifier] || k;
+
+                        schedule.OpeningTimes[identifier].periods.push({
+                            start: new Date(`${year}-${month}-${day} ${scheduleTime.Start}`),
+                            end: new Date(`${year}-${month}-${day} ${scheduleTime.End}`)
+                        });
+                    });
+
+                    console.log("Operation times" + JSON.stringify(schedule));
+                }
+                // If schedule times are in the future, accept range
+                return validSchedule;
+            });
+        }
+    });
     return records;
 }

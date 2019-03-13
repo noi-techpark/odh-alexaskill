@@ -1,18 +1,19 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
-import { IsIntent, RouteGenerate, GetRequestAttributes, dateFormat, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
+import { IsIntent, RouteGenerate, GetRequestAttributes, cleanSssmlResponseFromInvalidChars } from "../../lib/helpers";
 import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus } from "../../lib/constants";
 import { IResponseApiStructure, IHandlerResponse, IParamsApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as AmazonDateParser from "amazon-date-parser";
 
-export const PharmacyListHandler: RequestHandler = {
+export const ShopListHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
-        return IsIntent(handlerInput, RequestTypes.Pharmacy);
+        return IsIntent(handlerInput, RequestTypes.Shop);
     },
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
         const { t, language } = GetRequestAttributes(handlerInput);
+        //const { selectedMunicipality } = handlerInput.attributesManager.getSessionAttributes();
 
         const lang = language();
 
@@ -27,32 +28,45 @@ export const PharmacyListHandler: RequestHandler = {
         const periodSlot = requestAttributes.slots.period;
         const fromdateSlot = requestAttributes.slots.fromdate;
         const todateSlot = requestAttributes.slots.todate;
+        const poiTypeSlot = requestAttributes.slots.poiType;
         const districtSlot = requestAttributes.slots.district;
 
-        let fromdate: any;
-        let todate: any;
-        let fromdateSpeech: any;
-        let todateSpeech: any;
+        // let fromdate: any;
+        // let todate: any;
+        // let fromdateSpeech: any;
+        // let todateSpeech: any;
 
         const page: number = 1;
-        const limit: number = 99999;
+        const limit: number = 5;
 
-        // Poitype 1 are the pharmacies
         let data: IParamsApiStructure[ApiCallTypes.POI_LOCALIZED] = {
             "language": lang,
-            "poitype": "1",
-            "subtype": "1",
+            // Shops
+            "poitype": "2",
             "pagenumber": page,
             "active": true,
             "pagesize": limit,
         };
 
-        // Create fake pagination due to no native api support for getting pharmacies that have opened in a certain range
-        const pagenumber: number = 1;
-        const pagesize: number = 5;
-
         let municipality: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED][0];
 
+        console.log(JSON.stringify(poiTypeSlot));
+        // If the user asked for a specific subtype
+        if (poiTypeSlot.value !== "") {
+            if (poiTypeSlot.isMatch) {
+                data.subtype = poiTypeSlot.id;
+            }
+            else {
+                responseSpeech = {
+                    "speechText": t(TranslationTypes.ERROR_NO_POITYPE_FOUND),
+                    "promptText": t(TranslationTypes.HELP_MSG),
+                    "status": HandlerResponseStatus.Failure
+                }
+            }
+        }
+
+        // Previously multiple municipalities matched with the search pattern and user finally choosed one of them
+        // if (selectedMunicipality === undefined) {
         // If the user want events from a specific district
         if (districtSlot.value !== "") {
             const districtParams: IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] = {
@@ -191,7 +205,7 @@ export const PharmacyListHandler: RequestHandler = {
                 return response.getResponse();
             }
             else if (responseSpeech.status === HandlerResponseStatus.Delegate && responseSpeech.delegateIntent) {
-                // TODO:
+                // TODO: Configure intent for selecting a specific municiapality
                 // return handlerInput.responseBuilder
                 //     .addElicitSlotDirective('municipality', {
                 //         name: responseSpeech.delegateIntent,
@@ -202,49 +216,68 @@ export const PharmacyListHandler: RequestHandler = {
                 //     .getResponse();
             }
         }
+        // }
+        // else {
+        //     data.locfilter = `mun${selectedMunicipality.Id}`;
+        //     municipality = selectedMunicipality;
+        // }
 
-        if (periodSlot.value !== "") {
-            // parse the amazon date to a valid date range
-            const awsDate = AmazonDateParser(periodSlot.value);
-
-            fromdate = dateFormat({
-                date: awsDate.startDate,
-                lang
-            });
-            todate = dateFormat({
-                date: awsDate.endDate,
-                lang
-            });
-            fromdateSpeech = dateFormat({
-                date: awsDate.startDate,
-                lang,
-                format: "dddd, DD MMMM"
-            });
-            todateSpeech = dateFormat({
-                date: awsDate.endDate,
-                lang,
-                format: "dddd, DD MMMM YYYY"
-            });
-
+        // Disable period slots until api natively supports to filter shops by opening time
+        if (periodSlot.value !== "" || (fromdateSlot.value !== "" && todateSlot.value !== "")) {
+            // Return the message to alexa
+            return handlerInput.responseBuilder
+                .speak(t(TranslationTypes.ERROR_MSG))
+                .reprompt(t(TranslationTypes.HELP_MSG))
+                .getResponse();
         }
-        // get the events that are in a certain period of time
-        else if (fromdateSlot.value !== "" && todateSlot.value !== "") {
-            fromdate = fromdateSlot.value;
-            todate = todateSlot.value;
+        // if (periodSlot.value !== "") {
+        //     // parse the amazon date to a valid date range
+        //     const awsDate = AmazonDateParser(periodSlot.value);
 
-            // parse the date
-            fromdateSpeech = dateFormat({
-                date: fromdateSlot.value,
-                lang,
-                format: "dddd, DD MMMM"
-            });
-            todateSpeech = dateFormat({
-                date: todateSlot.value,
-                lang,
-                format: "dddd, DD MMMM YYYY"
-            });
+        //     fromdate = dateFormat({
+        //         date: awsDate.startDate,
+        //         lang
+        //     });
+        //     todate = dateFormat({
+        //         date: awsDate.endDate,
+        //         lang
+        //     });
+        //     fromdateSpeech = dateFormat({
+        //         date: awsDate.startDate,
+        //         lang,
+        //         format: "dddd, DD MMMM"
+        //     });
+        //     todateSpeech = dateFormat({
+        //         date: awsDate.endDate,
+        //         lang,
+        //         format: "dddd, DD MMMM YYYY"
+        //     });
 
-        }
+        //     // Save params for the following api call
+        //     data.begindate = fromdate;
+        //     data.enddate = todate;
+        // }
+        // // get the events that are in a certain period of time
+        // else if (fromdateSlot.value !== "" && todateSlot.value !== "") {
+        //     fromdate = fromdateSlot.value;
+        //     todate = todateSlot.value;
+
+        //     // parse the date
+        //     fromdateSpeech = dateFormat({
+        //         date: fromdateSlot.value,
+        //         lang,
+        //         format: "dddd, DD MMMM"
+        //     });
+        //     todateSpeech = dateFormat({
+        //         date: todateSlot.value,
+        //         lang,
+        //         format: "dddd, DD MMMM YYYY"
+        //     });
+
+        //     // Save params for the following api call
+        //     data.begindate = fromdate;
+        //     data.enddate = todate;
+        // }
 
         await RouteGenerate({
             url: ApiCallTypes.POI_LOCALIZED,
@@ -252,65 +285,76 @@ export const PharmacyListHandler: RequestHandler = {
             onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                 // If records exists
                 if (response.Items[0] !== null && response.Items.length) {
-                    if (fromdate !== undefined || todate !== undefined) {
-                        response = removeUnopenedPharmacies(response, new Date(fromdate), new Date(todate));
-                        if (response.Items.length) {
-                            // If from- and todate are the same
-                            if (fromdate === todate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_SINGLE_DATE, { "date": todateSpeech })}</p>`;
-                            }
-                            else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}</p>`;
-                            }
+                    // Get the names from the events
+                    const events = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
+                        return event.Shortname;
+                    }).join(", "), t);
+
+                    // if (data.begindate !== undefined || data.enddate !== undefined) {
+                    //     // when no topic filter is selected
+                    //     if (data.topicfilter !== undefined) {
+                    //         // If from- and todate are the same
+                    //         if (data.begindate === data.enddate) {
+                    //             responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, { "date": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                    //         }
+                    //         else {
+                    //             responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, { "fromdate": fromdateSpeech, "todate": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                    //         }
+                    //     }
+                    //     else {
+                    //         // If from- and todate are the same
+                    //         if (data.begindate === data.enddate) {
+                    //             responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, { "date": todateSpeech })}.</p>`;
+                    //         }
+                    //         else {
+                    //             responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}.</p>`;
+                    //         }
+                    //     }
+                    // }
+                    // else if (data.topicfilter !== undefined) {
+                    //     if (data.locfilter !== undefined) {
+                    //         responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC_WITH_MUNICIPALITY, { "topic": topicSlot.resolved, "municipality": municipality.Name })}</p>`;
+                    //     }
+                    //     else {
+                    //         responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, { "topic": topicSlot.resolved })}</p>`;
+                    //     }
+                    // }
+                    if (data.locfilter !== undefined) {
+                        if (data.subtype !== undefined) {
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.SHOPS_LOCATON_WITH_SUBTYPE, { "municipality": municipality.Name, "type": poiTypeSlot.resolved })}</p>`;
                         }
                         else {
-                            responseSpeech = {
-                                speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                                promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                                status: HandlerResponseStatus.Failure
-                            }
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.SHOPS_LOCATION, { "municipality": municipality.Name })}</p>`;
                         }
                     }
-                    else if (data.locfilter !== undefined) {
-                        responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_LOCATION, { "municipality": municipality.Name })}</p>`;
+                    else if (data.subtype !== undefined) {
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.SHOPS_SUBTYPE, { "type": poiTypeSlot.resolved })}</p>`;
                     }
 
-                    if (responseSpeech.status === HandlerResponseStatus.Success) {
-                        // When more than one page exists, don't show the message that there are more pharmacies available    
-                        if ((response.Items.length / pagesize) < pagenumber) {
-                            responseSpeech.promptText = t(TranslationTypes.PHARMACY_MORE_INFO);
-                        }
-                        else {
-                            responseSpeech.promptText = t(TranslationTypes.PHARMACY_REPROMPT);
-                        }
-
-                        // Create fake pagination
-                        const pharmacies = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
-                            return event.Shortname;
-                        }).splice((pagenumber - 1) * pagesize, pagenumber * pagesize).join(", "), t);
-
-                        responseSpeech.speechText += `<p>${pharmacies}.</p>`;
-                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
-
-                        // Save session for next request
-                        // Create fake pagination due to no native support
-                        handlerInput.attributesManager.setSessionAttributes({
-                            pharmacy: {
-                                "totalPages": Math.ceil(response.Items.length / pagesize),
-                                "pagenumber": pagenumber,
-                                "pagesize": pagesize,
-                                "data": data,
-                                fromdate,
-                                todate
-                            }
-                        });
+                    // If the last page was reached, don't show the message that there are more events available    
+                    if (data.pagenumber === response.TotalPages) {
+                        responseSpeech.promptText = t(TranslationTypes.SHOPS_MORE_INFO);
+                    }
+                    else {
+                        responseSpeech.promptText = t(TranslationTypes.SHOPS_REPROMPT);
                     }
 
+                    responseSpeech.speechText += `<p>${events}.</p>`;
+                    responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+
+
+                    // Save session for next request
+                    handlerInput.attributesManager.setSessionAttributes({
+                        shop: {
+                            "totalPages": response.TotalPages,
+                            "params": data
+                        }
+                    });
                 }
                 else {
                     responseSpeech = {
-                        speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                        promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
+                        speechText: t(TranslationTypes.NO_SHOPS_FOUND),
+                        promptText: t(TranslationTypes.NO_SHOPS_FOUND),
                         status: HandlerResponseStatus.Failure
                     }
                 }

@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Resource } from "i18next";
 import { LocaleTypes } from "./constants";
-import {ITranslations} from "./../interfaces/ITranslations";
+import { ITranslations } from "./../interfaces/ITranslations";
 
 export const strings: Resource = {
     [LocaleTypes.deDE]: {
@@ -57,6 +57,19 @@ export const strings: Resource = {
             NO_EVENTS_FOUND: [
                 "Es konnten leider keine Events mit diesen Suchkriterien gefunden werden."
             ],
+            SHOPS_REPROMPT: [
+                "Möchtest du mehr Vorschläge zu Shops erhalten oder mehr Informationen zu einem Geschäft bekommen?",
+                "Möchtest du noch weitere Vorschläge oder mehr Informationen zu einem bestimmten Shop bekommen?",
+                "Konnte ich bereits dein Interesse für ein bestimmtes Geschäft wecken oder möchtest du noch weitere Vorschläge bekommen?"
+            ],
+            SHOPS_MORE_INFO: [
+                "Möchtest du mehr Informationen zu einem Shop bekommen?",
+                "Möchten du mehr Informationen zu einem Geschäft bekommen?"
+            ],
+            NO_SHOPS_FOUND: [
+                "Es konnten leider keine Shops mit diesen Suchkriterien gefunden werden.",
+                "Es konnten leider keine Geschäfte mit diesen Suchkriterien gefunden werden."
+            ],
             PHARMACY_MSG_SINGLE_DATE: [
                 "Am %date% haben folgenden Apotheken geöffnet:",
                 "Folgende Apotheken haben am %date% geöffnet:"
@@ -77,7 +90,81 @@ export const strings: Resource = {
                 "Möchtest du mehr Vorschläge zu Apotheken erhalten oder mehr Informationen zu einer Apotheke bekommen?",
                 "Möchtest du noch weitere Vorschläge oder mehr Informationen zu einer bestimmten Apotheke bekommen?"
             ],
+            PHARMACY_DETAIL_LOCATION: [
+                "%pharmacy% befindet sich in %address%, %zipCode% %city%."
+            ],
+            PHARMACY_NO_OPENING_TIMES_AVAILABLE: "Derzeit liegen mir keine Öffnungszeiten für diese Apotheke vor.",
+            PHARMACY_DETAIL_OPENING: "Vom %fromdate% bis zum %todate% sind die Öffnungszeiten: ",
+            PHARMACY_DETAIL_OPENING_TIMES: " von %from% bis %to%",
+            PHARMACY_DETAIL: [
+                "%pharmacy% befindet sich in %address%, %zipCode% %city%."
+            ],
+            GASTRONOMY_KITCHENTYPE: [
+                "Mit %type% konnte ich folgende Einträge finden: ",
+                "Folgende Restaurants konnte ich mit %type% finden: ",
+            ],
+            GASTRONOMY_CEREMONY: [
+                "Für %ceremony% konnte ich folgende Einträge finden: ",
+                "Folgende Restaurants konnte ich für %ceremony% finden: ",
+            ],
+            GASTRONOMY_LOCATION: [
+                "In %municipality% konnte ich folgende Restaurants finden: ",
+                "Folgende Restaurants konnte ich in %municipality% finden: ",
+            ],
+            GASTRONOMY_MORE_INFO: [
+                "Möchtest du mehr Informationen zu einem Restaurant bekommen?"
+            ],
+            GASTRONOMY_TYPE_WITH_MUNICIPALITY: [
+                "In %municipality% konnte ich mit %type% folgende Einträge finden: ",
+                "Folgende Restaurants konnte ich in %municipality% mit %type% finden: ",
+                "In %municipality% konnte ich folgende Restaurants mit %type% finden: ",
+            ],
+            GASTRONOMY_TYPE_WITH_MUNICIPALITY_AND_CEREMONY: [
+                "In %municipality% konnte ich mit %type% für %ceremony% folgende Einträge finden: ",
+                "Folgende Restaurants konnte ich in %municipality% mit %type% für %ceremony% finden: ",
+                "In %municipality% konnte ich folgende Restaurants mit %type% für %ceremony% finden: ",
+            ],
+            GASTRONOMY_TYPE_WITH_CEREMONY: [
+                "In %municipality% konnte ich folgende Restaurants für %ceremony% finden: ",
+                "Folgende Restaurants für %ceremony% konnte ich in %municipality% finden: ",
+                "In %municipality% konnte ich folgende Restaurants für %ceremony% finden: ",
+            ],
+            GASTRONOMY_MAX_EXCEEDED: [
+                "Es sind leider keine weiteren Restaurants mit diesen Kriterien verfügbar.",
+                "Es sind leider keine weiteren Restaurants mit diesen Suchkriterien verfügbar.",
+                "Zu diesen Suchkriterien konnte ich leider keine weiteren Restaurants finden."
+            ],
+            GASTRONOMY_REPROMPT: [
+                "Möchtest du mehr Restaurant Vorschläge erhalten oder mehr Informationen zu einem Restaurant bekommen?",
+                "Möchtest du noch weitere Vorschläge oder mehr Informationen zu einem bestimmten Restaurant bekommen?",
+                "Konnte ich bereits dein Interesse für ein bestimmtes Restaurant wecken oder möchtest du noch weitere Vorschläge bekommen?"
+            ],
+            NO_GASTRONOMY_FOUND: [
+                "Es konnten leider keine Restaurants mit diesen Suchkriterien gefunden werden."
+            ],
             PHARMACY_MORE_INFO: "Möchtest du mehr Informationen zu einer Apotheke bekommen?",
+            TOO_MANY_PHARMACIES_FOUND: [
+                "Wir konnten %count% weitere Apotheken mit diesen Suchkriterien finden. Bitte frag genauer nach.",
+                "%count% weitere Apotheken konnten ich mit diesen Suchkriterien finden. Bitte frag genauer nach.",
+            ],
+            SHOPS_LOCATION: [
+                "In %municipality% konnte ich folgende Geschäfte finden: ",
+                "In %municipality% konnte ich folgende Shops finden: ",
+                "Folgende Shops konnte ich in %municipality% finden: ",
+            ],
+            SHOP_MAX_EXCEEDED: [
+                "Es sind leider keine weiteren Shops mit diesen Kriterien verfügbar.",
+                "Es sind leider keine weiteren Geschäfte mit diesen Suchkriterien verfügbar.",
+                "Zu diesen Suchkriterien konnte ich leider keine weiteren Shops finden."
+            ],
+            SHOPS_SUBTYPE: [
+                "Zu den Shops mit der Kategorie %type% konnte ich folgende Einträge finden: "
+            ],
+            SHOPS_LOCATON_WITH_SUBTYPE: [
+                "In %municipality% konnte ich folgende Geschäfte mit der Kategorie %type% finden: ",
+                "In %municipality% konnte ich folgende Shops mit der Kategorie %type% finden: ",
+                "Folgende Shops konnte ich mit der Kategorie %type% in %municipality% finden: ",
+            ],
             NO_PHARMACIES_FOUND: [
                 "Es konnten leider keine Apotheken mit diesen Suchkriterien gefunden werden."
             ],
@@ -90,7 +177,9 @@ export const strings: Resource = {
             ],
             AND_MSG: "und",
             ERROR_INVALID_MUNICIPALITY: "Leider ist der von dir angegebene Ort nicht gültig.",
+            ERROR_NO_POITYPE_FOUND: "Leider konnte ich die von dir angegebene Shop Kategorie nicht finden.",
             ERROR_NO_TOPIC_FOUND: "Leider konnte ich das von dir angegebene Thema nicht finden.",
+            GASTRONOMY_NO_KITCHENTYPE_FOUND: "Leider konnte ich den von dir angegebenen Restaurant Typ nicht finden.",
             ERROR_NO_DISTRICTS_FOUND: "Leider konnte ich den von dir angegebenen Ort nicht finden.",
             ERROR_MSG: [
                 "Entschuldigung, diesen Befehl verstehe ich leider nicht. Bitte versuchen Sie es erneut.",

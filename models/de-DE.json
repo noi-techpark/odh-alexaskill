@@ -139,6 +139,96 @@
                         "Welche Informationen hast du zu der Apotheke {query}",
                         "Zeig mir mehr Informationen zu der Apotheke {query}"
                     ]
+                },
+                {
+                    "name": "EventDetailIntent",
+                    "slots": [
+                        {
+                            "name": "query",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "Gib mir mehr Informationen zu dem Event {query}",
+                        "Mehr Infos zum Event {query}",
+                        "Mehr Informationen zum Event {query}",
+                        "Welche Informationen hast du zum Event {query}",
+                        "Zeig mir mehr Informationen zu dem Event {query}"
+                    ]
+                },
+                {
+                    "name": "GastronomyIntent",
+                    "slots": [
+                        {
+                            "name": "district",
+                            "type": "Districts"
+                        },
+                        {
+                            "name": "gastronomyType",
+                            "type": "GastronomyType"
+                        },
+                        {
+                            "name": "ceremonyType",
+                            "type": "GastronomyCeremonyType"
+                        }
+                    ],
+                    "samples": [
+                        "Schlag mir Restaurants mit {gastronomyType} für {ceremonyType} vor",
+                        "Zeig mir Restaurants für {ceremonyType}",
+                        "Welche Restaurants gibt es für {ceremonyType}",
+                        "Welche Restaurants sind in {district} mit {gastronomyType} für {ceremonyType}",
+                        "Welche Restaurants gibt es in {district} mit {gastronomyType} für {ceremonyType}",
+                        "Schlag mir ein Restaurant mit {gastronomyType} für {ceremonyType} vor",
+                        "Schlag mir ein Restaurant mit {gastronomyType} für {ceremonyType} in {district} vor",
+                        "Schlag mir ein Restaurant mit {gastronomyType} in {district} vor",
+                        "Schlag mir ein Restaurant mit {gastronomyType} vor",
+                        "Schlag mir Restaurants mit {gastronomyType} vor",
+                        "Zeig mir Restaurants mit {gastronomyType}",
+                        "Welche Restaurants gibt es mit {gastronomyType}",
+                        "Welche Restaurants gibt es in {district} mit {gastronomyType}",
+                        "Schlag mir Restaurants vor",
+                        "Welche Restaurants sind in {district} mit {gastronomyType}"
+                    ]
+                },
+                {
+                    "name": "ShopIntent",
+                    "slots": [
+                        {
+                            "name": "district",
+                            "type": "Districts"
+                        },
+                        {
+                            "name": "period",
+                            "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "fromdate",
+                            "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "todate",
+                            "type": "AMAZON.DATE"
+                        },
+                        {
+                            "name": "poiType",
+                            "type": "PoiTypes"
+                        }
+                    ],
+                    "samples": [
+                        "Welche Shops gibt es in {district} für {poiType}",
+                        "Welche Shops gibt es in {district} mit {poiType} ",
+                        "Schlag mir Shops vor wo es {poiType} gibt",
+                        "In welchen Geschäften gibt es {poiType}",
+                        "Welche Shops gibt es in {district} ",
+                        "Welche Geschäfte haben {period} in {district} geöffnet",
+                        "Welche Geschäfte haben  von {fromdate} bis {todate} in {district} geöffnet",
+                        "Welche Shops haben  von {fromdate} bis {todate} in {district} geöffnet",
+                        "Welche Shops haben {period} in {district} geöffnet",
+                        "Welche Geschäfte gibt es in {district} ",
+                        "Welche Shops haben {period} geöffnet",
+                        "Welche Geschäfte sind in meiner Nähe",
+                        "Welche Shops haben  von {fromdate} bis {todate} geöffnet"
+                    ]
                 }
             ],
             "types": [
@@ -3620,6 +3710,701 @@
                             "id": "DA6754A7C6DE42D0BA1D4702301186FA",
                             "name": {
                                 "value": "Riffia"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GastronomyType",
+                    "values": [
+                        {
+                            "id": "facilityCode_1",
+                            "name": {
+                                "value": "Kreditkarte"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_2",
+                            "name": {
+                                "value": "Bankomat",
+                                "synonyms": [
+                                    "Maestro"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_1",
+                            "name": {
+                                "value": "Vegetarisches Menü",
+                                "synonyms": [
+                                    "Vegetarier"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_2",
+                            "name": {
+                                "value": "Glutenfreie Küche",
+                                "synonyms": [
+                                    "glutenfrei"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_4",
+                            "name": {
+                                "value": "Laktosefreie Kost",
+                                "synonyms": [
+                                    "laktosefrei"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_8",
+                            "name": {
+                                "value": "Vegane Küche",
+                                "synonyms": [
+                                    "vegan"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_16",
+                            "name": {
+                                "value": "Warme Küche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_32",
+                            "name": {
+                                "value": "Südtiroler Spezialitäten"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_64",
+                            "name": {
+                                "value": "Gourmet Küche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_128",
+                            "name": {
+                                "value": "Italienische Küche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_256",
+                            "name": {
+                                "value": "Internationale Küche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_512",
+                            "name": {
+                                "value": "Pizza"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_1024",
+                            "name": {
+                                "value": "Fischspezialitäten"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_2048",
+                            "name": {
+                                "value": "Asiatische Küche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_4096",
+                            "name": {
+                                "value": "Wildspezialitäten"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_8192",
+                            "name": {
+                                "value": "Produkte eigener Erzeugung"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_16384",
+                            "name": {
+                                "value": "Diätküche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_32768",
+                            "name": {
+                                "value": "Grillspezialitäten"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_65536",
+                            "name": {
+                                "value": "Ladinische Küche"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_131072",
+                            "name": {
+                                "value": "Kleine Karte"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_262144",
+                            "name": {
+                                "value": "Fischwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_524288",
+                            "name": {
+                                "value": "Spargelwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_1048576",
+                            "name": {
+                                "value": "Lammwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_2097152",
+                            "name": {
+                                "value": "Wildwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_4194304",
+                            "name": {
+                                "value": "Vorspeisenwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_8388608",
+                            "name": {
+                                "value": "Nudelwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_16777216",
+                            "name": {
+                                "value": "Kräuterwochen"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_33554432",
+                            "name": {
+                                "value": "Kindermenüs"
+                            }
+                        },
+                        {
+                            "id": "cuisineCode_67108864",
+                            "name": {
+                                "value": "Mittagsmenüs"
+                            }
+                        },
+                        {
+                            "id": "equipmentCode_4",
+                            "name": {
+                                "value": "Barrierefrei"
+                            }
+                        },
+                        {
+                            "id": "facilityCode8",
+                            "name": {
+                                "value": "Garten"
+                            }
+                        },
+                        {
+                            "id": "facilityCode16",
+                            "name": {
+                                "value": "Raucherraum"
+                            }
+                        },
+                        {
+                            "id": "facilityCode32",
+                            "name": {
+                                "value": "Spielzimmer"
+                            }
+                        },
+                        {
+                            "id": "facilityCode64",
+                            "name": {
+                                "value": "Spielplatz"
+                            }
+                        },
+                        {
+                            "id": "facilityCode128",
+                            "name": {
+                                "value": "Parkplätze"
+                            }
+                        },
+                        {
+                            "id": "facilityCode256",
+                            "name": {
+                                "value": "Garage"
+                            }
+                        },
+                        {
+                            "id": "facilityCode512",
+                            "name": {
+                                "value": "Hunde erlaubt"
+                            }
+                        },
+                        {
+                            "id": "facilityCode1024",
+                            "name": {
+                                "value": "Biergarten"
+                            }
+                        },
+                        {
+                            "id": "facilityCode2048",
+                            "name": {
+                                "value": "Terrasse"
+                            }
+                        },
+                        {
+                            "id": "facilityCode4096",
+                            "name": {
+                                "value": "Wintergarten"
+                            }
+                        },
+                        {
+                            "id": "facilityCode8192",
+                            "name": {
+                                "value": "Geeignet für Busse"
+                            }
+                        },
+                        {
+                            "id": "facilityCode16384",
+                            "name": {
+                                "value": "Bierbar"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_32768",
+                            "name": {
+                                "value": "Gault Millau Südtirol"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_65536",
+                            "name": {
+                                "value": "Guide l‘Espresso"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_131072",
+                            "name": {
+                                "value": "Gambero Rosso"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_262144",
+                            "name": {
+                                "value": "Feinschmecker"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_524288",
+                            "name": {
+                                "value": "Aral Schlemmer Atlas"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_1048576",
+                            "name": {
+                                "value": "Varta Führer"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_2097152",
+                            "name": {
+                                "value": "Bertelsmann"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_4194304",
+                            "name": {
+                                "value": "Preis für Südtiroler Weinkultur"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_8388608",
+                            "name": {
+                                "value": "Guide Michelin"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_16777216",
+                            "name": {
+                                "value": "Roter Hahn"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_33554432",
+                            "name": {
+                                "value": "Tafelspitz"
+                            }
+                        },
+                        {
+                            "id": "facilityCode_67108864",
+                            "name": {
+                                "value": "Südtiroler Gasthaus"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GastronomyCeremonyType",
+                    "values": [
+                        {
+                            "id": "1",
+                            "name": {
+                                "value": "Familienfeiern",
+                                "synonyms": [
+                                    "Familie"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "name": {
+                                "value": "Hochzeiten"
+                            }
+                        },
+                        {
+                            "id": "4",
+                            "name": {
+                                "value": "Geburtstagsfeiern",
+                                "synonyms": [
+                                    "Geburtstag"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "8",
+                            "name": {
+                                "value": "Firmenessen",
+                                "synonyms": [
+                                    "Firma"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "16",
+                            "name": {
+                                "value": "Weihnachtsessen",
+                                "synonyms": [
+                                    "Weihnachten"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "32",
+                            "name": {
+                                "value": "Silvestermenü",
+                                "synonyms": [
+                                    "Silvester"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "64",
+                            "name": {
+                                "value": "Seminare / Tagungen",
+                                "synonyms": [
+                                    "Tagungen",
+                                    "Tagung",
+                                    "Seminar"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "128",
+                            "name": {
+                                "value": "Versammlungen"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "PoiTypes",
+                    "values": [
+                        {
+                            "id": "1",
+                            "name": {
+                                "value": "Getränke"
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "name": {
+                                "value": "Antiquitäten"
+                            }
+                        },
+                        {
+                            "id": "4",
+                            "name": {
+                                "value": "Blumen",
+                                "synonyms": [
+                                    "Rosen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "8",
+                            "name": {
+                                "value": "Computerzubehör Technik",
+                                "synonyms": [
+                                    "Laptop",
+                                    "Technik",
+                                    "Computer"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "16",
+                            "name": {
+                                "value": "Drogerie"
+                            }
+                        },
+                        {
+                            "id": "32",
+                            "name": {
+                                "value": "Fahrräder",
+                                "synonyms": [
+                                    "Fahrrad"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "64",
+                            "name": {
+                                "value": "Farbe Tapeten"
+                            }
+                        },
+                        {
+                            "id": "128",
+                            "name": {
+                                "value": "Fleisch und Wurstwaren",
+                                "synonyms": [
+                                    "Speck",
+                                    "Wurst",
+                                    "Fleisch"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "256",
+                            "name": {
+                                "value": "Brot und Gebäck",
+                                "synonyms": [
+                                    "Gebäck",
+                                    "Brot"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "512",
+                            "name": {
+                                "value": "Haushaltswaren",
+                                "synonyms": [
+                                    "Haushalt"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "1024",
+                            "name": {
+                                "value": "Juweliere Goldschmiede",
+                                "synonyms": [
+                                    "Juwelen",
+                                    "Gold",
+                                    "Goldschmied",
+                                    "Juwelier"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2048",
+                            "name": {
+                                "value": "Kunsthandwerke",
+                                "synonyms": [
+                                    "Handwerk",
+                                    "Kunst"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "4096",
+                            "name": {
+                                "value": "Landwirtschaftliche Artikel",
+                                "synonyms": [
+                                    "Landwirtschaft"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "8192",
+                            "name": {
+                                "value": "Lebensmittel"
+                            }
+                        },
+                        {
+                            "id": "16384",
+                            "name": {
+                                "value": "Lederwaren Schuhe",
+                                "synonyms": [
+                                    "Schuhe",
+                                    "Leder"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "32768",
+                            "name": {
+                                "value": "Lokale traditionelle Produkte"
+                            }
+                        },
+                        {
+                            "id": "65536",
+                            "name": {
+                                "value": "Mode Bekleidung",
+                                "synonyms": [
+                                    "Kopftuch",
+                                    "Socken",
+                                    "Hose",
+                                    "Jeans",
+                                    "Kleidung"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "131072",
+                            "name": {
+                                "value": "Obst und Gemüse",
+                                "synonyms": [
+                                    "Gemüse",
+                                    "Obst"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "262144",
+                            "name": {
+                                "value": "Optiker Foto",
+                                "synonyms": [
+                                    "Foto",
+                                    "Optiker"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "524288",
+                            "name": {
+                                "value": "Produktionsstätten Hofläden",
+                                "synonyms": [
+                                    "Hofladen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "1048576",
+                            "name": {
+                                "value": "Souvenir",
+                                "synonyms": [
+                                    "Geschenksartikel"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2097152",
+                            "name": {
+                                "value": "Spielwaren",
+                                "synonyms": [
+                                    "Spielzeug",
+                                    "Spiele"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "4194304",
+                            "name": {
+                                "value": "Sportartikel",
+                                "synonyms": [
+                                    "Sport"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "8388608",
+                            "name": {
+                                "value": "Tierbedarf",
+                                "synonyms": [
+                                    "Tierspielzeug",
+                                    "Tiere"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "16777216",
+                            "name": {
+                                "value": "Zeitungen Bücher und Papierwaren",
+                                "synonyms": [
+                                    "Papierwaren",
+                                    "Bücher",
+                                    "Zeitung"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "33554432",
+                            "name": {
+                                "value": "Kindermode",
+                                "synonyms": [
+                                    "Kinder"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "67108864",
+                            "name": {
+                                "value": "Auto und Motor",
+                                "synonyms": [
+                                    "Auto Reperaturen",
+                                    "PKW",
+                                    "LKW",
+                                    "Auto"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "134217728",
+                            "name": {
+                                "value": "Bausektor Handwerk",
+                                "synonyms": [
+                                    "Handwerk",
+                                    "Bauen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "268435456",
+                            "name": {
+                                "value": "Reinigungen",
+                                "synonyms": [
+                                    "Reinigen"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "536870912",
+                            "name": {
+                                "value": "Weitere Geschäfte"
                             }
                         }
                     ]

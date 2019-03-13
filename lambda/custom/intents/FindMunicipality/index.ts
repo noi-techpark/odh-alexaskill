@@ -2,7 +2,7 @@ import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
 import { IsIntent, GetRequestAttributes } from "../../lib/helpers";
 import { RequestTypes, TranslationTypes } from "../../lib/constants";
-import { EventHandler } from "../Event/list";
+import { EventListHandler } from "../Event/list";
 
 export const FindMunicipalityHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
@@ -31,7 +31,7 @@ export const FindMunicipalityHandler: RequestHandler = {
                     }
                 });
                 //handlerInput.attributesManager.setRequestAttributes(allowedMunicipality.eventSlots);
-                return EventHandler.handle(handlerInput);
+                return EventListHandler.handle(handlerInput);
             }
             else {
                 return handlerInput.responseBuilder

@@ -7,6 +7,10 @@ export enum RequestTypes {
     EventDetail = "EventDetailIntent",
     Pharmacy = "PharmacyIntent",
     PharmacyDetail = "PharmacyDetailIntent",
+    GastronomyList = "GastronomyIntent",
+    GastronomyDetail = "GastronomyDetailIntent",
+    Shop = "ShopIntent",
+    ShopDetail = "ShopDetailIntent",
     LoadMore = "LoadMoreIntent",
     FindMunicipality = "FindMunicipalityIntent"
 }
@@ -44,18 +48,43 @@ export enum TranslationTypes {
     EVENT_MORE_INFO = "EVENT_MORE_INFO",
     EVENT_MAX_EXCEEDED = "EVENT_MAX_EXCEEDED",
     NO_EVENTS_FOUND = "NO_EVENTS_FOUND",
+    GASTRONOMY_REPROMPT = "GASTRONOMY_REPROMPT",
+    NO_GASTRONOMY_FOUND = "NO_GASTRONOMY_FOUND",
     PHARMACY_MSG_SINGLE_DATE = "PHARMACY_MSG_SINGLE_DATE",
     PHARMACY_MSG_MULTIPLE_DATES = "PHARMACY_MSG_MULTIPLE_DATES",
+    PHARMACY_NO_OPENING_TIMES_AVAILABLE = "PHARMACY_NO_OPENING_TIMES_AVAILABLE",
     PHARMACY_REPROMPT = "PHARMACY_REPROMPT",
     PHARMACY_MORE_INFO = "PHARMACY_MORE_INFO",
     PHARMACY_LOCATION = "PHARMACY_LOCATION",
+    GASTRONOMY_MAX_EXCEEDED = "GASTRONOMY_MAX_EXCEEDED",
+    GASTRONOMY_NO_KITCHENTYPE_FOUND = "GASTRONOMY_NO_KITCHENTYPE_FOUND",
+    GASTRONOMY_CEREMONY = "GASTRONOMY_CEREMONY",
+    GASTRONOMY_TYPE_WITH_MUNICIPALITY = "GASTRONOMY_TYPE_WITH_MUNICIPALITY",
+    GASTRONOMY_FACILITYTYPE = "GASTRONOMY_FACILITYTYPE",
+    GASTRONOMY_TYPE_WITH_CEREMONY = "GASTRONOMY_TYPE_WITH_CEREMONY",
+    GASTRONOMY_KITCHENTYPE = "GASTRONOMY_KITCHENTYPE",
+    GASTRONOMY_TYPE_WITH_MUNICIPALITY_AND_CEREMONY = "GASTRONOMY_TYPE_WITH_MUNICIPALITY_AND_CEREMONY",
+    GASTRONOMY_LOCATION = "GASTRONOMY_LOCATION",
+    GASTRONOMY_MORE_INFO = "GASTRONOMY_MORE_INFO",
+    PHARMACY_DETAIL_OPENING_TIMES = "PHARMACY_DETAIL_OPENING_TIMES",
     NO_PHARMACIES_FOUND = "NO_PHARMACIES_FOUND",
+    TOO_MANY_PHARMACIES_FOUND = "TOO_MANY_PHARMACIES_FOUND",
+    PHARMACY_DETAIL_LOCATION = "PHARMACY_DETAIL_LOCATION",
+    PHARMACY_DETAIL_OPENING = "PHARMACY_DETAIL_OPENING",
     PHARMACY_MAX_EXCEEDED = "PHARMACY_MAX_EXCEEDED",
     AND_MSG = "AND_MSG",
     HELP_MSG = "HELP_MSG",
     GOODBYE_MSG = "GOODBYE_MSG",
     ERROR_INVALID_MUNICIPALITY = "ERROR_INVALID_MUNICIPALITY",
     ERROR_NO_TOPIC_FOUND = "ERROR_NO_TOPIC_FOUND",
+    SHOPS_REPROMPT = "SHOPS_REPROMPT",
+    SHOPS_LOCATION = "SHOPS_LOCATION",
+    NO_SHOPS_FOUND = "NO_SHOPS_FOUND",
+    SHOP_MAX_EXCEEDED = "SHOP_MAX_EXCEEDED",
+    SHOPS_SUBTYPE = "SHOPS_SUBTYPE",
+    SHOPS_LOCATON_WITH_SUBTYPE = "SHOPS_LOCATON_WITH_SUBTYPE",
+    SHOPS_MORE_INFO = "SHOPS_MORE_INFO",
+    ERROR_NO_POITYPE_FOUND = "ERROR_NO_POITYPE_FOUND",
     ERROR_NO_DISTRICTS_FOUND = "ERROR_NO_DISTRICTS_FOUND",
     ERROR_MSG = "ERROR_MSG",
     ERROR_UNEXPECTED_MSG = "ERROR_UNEXPECTED_MSG",
@@ -69,7 +98,8 @@ export enum ApiCallTypes {
     EVENT_LOCALIZED = "EventLocalized",
     DISTRICT_LOCALIZED = "DistrictLocalized",
     MUNICIPALITY_REDUCED = "MunicipalityReduced",
-    POI_LOCALIZED = "PoiLocalized"
+    POI_LOCALIZED = "PoiLocalized",
+    GASTRONOMY_LOCALIZED = "GastronomyLocalized"
 }
 
 export enum HandlerResponseStatus {
@@ -86,4 +116,49 @@ export enum WeekDays {
     FRIDAY = "Friday",
     SATURDAY = "Saturday",
     SUNDAY = "Sunday"
+}
+
+export enum WeekDaysNumber {
+    MONDAY = 1,
+    TUESDAY = 2,
+    WEDNESDAY = 3,
+    THURSDAY = 4,
+    FRIDAY = 5,
+    SATURDAY = 6,
+    SUNDAY = 0
+}
+
+export const WeekDaysMapping = {
+    "de": [
+        "Sonntag",
+        "Montag",
+        "Dienstag",
+        "Mittwoch",
+        "Donnerstag",
+        "Freitag",
+        "Samstag"
+    ],
+    "it": [
+        "domenica",
+        "lunedì",
+        "martedì",
+        "mercoledì",
+        "giovedì",
+        "venerdì",
+        "sabato"
+    ],
+    "en": [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+    ]
+}
+
+export enum GastronomyType {
+    FACILITY_CODE = "facilityCode",
+    CUISINE_CODE = "cuisineCode"
 }

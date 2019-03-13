@@ -11,7 +11,7 @@ export const LoadMoreHandler: RequestHandler = {
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
         const { t } = GetRequestAttributes(handlerInput);
-        const { event, pharmacy } = handlerInput.attributesManager.getSessionAttributes();
+        const { event, pharmacy, gastronomy, shop } = handlerInput.attributesManager.getSessionAttributes();
 
         let responseSpeech: IHandlerResponse = {
             speechText: t(TranslationTypes.ERROR_MSG),
@@ -59,6 +59,112 @@ export const LoadMoreHandler: RequestHandler = {
                         responseSpeech = {
                             speechText: t(TranslationTypes.NO_EVENTS_FOUND),
                             promptText: t(TranslationTypes.NO_EVENTS_FOUND),
+                            status: HandlerResponseStatus.Failure
+                        }
+                    }
+                },
+                onError: (error) => {
+                    console.error(error);
+                    responseSpeech = {
+                        speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        status: HandlerResponseStatus.Failure
+                    }
+                }
+            });
+        }
+        else if (shop !== undefined) {
+            let data: IParamsApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED];
+
+            // set data params from the old session
+            data = shop.params;
+
+            if (data.pagenumber) {
+                // Get the next page
+                data.pagenumber++;
+                // Notify the user when no more events are available
+                if (data.pagenumber > shop.totalPages) {
+                    return handlerInput.responseBuilder
+                        .speak(t(TranslationTypes.SHOP_MAX_EXCEEDED))
+                        .reprompt(t(TranslationTypes.HELP_MSG))
+                        .getResponse();
+                }
+            }
+
+            await RouteGenerate({
+                url: ApiCallTypes.POI_LOCALIZED,
+                data,
+                onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
+                    // If records exists
+                    if (response.Items[0] !== null) {
+                        // Slice the array to max 10 entries, because no pagination exists for this service
+                        const shops = cleanSssmlResponseFromInvalidChars(response.Items.map((shop) => {
+                            return shop.Shortname;
+                        }).join(", "), t);
+
+                        responseSpeech.speechText = `<p>${shops}.</p>`;
+                        // If last page is reached, show a different prompt message
+                        responseSpeech.promptText = t(data.pagenumber === response.TotalPages ? TranslationTypes.SHOPS_MORE_INFO : TranslationTypes.SHOPS_REPROMPT)
+
+                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+                    }
+                    else {
+                        responseSpeech = {
+                            speechText: t(TranslationTypes.NO_SHOPS_FOUND),
+                            promptText: t(TranslationTypes.NO_SHOPS_FOUND),
+                            status: HandlerResponseStatus.Failure
+                        }
+                    }
+                },
+                onError: (error) => {
+                    console.error(error);
+                    responseSpeech = {
+                        speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        status: HandlerResponseStatus.Failure
+                    }
+                }
+            });
+        }
+        else if (gastronomy !== undefined) {
+            let data: IParamsApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED];
+
+            // set data params from the old session
+            data = gastronomy.params;
+
+            if (data.pagenumber) {
+                // Get the next page
+                data.pagenumber++;
+                // Notify the user when no more events are available
+                if (data.pagenumber > gastronomy.totalPages) {
+                    return handlerInput.responseBuilder
+                        .speak(t(TranslationTypes.GASTRONOMY_MAX_EXCEEDED))
+                        .reprompt(t(TranslationTypes.HELP_MSG))
+                        .getResponse();
+                }
+            }
+
+            await RouteGenerate({
+                url: ApiCallTypes.GASTRONOMY_LOCALIZED,
+                data,
+                onSuccess: (response: IResponseApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED]) => {
+                    // If records exists
+                    if (response.Items[0] !== null) {
+                        // Slice the array to max 10 entries, because no pagination exists for this service
+                        const gastronomies = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
+                            return event.Shortname;
+                        }).join(", "), t);
+
+                        responseSpeech.speechText = `<p>${gastronomies}.</p>`;
+                        // If last page is reached, show a different prompt message
+                        responseSpeech.promptText = t(data.pagenumber === response.TotalPages ? TranslationTypes.GASTRONOMY_MORE_INFO : TranslationTypes.GASTRONOMY_REPROMPT)
+
+                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+                    }
+                    else {
+                        responseSpeech = {
+                            speechText: t(TranslationTypes.NO_GASTRONOMY_FOUND),
+                            promptText: t(TranslationTypes.NO_GASTRONOMY_FOUND),
                             status: HandlerResponseStatus.Failure
                         }
                     }
