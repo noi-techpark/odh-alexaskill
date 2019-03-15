@@ -1,6 +1,6 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest, services } from "ask-sdk-model";
-import { RequestTypes, ApiUrl, AuthToken, TranslationTypes, ApiCallTypes, WeekDays, WeekDaysNumber } from "./constants";
+import { RequestTypes, AuthToken, TranslationTypes, ApiCallTypes, WeekDays, WeekDaysNumber } from "./constants";
 import * as Interface from "./../interfaces";
 import "isomorphic-fetch";
 // @ts-ignore no types available for this module
@@ -242,12 +242,15 @@ export function GetSlotValues(filledSlots?: Interface.ISlots): Interface.ISlotVa
 */
 export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> => {
     try {
-        const url = new URL(`${ApiUrl}/api/${route.url}`);
         //@ts-ignore
-        const searchParams = new URLSearchParams(route.data)
+        const searchParams = new URLSearchParams(route.data);
+
+        const url = new URL(`${route.host}${route.url}`);
+
+        const query = route.data ? `${url}?${searchParams}` : (url + "");
 
         console.info(`API Request: ${url}?${searchParams}`)
-        let response = await fetch(`${url}?${searchParams}`, {
+        let response = await fetch(query, {
             "headers": {
                 "Authorization": `Bearer ${AuthToken}`,
                 "Content-Type": "application/json"
@@ -260,7 +263,6 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
         route.onError(error);
     }
 };
-
 
 /**
 * Parse the date string to the desired format
@@ -402,7 +404,7 @@ export const removeOldPharmacySchedule = (records: IResponseApiStructure[ApiCall
                     schedule.OpeningTimes = {};
 
                     schedule.OperationScheduleTime.forEach(scheduleTime => {
-                       
+
 
                         let identifier: string = "";
                         let k: { "periods": Array<{ "start": string, "end": string }>, "days": Array<number> } = {
@@ -446,8 +448,6 @@ export const removeOldPharmacySchedule = (records: IResponseApiStructure[ApiCall
                             end: new Date(`${year}-${month}-${day} ${scheduleTime.End}`)
                         });
                     });
-
-                    console.log("Operation times" + JSON.stringify(schedule));
                 }
                 // If schedule times are in the future, accept range
                 return validSchedule;
@@ -456,3 +456,65 @@ export const removeOldPharmacySchedule = (records: IResponseApiStructure[ApiCall
     });
     return records;
 }
+
+// "Geolocation":{ 
+//     "locationServices": { 
+//         "access": "ENABLED",
+//         "status": "RUNNING",   
+//     },
+//     "timestamp": "2018-03-25T00:00:00Z+00:00",
+//     "coordinate": {
+//         "latitudeInDegrees": 38.2,
+//         "longitudeInDegrees": 28.3,
+//         "accuracyInMeters": 12.1 
+//     },
+//     "altitude": {
+//         "altitudeInMeters": 120.1,
+//         "accuracyInMeters": 30.1
+//     },
+//     "heading": { 
+//         "directionInDegrees": 180.0,
+//         "accuracyInDegrees": 5.0  
+//     },
+//     "speed": { 
+//         "speedInMetersPerSecond": 10.0,
+//         "accuracyInMetresPerSecond": 1.1
+//     }       
+// }
+// export const getGeoLocationPositon = (handlerInput: HandlerInput) =>{
+//     var isGeolocationSupported = handlerInput.requestEnvelope.context.System.device.supportedInterfaces.Geolocation;
+
+//     console.log("Geo Supported:"+ isGeolocationSupported);
+//     console.log("Geo Context:"+ JSON.stringify(handlerInput));
+//     if ( isGeolocationSupported ) {   //  does the device support location based features? 
+//             var geoObject = handlerInput.requestEnvelope.context.Geolocation;
+//             if ( ! geoObject || ! geoObject.coordinate ) {
+//               return handlerInput.responseBuilder
+//                 .speak('FindMyWayHome would like to use your location. To turn on location sharing, please go to your Alexa app, and follow the instructions.')
+//                 .withAskForPermissionsConsentCard(['alexa::devices:all:geolocation:read'])
+//                 .getResponse();
+//             } else {
+//                 console.log("GeoObject"+ JSON.stringify(geoObject));
+//               // use location data
+//               return geoObject;
+//             }
+//     }
+//     return false;
+
+
+//     const das = new Alexa.services.DeviceAddressService(); 
+
+// das.getFullAddress(deviceId, apiEndpoint, token) 
+//     .then((data) => { 
+//         this.response.speak('<address information>'); 
+//         console.log('Address get: ' + JSON.stringify(data)); //print log to Amazon CloudWatch 
+//         this.response.speak("You are in " + data.city); 
+//         this.emit(':responseReady'); 
+//     }) 
+//     .catch((error) => { 
+//         this.response.speak('I\'m sorry. Something went wrong.'); 
+//         this.emit(':responseReady'); 
+//         console.log(error.message); 
+//         }); 
+
+// }

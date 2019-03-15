@@ -5,6 +5,7 @@ import * as Event from "./intents/Event";
 import * as Pharmacy from "./intents/Pharmacy";
 import * as Shop from "./intents/Shop";
 import * as Gastronomy from "./intents/Gastronomy";
+import * as CarSharing from "./intents/CarSharing";
 import * as Interceptor from "./interceptors";
 import * as Errors from "./errors";
 
@@ -25,6 +26,8 @@ export const handler = SkillBuilders.custom()
     Pharmacy.PharmacyDetailHandler,
 
     Shop.ShopListHandler,
+
+    CarSharing.CarSharingListHandler,
 
     Gastronomy.GastronomyListHandler,
 

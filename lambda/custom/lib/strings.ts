@@ -70,6 +70,22 @@ export const strings: Resource = {
                 "Es konnten leider keine Shops mit diesen Suchkriterien gefunden werden.",
                 "Es konnten leider keine Geschäfte mit diesen Suchkriterien gefunden werden."
             ],
+            PHARMACY_GENERAL: [
+                "Folgende Einträge konnte ich finden: ",
+                "Folgende Apotheken konnte ich finden: "
+            ],
+            GASTRONOMY_GENERAL: [
+                "Folgende Einträge konnte ich finden: ",
+                "Folgende Restaurants konnte ich finden: "
+            ],
+            CARSHARING_GENERAL: [
+                "Folgende Einträge konnte ich finden: ",
+                "Folgende Car Sharing Angebote konnte ich finden: "
+            ],
+            SHOP_GENERAL: [
+                "Folgende Einträge konnte ich finden: ",
+                "Folgende Shops konnte ich finden: "
+            ],
             PHARMACY_MSG_SINGLE_DATE: [
                 "Am %date% haben folgenden Apotheken geöffnet:",
                 "Folgende Apotheken haben am %date% geöffnet:"
@@ -165,8 +181,24 @@ export const strings: Resource = {
                 "In %municipality% konnte ich folgende Shops mit der Kategorie %type% finden: ",
                 "Folgende Shops konnte ich mit der Kategorie %type% in %municipality% finden: ",
             ],
+            CARSHARING_SINGLE_AVAILABLE_VEHICLES: [
+                "%name% %municipality% hat %availableVehicels% Fahrzeug verfügbar. "
+            ],
+            CARSHARING_MULTIPLE_AVAILABLE_VEHICLES: [
+                "%name% %municipality% hat %availableVehicels% Fahrzeuge verfügbar. "
+            ],
+            CARSHARING_NO_AVAILABLE_VEHICLES: [
+                "%name% %municipality% ist kein Fahrzeug verfügbar. "
+            ],
+            CARSHARING_REPROMPT: [
+                "Möchtest du mehr Car Sharing Angebote erhalten?",
+                "Möchtest du noch weitere Vorschläge bekommen?"
+            ],
             NO_PHARMACIES_FOUND: [
                 "Es konnten leider keine Apotheken mit diesen Suchkriterien gefunden werden."
+            ],
+            NO_CARSHARING_FOUND: [
+                "Es konnten leider keine Car Sharing Angebote mit diesen Suchkriterien gefunden werden."
             ],
             HELP_MSG: [
                 "Frage mich nach einem Restaurant in der Nähe, der nächstgelegenen, geöffneten Apotheke oder nach Einkaufsgeschäften."

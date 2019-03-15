@@ -16,7 +16,9 @@
     "es6-promise": "^4.2.6",
     "i18next": "^11.3.5",
     "i18next-sprintf-postprocessor": "^0.2.2",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "nominatim-js": "^1.0.0",
+    "sort-by-distance": "^1.1.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.19",

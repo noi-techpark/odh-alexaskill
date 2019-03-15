@@ -1,10 +1,11 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
 import { IsIntent, RouteGenerate, GetRequestAttributes, dateFormat, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
-import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus } from "../../lib/constants";
+import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus, ApiUrl } from "../../lib/constants";
 import { IResponseApiStructure, IHandlerResponse, IParamsApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as AmazonDateParser from "amazon-date-parser";
+import { AlexaDeviceAddressClient } from "../../lib/AlexaDeviceAddressClient";
 
 export const PharmacyListHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
@@ -62,6 +63,7 @@ export const PharmacyListHandler: RequestHandler = {
             let district_id: string = "";
 
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.DISTRICT_LOCALIZED,
                 data: districtParams,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.DISTRICT_LOCALIZED]) => {
@@ -132,6 +134,7 @@ export const PharmacyListHandler: RequestHandler = {
             // If a municipality was found
             if (district_id !== "") {
                 await RouteGenerate({
+                    host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,
                     data: districtParams,
                     onSuccess: (response: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED]) => {
@@ -202,7 +205,23 @@ export const PharmacyListHandler: RequestHandler = {
                 //     .getResponse();
             }
         }
+        else {
+            // Get the events by coordinates when no specific district was telled
+            const accessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
+            const deviceId = handlerInput.requestEnvelope.context.System.device.deviceId;
+            const apiEndpoint = handlerInput.requestEnvelope.context.System.apiEndpoint;
 
+            if (accessToken !== undefined) {
+                const device = new AlexaDeviceAddressClient(apiEndpoint, deviceId, accessToken);
+                const address = await device.getFullAddress();
+
+                if (address.statusCode === HandlerResponseStatus.Success) {
+                    data.latitude = address.response.lat;
+                    data.longitude = address.response.lng;
+                }
+            }
+        }
+        
         if (periodSlot.value !== "") {
             // parse the amazon date to a valid date range
             const awsDate = AmazonDateParser(periodSlot.value);
@@ -247,6 +266,7 @@ export const PharmacyListHandler: RequestHandler = {
         }
 
         await RouteGenerate({
+            host: ApiUrl,
             url: ApiCallTypes.POI_LOCALIZED,
             data,
             onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
@@ -273,6 +293,9 @@ export const PharmacyListHandler: RequestHandler = {
                     }
                     else if (data.locfilter !== undefined) {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_LOCATION, { "municipality": municipality.Name })}</p>`;
+                    }
+                    else{
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_GENERAL)}</p>`;
                     }
 
                     if (responseSpeech.status === HandlerResponseStatus.Success) {

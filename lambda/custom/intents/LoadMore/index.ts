@@ -1,8 +1,10 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
 import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
-import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes } from "../../lib/constants";
+import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, ApiUrl, ApiUrlChannel } from "../../lib/constants";
 import { IHandlerResponse, IParamsApiStructure, IResponseApiStructure } from "../../interfaces";
+// @ts-ignore no types available
+import * as sortByDistance from "sort-by-distance";
 
 export const LoadMoreHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
@@ -11,7 +13,7 @@ export const LoadMoreHandler: RequestHandler = {
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
         const { t } = GetRequestAttributes(handlerInput);
-        const { event, pharmacy, gastronomy, shop } = handlerInput.attributesManager.getSessionAttributes();
+        const { event, pharmacy, gastronomy, shop, carSharing } = handlerInput.attributesManager.getSessionAttributes();
 
         let responseSpeech: IHandlerResponse = {
             speechText: t(TranslationTypes.ERROR_MSG),
@@ -39,6 +41,7 @@ export const LoadMoreHandler: RequestHandler = {
             }
 
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.EVENT_LOCALIZED,
                 data,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.EVENT_LOCALIZED]) => {
@@ -92,6 +95,7 @@ export const LoadMoreHandler: RequestHandler = {
             }
 
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.POI_LOCALIZED,
                 data,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
@@ -145,6 +149,7 @@ export const LoadMoreHandler: RequestHandler = {
             }
 
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.GASTRONOMY_LOCALIZED,
                 data,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED]) => {
@@ -194,6 +199,7 @@ export const LoadMoreHandler: RequestHandler = {
             }
 
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.POI_LOCALIZED,
                 data: pharmacy.data,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
@@ -219,6 +225,101 @@ export const LoadMoreHandler: RequestHandler = {
                         responseSpeech = {
                             speechText: t(TranslationTypes.NO_EVENTS_FOUND),
                             promptText: t(TranslationTypes.NO_EVENTS_FOUND),
+                            status: HandlerResponseStatus.Failure
+                        }
+                    }
+                },
+                onError: (error) => {
+                    console.error(error);
+                    responseSpeech = {
+                        speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        status: HandlerResponseStatus.Failure
+                    }
+                }
+            });
+        }
+        else if (carSharing !== undefined) {
+
+            const data = carSharing.params;
+
+            if (carSharing.pagenumber) {
+                // Get the next page
+                carSharing.pagenumber++;
+                // Notify the user when no more events are available
+                if (carSharing.pagenumber > carSharing.totalPages) {
+                    return handlerInput.responseBuilder
+                        .speak(t(TranslationTypes.PHARMACY_MAX_EXCEEDED))
+                        .reprompt(t(TranslationTypes.HELP_MSG))
+                        .getResponse();
+                }
+            }
+
+            await RouteGenerate({
+                "host": ApiUrlChannel,
+                "url": ApiCallTypes.CAR_STATIONS,
+                onSuccess: (response: IResponseApiStructure[ApiCallTypes.CAR_STATIONS]) => {
+                    // If records exists
+                    if (response.length) {
+
+                        // Save session for next request
+                        handlerInput.attributesManager.setSessionAttributes({
+                            carSharing: {
+                                "totalPages": response.length,
+                                "params": data
+                            }
+                        });
+
+                        const opts = {
+                            yName: 'latitude',
+                            xName: 'longitude'
+                        }
+
+                        const origin = {
+                            "latitude": data.latitude,
+                            "longitude": data.longitude
+                        }
+
+                        response = sortByDistance(origin, response, opts).splice((data.pagenumber - 1) * data.pagesize, data.pagenumber * data.pagesize);
+
+                        responseSpeech.promptText = t(TranslationTypes.CARSHARING_REPROMPT);
+
+                        response.forEach(carShare => {
+
+                            // If car is available
+                            if (carShare.availableVehicles > 1) {
+                                responseSpeech.speechText += t(TranslationTypes.CARSHARING_MULTIPLE_AVAILABLE_VEHICLES, {
+                                    "name": carShare.name,
+                                    "municipality": carShare.municipality,
+                                    "availableVehicels": carShare.availableVehicles
+                                });
+                            }
+                            else if (carShare.availableVehicles === 1) {
+                                responseSpeech.speechText += t(TranslationTypes.CARSHARING_SINGLE_AVAILABLE_VEHICLES, {
+                                    "name": carShare.name,
+                                    "municipality": carShare.municipality,
+                                    "availableVehicels": carShare.availableVehicles
+                                });
+                            }
+                            else {
+                                responseSpeech.speechText += t(TranslationTypes.CARSHARING_NO_AVAILABLE_VEHICLES, {
+                                    "name": carShare.name,
+                                    "municipality": carShare.municipality
+                                })
+                            }
+                        });
+
+                        // Display prompt message only when more car stations are available
+                        if (data.pagenumber < carSharing.totalPages) {
+                            responseSpeech.speechText += `<p>${t(TranslationTypes.CARSHARING_REPROMPT)}</p>`;
+                        }
+
+                        responseSpeech.status = HandlerResponseStatus.Success;
+                    }
+                    else {
+                        responseSpeech = {
+                            speechText: t(TranslationTypes.NO_CARSHARING_FOUND),
+                            promptText: t(TranslationTypes.NO_CARSHARING_FOUND),
                             status: HandlerResponseStatus.Failure
                         }
                     }

@@ -11,6 +11,7 @@ export enum RequestTypes {
     GastronomyDetail = "GastronomyDetailIntent",
     Shop = "ShopIntent",
     ShopDetail = "ShopDetailIntent",
+    CarSharingList = "CarSharingIntent",
     LoadMore = "LoadMoreIntent",
     FindMunicipality = "FindMunicipalityIntent"
 }
@@ -68,15 +69,24 @@ export enum TranslationTypes {
     GASTRONOMY_MORE_INFO = "GASTRONOMY_MORE_INFO",
     PHARMACY_DETAIL_OPENING_TIMES = "PHARMACY_DETAIL_OPENING_TIMES",
     NO_PHARMACIES_FOUND = "NO_PHARMACIES_FOUND",
+    NO_CARSHARING_FOUND = "NO_CARSHARING_FOUND",
     TOO_MANY_PHARMACIES_FOUND = "TOO_MANY_PHARMACIES_FOUND",
     PHARMACY_DETAIL_LOCATION = "PHARMACY_DETAIL_LOCATION",
     PHARMACY_DETAIL_OPENING = "PHARMACY_DETAIL_OPENING",
     PHARMACY_MAX_EXCEEDED = "PHARMACY_MAX_EXCEEDED",
     AND_MSG = "AND_MSG",
     HELP_MSG = "HELP_MSG",
+    PHARMACY_GENERAL = "PHARMACY_GENERAL",
+    GASTRONOMY_GENERAL = "GASTRONOMY_GENERAL",
+    SHOP_GENERAL = "SHOP_GENERAL",
     GOODBYE_MSG = "GOODBYE_MSG",
     ERROR_INVALID_MUNICIPALITY = "ERROR_INVALID_MUNICIPALITY",
     ERROR_NO_TOPIC_FOUND = "ERROR_NO_TOPIC_FOUND",
+    CARSHARING_SINGLE_AVAILABLE_VEHICLES = "CARSHARING_SINGLE_AVAILABLE_VEHICLES",
+    CARSHARING_MULTIPLE_AVAILABLE_VEHICLES = "CARSHARING_MULTIPLE_AVAILABLE_VEHICLES",
+    CARSHARING_NO_AVAILABLE_VEHICLES = "CARSHARING_NO_AVAILABLE_VEHICLES",
+    CARSHARING_REPROMPT = "CARSHARING_REPROMPT",
+    CARSHARING_GENERAL = "CARSHARING_GENERAL",
     SHOPS_REPROMPT = "SHOPS_REPROMPT",
     SHOPS_LOCATION = "SHOPS_LOCATION",
     NO_SHOPS_FOUND = "NO_SHOPS_FOUND",
@@ -90,8 +100,10 @@ export enum TranslationTypes {
     ERROR_UNEXPECTED_MSG = "ERROR_UNEXPECTED_MSG",
 }
 
-export const ApiUrl = "https://tourism.opendatahub.bz.it";
+export const ApiUrl = "https://tourism.opendatahub.bz.it/api/";
 export const AuthToken = "8x0XpxnVP7B8MFyPLM64RZQjfTsAPlX1Y8NwnMA1WiXhXMZq35Y1ZMK876WYjj64xVS_kGFj7SwQT0sVf-_3qALfIUdTF1nNgSKWtPpVoQW5Y8pDjPzKOyk-h0iI0Dny4IWmsBA8NZejLDEEWtn56Vdit3N3oyBwjOP_uosE8V-DGp1DIlWFp_CfeaKVwUWGy_XhA1AgLoGvmUPy-_Gjeujfo809BKSLpr3sgFMf7sbQdYzGQPat9f-J-5dkoclu6yHii2LRWaZUtu6MQvuSCqJl_iDwGR_HfV2r-OY0nd00-e0VzPawuEgmNXyInO64rFuiRbUF9oSEH28oFt47vVZyrm4Aao7xCLlr7p-HmJR0K9yJl5WdbktSRytAJByjVb6-Gbs6atev1884bNm6CkQc7B51ZkrjVBDFpt_hMQirrcJkoj8Gk6h5Lr6qC_HLeVz9z-HSRM-YRLEhJMBQVoQ_XzdensILohv-5pMwyqyey3Yumes0lF6CGc551nHIbvl_M5OMcTyqLpk_lIdje2EJnFF3uoMq-7qQeHD-Qug";
+
+export const ApiUrlChannel = "http://ipchannels.integreen-life.bz.it";
 
 export enum ApiCallTypes {
     EVENT_REDUCED = "EventReduced",
@@ -99,7 +111,8 @@ export enum ApiCallTypes {
     DISTRICT_LOCALIZED = "DistrictLocalized",
     MUNICIPALITY_REDUCED = "MunicipalityReduced",
     POI_LOCALIZED = "PoiLocalized",
-    GASTRONOMY_LOCALIZED = "GastronomyLocalized"
+    GASTRONOMY_LOCALIZED = "GastronomyLocalized",
+    CAR_STATIONS = "/carsharing/rest/get-station-details"
 }
 
 export enum HandlerResponseStatus {

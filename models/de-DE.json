@@ -87,12 +87,15 @@
                         }
                     ],
                     "samples": [
+                        "Welche Apotheken von {fromdate} bis {todate} geöffnet",
+                        "Welche Apotheken {period} geöffnet haben",
+                        "Welche Apotheken es in {district} gibt",
                         "Welche Apotheken haben  von {fromdate} bis {todate} in {district} geöffnet",
                         "Welche Apotheken haben {period} in {district} geöffnet",
                         "Welche Apotheken gibt es in {district} ",
                         "Welche Apotheken haben {period} geöffnet",
                         "Welche Apotheken sind in meiner Nähe",
-                        "Welche Apotheken haben  von {fromdate} bis {todate} geöffnet"
+                        "Welche Apotheken haben von {fromdate} bis {todate} geöffnet"
                     ]
                 },
                 {
@@ -173,6 +176,8 @@
                         }
                     ],
                     "samples": [
+                        "Welche Restaurants es in {district} gibt mit {gastronomyType}",
+                        "Welche Restaurants es in {district} gibt",
                         "Schlag mir Restaurants mit {gastronomyType} für {ceremonyType} vor",
                         "Zeig mir Restaurants für {ceremonyType}",
                         "Welche Restaurants gibt es für {ceremonyType}",
@@ -215,6 +220,10 @@
                         }
                     ],
                     "samples": [
+                        "Welche Shops es für {poiType} gibt",
+                        "Welche Geschäfte es für {poiType} gibt",
+                        "Welche Shops gibt für {poiType}",
+                        "Welche Geschäfte haben {period} geöffnet",
                         "Welche Shops gibt es in {district} für {poiType}",
                         "Welche Shops gibt es in {district} mit {poiType} ",
                         "Schlag mir Shops vor wo es {poiType} gibt",
@@ -228,6 +237,22 @@
                         "Welche Shops haben {period} geöffnet",
                         "Welche Geschäfte sind in meiner Nähe",
                         "Welche Shops haben  von {fromdate} bis {todate} geöffnet"
+                    ]
+                },
+                {
+                    "name": "CarSharingIntent",
+                    "slots": [
+                        {
+                            "name": "city",
+                            "type": "City"
+                        }
+                    ],
+                    "samples": [
+                        "Zeig mir Car Sharing Angebote",
+                        "Welche Car Sharing Angebote findest du in {city}",
+                        "Welche Car Sharing Angebote kannst du finden",
+                        "Welche Car Sharing Angebote sind in {city}",
+                        "Welche Car Sharing Angebote sind in meiner Nähe"
                     ]
                 }
             ],
@@ -413,7 +438,7 @@
                         },
                         {
                             "name": {
-                                "value": "Buchholz "
+                                "value": "Buchholz"
                             }
                         },
                         {
@@ -678,11 +703,6 @@
                         },
                         {
                             "name": {
-                                "value": "Mühlbach"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Jenesien"
                             }
                         },
@@ -784,11 +804,6 @@
                         {
                             "name": {
                                 "value": "St. Georgen"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Ried"
                             }
                         },
                         {
@@ -973,11 +988,6 @@
                         },
                         {
                             "name": {
-                                "value": "Kematen"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Reischach"
                             }
                         },
@@ -1143,17 +1153,7 @@
                         },
                         {
                             "name": {
-                                "value": "St. Peter"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Kasern"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Jakob"
                             }
                         },
                         {
@@ -1264,11 +1264,6 @@
                         {
                             "name": {
                                 "value": "Innerprags"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Magdalena"
                             }
                         },
                         {
@@ -1413,16 +1408,6 @@
                         },
                         {
                             "name": {
-                                "value": "St. Michael"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Martin"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Raas"
                             }
                         },
@@ -1508,22 +1493,12 @@
                         },
                         {
                             "name": {
-                                "value": "St. Veit"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Stilfs"
                             }
                         },
                         {
                             "name": {
                                 "value": "Vilpian"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Pauls"
                             }
                         },
                         {
@@ -1554,11 +1529,6 @@
                         {
                             "name": {
                                 "value": "Bula/Pufels"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Runggaditsch"
                             }
                         },
                         {
@@ -1613,17 +1583,7 @@
                         },
                         {
                             "name": {
-                                "value": "Gand"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Rentsch"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Martin"
                             }
                         },
                         {
@@ -1644,11 +1604,6 @@
                         {
                             "name": {
                                 "value": "Telfes"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Mühlbach"
                             }
                         },
                         {
@@ -1713,11 +1668,6 @@
                         },
                         {
                             "name": {
-                                "value": "St. Magdalena"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Kurtatsch"
                             }
                         },
@@ -1734,11 +1684,6 @@
                         {
                             "name": {
                                 "value": "Truden"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Graun"
                             }
                         },
                         {
@@ -1848,11 +1793,6 @@
                         },
                         {
                             "name": {
-                                "value": "St. Jakob"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Morter"
                             }
                         },
@@ -1938,11 +1878,6 @@
                         },
                         {
                             "name": {
-                                "value": "Rungg"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Quadrat"
                             }
                         },
@@ -1969,11 +1904,6 @@
                         {
                             "name": {
                                 "value": "Völser Aicha"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Tisens"
                             }
                         },
                         {
@@ -2059,11 +1989,6 @@
                         {
                             "name": {
                                 "value": "Trafoi"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Tabland"
                             }
                         },
                         {
@@ -2154,11 +2079,6 @@
                         {
                             "name": {
                                 "value": "Tagusens"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Oswald"
                             }
                         },
                         {
@@ -2279,11 +2199,6 @@
                         {
                             "name": {
                                 "value": "Signat"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Jakob"
                             }
                         },
                         {
@@ -2483,11 +2398,6 @@
                         },
                         {
                             "name": {
-                                "value": "Gfrill"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Durnholz"
                             }
                         },
@@ -2569,11 +2479,6 @@
                         {
                             "name": {
                                 "value": "Agratsberg"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Platten"
                             }
                         },
                         {
@@ -2663,11 +2568,6 @@
                         },
                         {
                             "name": {
-                                "value": "St. Jakob"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Schmuders"
                             }
                         },
@@ -2704,11 +2604,6 @@
                         {
                             "name": {
                                 "value": "Prenn"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Sonnenberg"
                             }
                         },
                         {
@@ -2798,16 +2693,6 @@
                         },
                         {
                             "name": {
-                                "value": "St. Peter"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "St. Valentin"
-                            }
-                        },
-                        {
-                            "name": {
                                 "value": "Koll"
                             }
                         },
@@ -2824,11 +2709,6 @@
                         {
                             "name": {
                                 "value": "Pawigl"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Sonnenberg"
                             }
                         },
                         {
@@ -2994,11 +2874,6 @@
                         {
                             "name": {
                                 "value": "Gaid"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "Blumau"
                             }
                         },
                         {
@@ -4408,6 +4283,66 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "City",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Freienfeld"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Pfatten"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Meran"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Klausen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Mals"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lana"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Schlanders"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bruneck"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Toblach"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Brixen"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Bozen"
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -4426,6 +4361,48 @@
                             "prompts": {
                                 "elicitation": "Elicit.Slot.558052350761.920289827446"
                             }
+                        }
+                    ]
+                },
+                {
+                    "name": "ShopIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "district",
+                            "type": "Districts",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "period",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "fromdate",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "todate",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "poiType",
+                            "type": "PoiTypes",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
                         }
                     ]
                 }

@@ -437,12 +437,26 @@ export interface IResponseApiStructure {
             "SmgTags": Array<string> | null,
             "SmgActive": boolean
         }>
-    }
+    },
+    [ApiCallTypes.CAR_STATIONS]: Array<{
+        "_t": string,
+        "id": string,
+        "name": string,
+        "latitude": number,
+        "longitude": number,
+        "municipality": string,
+        "company": string,
+        "availableVehicles": number,
+        "bookahead": boolean,
+        "fixedParking": boolean,
+        "spontaneously": boolean
+    }>
 }
 
 export interface IApiCall {
+    host: string,
     url: ApiCallTypes,
-    data: IParamsApiStructure[ApiCallTypes.EVENT_REDUCED] | IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED],
+    data?: IParamsApiStructure[ApiCallTypes.EVENT_REDUCED] | IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED],
     onSuccess(response: any): any,
     onError(message: string): any
 };

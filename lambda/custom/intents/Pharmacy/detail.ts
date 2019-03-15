@@ -1,7 +1,7 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
 import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromInvalidChars, removeOldPharmacySchedule, dateFormat } from "../../lib/helpers";
-import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, WeekDaysMapping } from "../../lib/constants";
+import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, WeekDaysMapping, ApiUrl } from "../../lib/constants";
 import { IHandlerResponse, IParamsApiStructure, IResponseApiStructure } from "../../interfaces";
 
 export const PharmacyDetailHandler: RequestHandler = {
@@ -35,6 +35,7 @@ export const PharmacyDetailHandler: RequestHandler = {
 
         if (query.value !== "") {
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.POI_LOCALIZED,
                 data,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {

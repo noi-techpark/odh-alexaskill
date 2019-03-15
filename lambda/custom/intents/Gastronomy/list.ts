@@ -1,10 +1,11 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
 import { IsIntent, RouteGenerate, GetRequestAttributes, cleanSssmlResponseFromInvalidChars } from "../../lib/helpers";
-import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus, GastronomyType } from "../../lib/constants";
+import { RequestTypes, ApiCallTypes, TranslationTypes, HandlerResponseStatus, GastronomyType, ApiUrl } from "../../lib/constants";
 import { IResponseApiStructure, IHandlerResponse, IParamsApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as AmazonDateParser from "amazon-date-parser";
+import { AlexaDeviceAddressClient } from "../../lib/AlexaDeviceAddressClient";
 
 export const GastronomyListHandler: RequestHandler = {
     canHandle(handlerInput: HandlerInput): boolean {
@@ -95,6 +96,7 @@ export const GastronomyListHandler: RequestHandler = {
             let district_id: string = "";
 
             await RouteGenerate({
+                host: ApiUrl,
                 url: ApiCallTypes.DISTRICT_LOCALIZED,
                 data: districtParams,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.DISTRICT_LOCALIZED]) => {
@@ -165,6 +167,7 @@ export const GastronomyListHandler: RequestHandler = {
             // If a municipality was found
             if (district_id !== "") {
                 await RouteGenerate({
+                    host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,
                     data: districtParams,
                     onSuccess: (response: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED]) => {
@@ -235,6 +238,22 @@ export const GastronomyListHandler: RequestHandler = {
                 //     .getResponse();
             }
         }
+        else {
+            // Get the events by coordinates when no specific district was telled
+            const accessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
+            const deviceId = handlerInput.requestEnvelope.context.System.device.deviceId;
+            const apiEndpoint = handlerInput.requestEnvelope.context.System.apiEndpoint;
+
+            if (accessToken !== undefined) {
+                const device = new AlexaDeviceAddressClient(apiEndpoint, deviceId, accessToken);
+                const address = await device.getFullAddress();
+
+                if (address.statusCode === HandlerResponseStatus.Success) {
+                    data.latitude = address.response.lat;
+                    data.longitude = address.response.lng;
+                }
+            }
+        }
         // }
         // else {
         //     data.locfilter = `mun${selectedMunicipality.Id}`;
@@ -242,6 +261,7 @@ export const GastronomyListHandler: RequestHandler = {
         // }
 
         await RouteGenerate({
+            host: ApiUrl,
             url: ApiCallTypes.GASTRONOMY_LOCALIZED,
             data,
             onSuccess: (response: IResponseApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED]) => {
@@ -274,6 +294,9 @@ export const GastronomyListHandler: RequestHandler = {
                     }
                     else if (data.ceremonycodefilter !== undefined) {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_CEREMONY, { "ceremony": ceremonyTypeSlot.resolved })}</p>`;
+                    }
+                    else{
+                        responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_GENERAL)}</p>`;
                     }
 
                     // If the last page was reached, don't show the message that there are more gastronomies available    
