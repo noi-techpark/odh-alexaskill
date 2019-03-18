@@ -92,7 +92,7 @@
                         "Welche Apotheken es in {district} gibt",
                         "Welche Apotheken haben  von {fromdate} bis {todate} in {district} geöffnet",
                         "Welche Apotheken haben {period} in {district} geöffnet",
-                        "Welche Apotheken gibt es in {district} ",
+                        "Welche Apotheken gibt es in {district}",
                         "Welche Apotheken haben {period} geöffnet",
                         "Welche Apotheken sind in meiner Nähe",
                         "Welche Apotheken haben von {fromdate} bis {todate} geöffnet"
@@ -102,6 +102,8 @@
                     "name": "LoadMoreIntent",
                     "slots": [],
                     "samples": [
+                        "Mehr Shops",
+                        "Mehr Apotheken",
                         "Zeig mir mehr",
                         "Lade weitere",
                         "Lad mehr Events",
