@@ -7,16 +7,45 @@
     "clean": "rimraf dist",
     "dialog": "ask dialog --locale=de-DE",
     "build": "npm run clean && gulp",
-    "deploy": "npm run build && ask deploy --force"
+    "deploy": "npm run build && ask deploy --force",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
+    "coverageDirectory": ".coverage"
   },
   "keywords": [],
   "author": "IDM Südtirol",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^11.10.4",
+    "@types/i18next": "^12.1.0",
+    "@types/i18next-sprintf-postprocessor": "0.0.29",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.5",
     "gulp": "^3.9.1",
     "gulp-typescript": "^5.0.0",
+    "jest": "^24.7.1",
     "rimraf": "^2.6.2",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "ask-sdk-core": "^2.5.1",
+    "ask-sdk-model": "^1.11.2",
+    "i18next": "^15.0.9",
+    "i18next-sprintf-postprocessor": "^0.2.2"
   }
 }

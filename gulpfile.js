@@ -2,7 +2,6 @@ var gulp = require("gulp");
 var fs = require("fs");
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
-
 var packageJson = require('./package.json');
 
 var gulp = require('gulp');
