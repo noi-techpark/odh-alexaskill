@@ -217,12 +217,13 @@ export const EventListHandler: RequestHandler = {
             }
         }
         else {
+            const system = handlerInput.requestEnvelope.context.System;
             // Get the events by coordinates when no specific district was telled
-            const accessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-            const deviceId = handlerInput.requestEnvelope.context.System.device.deviceId;
-            const apiEndpoint = handlerInput.requestEnvelope.context.System.apiEndpoint;
+            const accessToken = system.apiAccessToken;
+            const apiEndpoint = system.apiEndpoint;
 
-            if (accessToken !== undefined) {
+            if (accessToken !== undefined && system.device !== undefined) {
+                const deviceId = system.device.deviceId;
                 const device = new AlexaDeviceAddressClient(apiEndpoint, deviceId, accessToken);
                 const address = await device.getFullAddress();
 
@@ -282,88 +283,95 @@ export const EventListHandler: RequestHandler = {
             data.enddate = todate;
         }
 
-        await RouteGenerate({
-            host: ApiUrl,
-            url: ApiCallTypes.EVENT_LOCALIZED,
-            data,
-            onSuccess: (response: IResponseApiStructure[ApiCallTypes.EVENT_LOCALIZED]) => {
-                // If records exists
-                if (response.Items[0] !== null && response.Items.length) {
-                    // Get the names from the events
-                    const events = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
-                        return event.Shortname;
-                    }).join(", "), t);
+        if (responseSpeech.status !== HandlerResponseStatus.Failure) {
 
-                    if (data.begindate !== undefined || data.enddate !== undefined) {
-                        // when no topic filter is selected
-                        if (data.topicfilter !== undefined) {
-                            // If from- and todate are the same
-                            if (data.begindate === data.enddate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, { "date": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+            await RouteGenerate({
+                host: ApiUrl,
+                url: ApiCallTypes.EVENT_LOCALIZED,
+                data,
+                onSuccess: (response: IResponseApiStructure[ApiCallTypes.EVENT_LOCALIZED]) => {
+                    // If records exists
+                    if (response.Items[0] !== null && response.Items.length) {
+                        // Get the names from the events
+                        const events = cleanSssmlResponseFromInvalidChars(response.Items.map((event) => {
+                            return event.Shortname;
+                        }).join(", "), t);
+
+                        if (data.begindate !== undefined || data.enddate !== undefined) {
+                            // when no topic filter is selected
+                            if (data.topicfilter !== undefined) {
+                                // If from- and todate are the same
+                                if (data.begindate === data.enddate) {
+                                    responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE_WITH_TOPIC, { "date": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                                }
+                                else {
+                                    responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, { "fromdate": fromdateSpeech, "todate": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                                }
                             }
                             else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES_WITH_TOPIC, { "fromdate": fromdateSpeech, "todate": todateSpeech, "topic": topicSlot.resolved })}</p>`;
+                                // If from- and todate are the same
+                                if (data.begindate === data.enddate) {
+                                    responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, { "date": todateSpeech })}</p>`;
+                                }
+                                else {
+                                    responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}</p>`;
+                                }
                             }
                         }
-                        else {
-                            // If from- and todate are the same
-                            if (data.begindate === data.enddate) {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_SINGLE_DATE, { "date": todateSpeech })}.</p>`;
+                        else if (data.topicfilter !== undefined) {
+                            if (data.locfilter !== undefined) {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC_WITH_MUNICIPALITY, { "topic": topicSlot.resolved, "municipality": municipality.Name })}</p>`;
                             }
                             else {
-                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}.</p>`;
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, { "topic": topicSlot.resolved })}</p>`;
                             }
                         }
-                    }
-                    else if (data.topicfilter !== undefined) {
-                        if (data.locfilter !== undefined) {
-                            responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC_WITH_MUNICIPALITY, { "topic": topicSlot.resolved, "municipality": municipality.Name })}</p>`;
+                        else if (data.locfilter !== undefined) {
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_LOCATION, { "municipality": municipality.Name })}</p>`;
                         }
                         else {
-                            responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_TOPIC, { "topic": topicSlot.resolved })}</p>`;
+                            // Fallback when no specific params were used
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.EVENTS_GENERAL)}</p>`;
                         }
-                    }
-                    else if (data.locfilter !== undefined) {
-                        responseSpeech.speechText = `<p>${t(TranslationTypes.EVENT_LOCATION, { "municipality": municipality.Name })}</p>`;
-                    }
 
-                    // If the last page was reached, don't show the message that there are more events available    
-                    if (data.pagenumber === response.TotalPages) {
-                        responseSpeech.promptText = t(TranslationTypes.EVENT_MORE_INFO);
+                        // If the last page was reached, don't show the message that there are more events available    
+                        if (data.pagenumber === response.TotalPages) {
+                            responseSpeech.promptText = t(TranslationTypes.EVENT_MORE_INFO);
+                        }
+                        else {
+                            responseSpeech.promptText = t(TranslationTypes.EVENT_REPROMPT);
+                        }
+
+                        responseSpeech.speechText += `<p>${events}.</p>`;
+                        responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
+
+
+                        // Save session for next request
+                        handlerInput.attributesManager.setSessionAttributes({
+                            event: {
+                                "totalPages": response.TotalPages,
+                                "params": data
+                            }
+                        });
                     }
                     else {
-                        responseSpeech.promptText = t(TranslationTypes.EVENT_REPROMPT);
-                    }
-
-                    responseSpeech.speechText += `<p>${events}.</p>`;
-                    responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
-
-
-                    // Save session for next request
-                    handlerInput.attributesManager.setSessionAttributes({
-                        event: {
-                            "totalPages": response.TotalPages,
-                            "params": data
+                        responseSpeech = {
+                            speechText: t(TranslationTypes.NO_EVENTS_FOUND),
+                            promptText: t(TranslationTypes.NO_EVENTS_FOUND),
+                            status: HandlerResponseStatus.Failure
                         }
-                    });
-                }
-                else {
+                    }
+                },
+                onError: (error) => {
+                    console.error(error);
                     responseSpeech = {
-                        speechText: t(TranslationTypes.NO_EVENTS_FOUND),
-                        promptText: t(TranslationTypes.NO_EVENTS_FOUND),
+                        speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                        promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
                         status: HandlerResponseStatus.Failure
                     }
                 }
-            },
-            onError: (error) => {
-                console.error(error);
-                responseSpeech = {
-                    speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
-                    promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
-                    status: HandlerResponseStatus.Failure
-                }
-            }
-        });
+            });
+        }
 
         let response = handlerInput.responseBuilder;
 

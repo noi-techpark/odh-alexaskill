@@ -240,11 +240,13 @@ export const GastronomyListHandler: RequestHandler = {
         }
         else {
             // Get the events by coordinates when no specific district was telled
-            const accessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-            const deviceId = handlerInput.requestEnvelope.context.System.device.deviceId;
-            const apiEndpoint = handlerInput.requestEnvelope.context.System.apiEndpoint;
+            const system = handlerInput.requestEnvelope.context.System;
+            const accessToken = system.apiAccessToken;
+            
+            const apiEndpoint = system.apiEndpoint;
 
-            if (accessToken !== undefined) {
+            if (accessToken !== undefined && system.device !== undefined) {
+                const deviceId = system.device.deviceId;
                 const device = new AlexaDeviceAddressClient(apiEndpoint, deviceId, accessToken);
                 const address = await device.getFullAddress();
 

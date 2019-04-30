@@ -30,8 +30,8 @@ export const strings: Resource = {
                 "Folgende Events finden am %date% statt:"
             ],
             EVENT_MSG_SINGLE_DATE_WITH_TOPIC: [
-                "Am %date% finden folgenden Events statt:",
-                "Folgende Events finden am %date% statt:"
+                "Am %date% finden folgenden Events zum Thema %topic% statt:",
+                "Folgende Events finden am %date% zum Thema %topic% statt:"
             ],
             EVENT_MSG_MULTIPLE_DATES: [
                 "Vom %fromdate% bis zum %todate% finden folgende Events statt:"
@@ -69,6 +69,10 @@ export const strings: Resource = {
             NO_SHOPS_FOUND: [
                 "Es konnten leider keine Shops mit diesen Suchkriterien gefunden werden.",
                 "Es konnten leider keine Geschäfte mit diesen Suchkriterien gefunden werden."
+            ],
+            EVENTS_GENERAL: [
+                "Folgende Einträge konnte ich finden: ",
+                "Folgende Events konnte ich finden: "
             ],
             PHARMACY_GENERAL: [
                 "Folgende Einträge konnte ich finden: ",

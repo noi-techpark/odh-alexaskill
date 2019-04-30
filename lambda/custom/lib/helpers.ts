@@ -17,7 +17,6 @@ import { IResponseApiStructure } from "./../interfaces";
 export function IsIntent(handlerInput: HandlerInput, ...intents: string[]): boolean {
     if (handlerInput.requestEnvelope.request.type === RequestTypes.Intent) {
         for (let i = 0; i < intents.length; i++) {
-            console.log(handlerInput.requestEnvelope.request.intent.name);
             if (handlerInput.requestEnvelope.request.intent.name === intents[i]) {
                 return true;
             }
@@ -257,7 +256,7 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
             }
         });
         response = await response.json();
-        console.info(`API Response: ${JSON.stringify(response)}`)
+        // console.info(`API Response: ${JSON.stringify(response)}`)
         route.onSuccess(response);
     } catch (error) {
         route.onError(error);

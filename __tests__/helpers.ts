@@ -1,23 +1,44 @@
 import { RequestEnvelope, ResponseEnvelope, DialogState, SlotConfirmationStatus, slu, Slot } from "ask-sdk-model";
 import { handler } from "../lambda/custom";
 import { RequestTypes, LocaleTypes, IntentTypes } from "../lambda/custom/lib/constants";
-
+import { dateFormat } from "../lambda/custom/lib/helpers";
 
 expect.extend({
     translationMatch(received, argument) {
 
         let translationMatches = false;
-        const outputSpeech = received.response.outputSpeech.ssml.replace(/<speak>/g, "").replace(/<\/speak>/g, "");
+        let outputSpeech = received.response.outputSpeech.ssml.replace(/<speak>/g, "").replace(/<\/speak>/g, "");
 
         const attributeKeys = argument.attributes !== undefined ? Object.keys(argument.attributes) : [];
 
         argument.translations.forEach((translation: string) => {
             attributeKeys.forEach((attributeKey) => {
-                const regex = new RegExp(`%${attributeKey}%`,"g");
-                translation = translation.replace(regex, argument.attributes[attributeKey]);
+                const regex = new RegExp(`%${attributeKey}%`, "g");
+                if (argument.attributes[attributeKey].resolutions) {
+                    argument.attributes[attributeKey].resolutions.values.forEach((resolution: { name: string }) => {
+                        if (resolution.name.toLowerCase().indexOf(argument.attributes[attributeKey].value.toLowerCase()) !== -1) {
+                            translation = translation.replace(regex, resolution.name);
+                        }
+                    });
+                }
+                else {
+                    translation = translation.replace(regex, argument.attributes[attributeKey]);
+                }
             });
 
-            if (outputSpeech === translation) {
+            outputSpeech = stripHtmlTags(outputSpeech);
+
+            if (argument.regExpression) {
+                // Get the translation string
+                const expressionString = argument.regExpression.replace("%t", translation);
+                const reg = new RegExp(expressionString, "g");
+
+                // Check if the regex matches with the desired pattern
+                if (reg.test(outputSpeech)) {
+                    translationMatches = true;
+                }
+            }
+            else if (outputSpeech === translation) {
                 translationMatches = true;
             }
         })
@@ -35,6 +56,23 @@ expect.extend({
         }
     }
 });
+
+export const addDays = (date: Date, days: number) : string => {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return dateFormat({
+        date: result,
+        format: "YYYY-MM-DD"
+    });
+}
+
+export const stripHtmlTags = (str: string) => {
+    if ((str === null) || (str === ''))
+        return false;
+    else
+        str = str.toString();
+    return str.replace(/<[^>]*>/g, '');
+}
 
 export type PartialDeep<T> = {
     [P in keyof T]?: PartialDeep<T[P]>;
@@ -124,6 +162,20 @@ export function RequestWithIntent(options: {
     });
 }
 
+
+export interface ISlots {
+    [key: string]: {
+        value?: string;
+        confirmationStatus?: SlotConfirmationStatus;
+        resolutions?: {
+            status: slu.entityresolution.StatusCode,
+            values?: {
+                name: string;
+                id?: string;
+            }[];
+        }
+    }
+}
 /**
  * Creates an intent request envelope with the given parameters.
  * 
@@ -133,24 +185,21 @@ export function CreateIntentRequest(options: {
     name: string;
     locale: LocaleTypes;
     dialogState?: DialogState;
-    slots?: {
-        [key: string]: {
-            value?: string;
-            confirmationStatus?: SlotConfirmationStatus;
-            resolutions?: {
-                status: slu.entityresolution.StatusCode,
-                values?: {
-                    name: string;
-                    id?: string;
-                }[];
-            }
-        }
+    session?: {
+        [key: string]: any
     },
+    slots?: ISlots
 }) {
+
+    const session = options.session ? {
+        attributes: options.session
+    } : {};
+    
     return partial<RequestEnvelope>({
         "context": {
             "System": {}
         },
+        "session": session,
         "request": {
             "type": "IntentRequest",
             "locale": options.locale,
