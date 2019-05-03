@@ -1,6 +1,6 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest, services } from "ask-sdk-model";
-import { RequestTypes, AuthToken, TranslationTypes, ApiCallTypes, WeekDays, WeekDaysNumber } from "./constants";
+import { RequestTypes, TranslationTypes, ApiCallTypes, WeekDays, WeekDaysNumber, ApiAuthentication } from "./constants";
 import * as Interface from "./../interfaces";
 import "isomorphic-fetch";
 // @ts-ignore no types available for this module
@@ -23,6 +23,19 @@ export function IsIntent(handlerInput: HandlerInput, ...intents: string[]): bool
         }
     }
     return false;
+}
+
+
+/**
+ * Checks if the request matches any of the given types.
+ * 
+ * @param array
+ * @param callback 
+ */
+export async function asyncForEach(array: any, callback: any) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
 }
 
 /**
@@ -235,6 +248,24 @@ export function GetSlotValues(filledSlots?: Interface.ISlots): Interface.ISlotVa
     return slotValues;
 }
 
+let authToken: string = "";
+
+const getToken = async () => {
+    let response = await fetch("https://tourism.opendatahub.bz.it/token", {
+        method: "POST",
+        body: new URLSearchParams({
+            "grant_type": "password",
+            "username": ApiAuthentication.user,
+            "password": ApiAuthentication.password
+        })
+    });
+    response = await response.json();
+    // @ts-ignore
+    authToken = response.access_token;
+
+    console.log("API TOKEN generated" + authToken);
+}
+
 /**
 * Make an api request to the desired route
 * @param route object where the api endpoint and the different callbacks are defined
@@ -248,16 +279,29 @@ export const RouteGenerate = async (route: Interface.IApiCall): Promise<void> =>
 
         const query = route.data ? `${url}?${searchParams}` : (url + "");
 
-        console.info(`API Request: ${url}?${searchParams}`)
-        let response = await fetch(query, {
-            "headers": {
-                "Authorization": `Bearer ${AuthToken}`,
-                "Content-Type": "application/json"
+
+        let response;
+
+        if (route.auth) {
+            // Create bearer token
+            if (authToken === "") {
+                await getToken();
             }
-        });
+            response = await fetch(query, {
+                "headers": {
+                    "Authorization": `Bearer ${authToken}`,
+                    "Content-Type": "application/json"
+                }
+            });
+        }
+        else{
+            response = await fetch(query);
+        }
+
         response = await response.json();
+        // console.info(`API Request: ${url}?${searchParams}`)
         // console.info(`API Response: ${JSON.stringify(response)}`)
-        route.onSuccess(response);
+        await route.onSuccess(response);
     } catch (error) {
         route.onError(error);
     }
@@ -309,7 +353,7 @@ export const removeUnopenedPharmacies = (records: IResponseApiStructure[ApiCallT
 
                     copyFromdate.setDate(copyFromdate.getDate() + 1);
                 }
-                if (scheduleRangeValid) {
+                if (scheduleRangeValid && schedule.OperationScheduleTime) {
                     // Check if an opening hour for this pharmacy exists
                     // TODO: Add feature where user can ask for currently opened pharmacies
                     if (schedule.OperationScheduleTime.length) {

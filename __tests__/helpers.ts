@@ -15,11 +15,7 @@ expect.extend({
             attributeKeys.forEach((attributeKey) => {
                 const regex = new RegExp(`%${attributeKey}%`, "g");
                 if (argument.attributes[attributeKey].resolutions) {
-                    argument.attributes[attributeKey].resolutions.values.forEach((resolution: { name: string }) => {
-                        if (resolution.name.toLowerCase().indexOf(argument.attributes[attributeKey].value.toLowerCase()) !== -1) {
-                            translation = translation.replace(regex, resolution.name);
-                        }
-                    });
+                    translation = translation.replace(regex, argument.attributes[attributeKey].resolutions.values[0].name);
                 }
                 else {
                     translation = translation.replace(regex, argument.attributes[attributeKey]);

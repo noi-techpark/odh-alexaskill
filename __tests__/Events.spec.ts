@@ -14,6 +14,8 @@ const getSlots = (): ISlots => {
     };
 }
 
+jest.setTimeout(30000);
+
 const currLang = LocaleTypes.deDE;
 const lang = "de";
 const translations = strings[currLang].translation;

@@ -76,6 +76,7 @@ export const EventListHandler: RequestHandler = {
             await RouteGenerate({
                 host: ApiUrl,
                 url: ApiCallTypes.DISTRICT_LOCALIZED,
+                auth: true,
                 data: districtParams,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.DISTRICT_LOCALIZED]) => {
                     if (response.length) {
@@ -147,6 +148,7 @@ export const EventListHandler: RequestHandler = {
                 await RouteGenerate({
                     host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,
+                    auth: true,
                     data: districtParams,
                     onSuccess: (response: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED]) => {
                         if (response.length) {
@@ -287,6 +289,7 @@ export const EventListHandler: RequestHandler = {
 
             await RouteGenerate({
                 host: ApiUrl,
+                auth: true,
                 url: ApiCallTypes.EVENT_LOCALIZED,
                 data,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.EVENT_LOCALIZED]) => {

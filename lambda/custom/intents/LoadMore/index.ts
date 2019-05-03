@@ -1,7 +1,7 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
-import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies } from "../../lib/helpers";
-import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, ApiUrl, ApiUrlChannel } from "../../lib/constants";
+import { IsIntent, GetRequestAttributes, RouteGenerate, cleanSssmlResponseFromInvalidChars, removeUnopenedPharmacies, asyncForEach } from "../../lib/helpers";
+import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, ApiUrl, ApiUrlChannel, ApiUrlGeoReverse } from "../../lib/constants";
 import { IHandlerResponse, IParamsApiStructure, IResponseApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as sortByDistance from "sort-by-distance";
@@ -12,8 +12,10 @@ export const LoadMoreHandler: RequestHandler = {
     },
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
-        const { t } = GetRequestAttributes(handlerInput);
+        const { t, language } = GetRequestAttributes(handlerInput);
         const { event, pharmacy, gastronomy, shop, carSharing } = handlerInput.attributesManager.getSessionAttributes();
+
+        const lang = language();
 
         let responseSpeech: IHandlerResponse = {
             speechText: t(TranslationTypes.ERROR_MSG),
@@ -44,6 +46,7 @@ export const LoadMoreHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.EVENT_LOCALIZED,
                 data,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.EVENT_LOCALIZED]) => {
                     // If records exists
                     if (response.Items[0] !== null) {
@@ -98,6 +101,7 @@ export const LoadMoreHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.POI_LOCALIZED,
                 data,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                     // If records exists
                     if (response.Items[0] !== null) {
@@ -152,6 +156,7 @@ export const LoadMoreHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.GASTRONOMY_LOCALIZED,
                 data,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED]) => {
                     // If records exists
                     if (response.Items[0] !== null) {
@@ -202,6 +207,7 @@ export const LoadMoreHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.POI_LOCALIZED,
                 data: pharmacy.data,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                     // If records exists
                     if (response.Items[0] !== null) {
@@ -243,22 +249,26 @@ export const LoadMoreHandler: RequestHandler = {
 
             const data = carSharing.params;
 
-            if (carSharing.pagenumber) {
+            if (data.pagenumber) {
                 // Get the next page
-                carSharing.pagenumber++;
+                data.pagenumber++;
                 // Notify the user when no more events are available
-                if (carSharing.pagenumber > carSharing.totalPages) {
+                if (data.pagenumber > carSharing.totalPages) {
                     return handlerInput.responseBuilder
                         .speak(t(TranslationTypes.PHARMACY_MAX_EXCEEDED))
                         .reprompt(t(TranslationTypes.HELP_MSG))
                         .getResponse();
+                }
+                else {
+                    responseSpeech.speechText = "";
+                    responseSpeech.promptText = "";
                 }
             }
 
             await RouteGenerate({
                 "host": ApiUrlChannel,
                 "url": ApiCallTypes.CAR_STATIONS,
-                onSuccess: (response: IResponseApiStructure[ApiCallTypes.CAR_STATIONS]) => {
+                onSuccess: async (response: IResponseApiStructure[ApiCallTypes.CAR_STATIONS]) => {
                     // If records exists
                     if (response.length) {
 
@@ -284,8 +294,39 @@ export const LoadMoreHandler: RequestHandler = {
 
                         responseSpeech.promptText = t(TranslationTypes.CARSHARING_REPROMPT);
 
-                        response.forEach(carShare => {
-
+                        await asyncForEach(response, async (carShare: any) => {
+                            // Resolve coordinates to real address name
+                            await RouteGenerate({
+                                "host": ApiUrlGeoReverse,
+                                "url": ApiCallTypes.REVERSE_GEOCODING,
+                                "data": {
+                                    "format": "geojson",
+                                    "lat": carShare.latitude,
+                                    "lon": carShare.longitude,
+                                    "accept-language": lang
+                                },
+                                onSuccess: (response: IResponseApiStructure[ApiCallTypes.REVERSE_GEOCODING]) => {
+                                    if (response.features.length) {
+                                        if (response.features[0].properties.address.city) {
+                                            carShare.municipality = response.features[0].properties.address.city;
+                                        }
+                                        else if (response.features[0].properties.address.village) {
+                                            carShare.municipality = response.features[0].properties.address.village;
+                                        }
+                                        else if (response.features[0].properties.address.town) {
+                                            carShare.municipality = response.features[0].properties.address.town;
+                                        }
+                                    }
+                                },
+                                onError: (error) => {
+                                    console.error(error);
+                                    responseSpeech = {
+                                        speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                                        promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                                        status: HandlerResponseStatus.Failure
+                                    }
+                                }
+                            });
                             // If car is available
                             if (carShare.availableVehicles > 1) {
                                 responseSpeech.speechText += t(TranslationTypes.CARSHARING_MULTIPLE_AVAILABLE_VEHICLES, {

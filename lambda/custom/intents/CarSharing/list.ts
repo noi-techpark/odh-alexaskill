@@ -1,7 +1,7 @@
 import { HandlerInput, RequestHandler } from "ask-sdk-core";
 import { Response } from "ask-sdk-model";
-import { IsIntent, GetRequestAttributes, RouteGenerate } from "../../lib/helpers";
-import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, ApiUrlChannel } from "../../lib/constants";
+import { IsIntent, GetRequestAttributes, RouteGenerate, asyncForEach } from "../../lib/helpers";
+import { RequestTypes, TranslationTypes, HandlerResponseStatus, ApiCallTypes, ApiUrlChannel, ApiUrlGeoReverse } from "../../lib/constants";
 import { IHandlerResponse, IResponseApiStructure } from "../../interfaces";
 // @ts-ignore no types available
 import * as AmazonDateParser from "amazon-date-parser";
@@ -17,8 +17,9 @@ export const CarSharingListHandler: RequestHandler = {
     },
     async handle(handlerInput: HandlerInput): Promise<Response> {
 
-        const { t } = GetRequestAttributes(handlerInput);
+        const { t, language } = GetRequestAttributes(handlerInput);
 
+        const lang = language();
 
         let responseSpeech: IHandlerResponse = {
             speechText: t(TranslationTypes.ERROR_MSG),
@@ -77,7 +78,7 @@ export const CarSharingListHandler: RequestHandler = {
         await RouteGenerate({
             "host": ApiUrlChannel,
             "url": ApiCallTypes.CAR_STATIONS,
-            onSuccess: (response: IResponseApiStructure[ApiCallTypes.CAR_STATIONS]) => {
+            onSuccess: async (response: IResponseApiStructure[ApiCallTypes.CAR_STATIONS]) => {
                 // If records exists
                 if (response.length) {
 
@@ -94,12 +95,43 @@ export const CarSharingListHandler: RequestHandler = {
                     }
 
                     response = sortByDistance(origin, response, opts).splice((data.pagenumber - 1) * data.pagesize, data.pagenumber * data.pagesize);
-                  
+
                     responseSpeech.speechText = t(TranslationTypes.CARSHARING_GENERAL);
                     responseSpeech.promptText = t(TranslationTypes.CARSHARING_REPROMPT);
 
-                    response.forEach(carShare => {
-
+                    await asyncForEach(response, async (carShare: any) => {
+                        // Resolve coordinates to real address name
+                        await RouteGenerate({
+                            "host": ApiUrlGeoReverse,
+                            "url": ApiCallTypes.REVERSE_GEOCODING,
+                            "data": {
+                                "format": "geojson",
+                                "lat": carShare.latitude,
+                                "lon": carShare.longitude,
+                                "accept-language": lang
+                            },
+                            onSuccess: (response: IResponseApiStructure[ApiCallTypes.REVERSE_GEOCODING]) => {
+                                if (response.features.length) {
+                                    if(response.features[0].properties.address.city){
+                                        carShare.municipality = response.features[0].properties.address.city;
+                                    }
+                                    else if(response.features[0].properties.address.village){
+                                        carShare.municipality = response.features[0].properties.address.village;
+                                    }
+                                    else if(response.features[0].properties.address.town){
+                                        carShare.municipality = response.features[0].properties.address.town;
+                                    }
+                                }
+                            },
+                            onError: (error) => {
+                                console.error(error);
+                                responseSpeech = {
+                                    speechText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                                    promptText: t(TranslationTypes.ERROR_UNEXPECTED_MSG),
+                                    status: HandlerResponseStatus.Failure
+                                }
+                            }
+                        });
                         // If car is available
                         if (carShare.availableVehicles > 1) {
                             responseSpeech.speechText += t(TranslationTypes.CARSHARING_MULTIPLE_AVAILABLE_VEHICLES, {
@@ -124,14 +156,14 @@ export const CarSharingListHandler: RequestHandler = {
                     });
 
                     // Display prompt message only when more car stations are available
-                    if(data.pagenumber < totalPages){
+                    if (data.pagenumber < totalPages) {
                         responseSpeech.speechText += `<p>${responseSpeech.promptText}</p>`;
                     }
 
                     responseSpeech.status = HandlerResponseStatus.Success;
 
-                     // Save session for next request
-                     handlerInput.attributesManager.setSessionAttributes({
+                    // Save session for next request
+                    handlerInput.attributesManager.setSessionAttributes({
                         carSharing: {
                             "totalPages": totalPages,
                             "params": data

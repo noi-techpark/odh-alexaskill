@@ -96,6 +96,13 @@ export interface IParamsApiStructure {
         "longitude"?: number,
         "radius"?: number
     }
+    // https://developer.mapquest.com/documentation/open/nominatim-search/reverse/
+    [ApiCallTypes.REVERSE_GEOCODING]: {
+        "format": string,
+        "lat": number,
+        "lon": number,
+        "accept-language": string
+    },
 }
 
 export interface IResponseApiStructure {
@@ -450,13 +457,43 @@ export interface IResponseApiStructure {
         "bookahead": boolean,
         "fixedParking": boolean,
         "spontaneously": boolean
-    }>
+    }>,
+    [ApiCallTypes.REVERSE_GEOCODING]: {
+        "type": string,
+        "license": string,
+        "features": Array<{
+            "type": string,
+            "properties": {
+                "place_id": number,
+                "osm_type": string,
+                "osm_id": number,
+                "place_rank": number,
+                "category": string,
+                "type": string,
+                "importance": string,
+                "addresstype": string,
+                "name": string,
+                "display_name": string,
+                "address": {
+                    "town": string,
+                    "village": string,
+                    "city": string,
+                    "county": string,
+                    "state": string,
+                    "postcode": string,
+                    "country": string,
+                    "country_code": string
+                }
+            }
+        }>
+    }
 }
 
 export interface IApiCall {
     host: string,
     url: ApiCallTypes,
-    data?: IParamsApiStructure[ApiCallTypes.EVENT_REDUCED] | IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED],
+    auth?: boolean,
+    data?: IParamsApiStructure[ApiCallTypes.EVENT_REDUCED] | IParamsApiStructure[ApiCallTypes.EVENT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.DISTRICT_LOCALIZED] | IParamsApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED] | IParamsApiStructure[ApiCallTypes.REVERSE_GEOCODING],
     onSuccess(response: any): any,
     onError(message: string): any
 };

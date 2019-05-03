@@ -90,6 +90,10 @@ export const strings: Resource = {
                 "Folgende Einträge konnte ich finden: ",
                 "Folgende Shops konnte ich finden: "
             ],
+            PHARMACY_MSG_SINGLE_DATE_WITH_DISTRICT: [
+                "Am %date% haben folgenden Apotheken in %municipality% geöffnet:",
+                "Folgende Apotheken haben am %date% in %municipality% geöffnet:"
+            ],
             PHARMACY_MSG_SINGLE_DATE: [
                 "Am %date% haben folgenden Apotheken geöffnet:",
                 "Folgende Apotheken haben am %date% geöffnet:"
@@ -99,7 +103,10 @@ export const strings: Resource = {
                 "Folgende Apotheken konnte ich in %municipality% finden:",
             ],
             PHARMACY_MSG_MULTIPLE_DATES: [
-                "Vom %fromdate% bis zum %todate% haben folgenden Apotheken geöffnet:"
+                "Vom %fromdate% bis zum %todate% haben folgende Apotheke geöffnet:"
+            ],
+            PHARMACY_MSG_MULTIPLE_DATES_WITH_DISTRICT: [
+                "Vom %fromdate% bis zum %todate% haben folgende Apotheke in %municipality% geöffnet:"
             ],
             PHARMACY_MAX_EXCEEDED: [
                 "Es sind leider keine weiteren Apotheken mit diesen Kriterien verfügbar.",
@@ -145,9 +152,8 @@ export const strings: Resource = {
                 "In %municipality% konnte ich folgende Restaurants mit %type% für %ceremony% finden: ",
             ],
             GASTRONOMY_TYPE_WITH_CEREMONY: [
-                "In %municipality% konnte ich folgende Restaurants für %ceremony% finden: ",
-                "Folgende Restaurants für %ceremony% konnte ich in %municipality% finden: ",
-                "In %municipality% konnte ich folgende Restaurants für %ceremony% finden: ",
+                "Mit %type% konnte ich folgende Restaurants für %ceremony% finden: ",
+                "Folgende Restaurants mit %type% konnte ich für %ceremony%% finden: "
             ],
             GASTRONOMY_MAX_EXCEEDED: [
                 "Es sind leider keine weiteren Restaurants mit diesen Kriterien verfügbar.",

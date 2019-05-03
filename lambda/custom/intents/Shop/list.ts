@@ -51,7 +51,6 @@ export const ShopListHandler: RequestHandler = {
 
         let municipality: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED][0];
 
-        console.log(JSON.stringify(poiTypeSlot));
         // If the user asked for a specific subtype
         if (poiTypeSlot.value !== "") {
             if (poiTypeSlot.isMatch) {
@@ -80,6 +79,7 @@ export const ShopListHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.DISTRICT_LOCALIZED,
                 data: districtParams,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.DISTRICT_LOCALIZED]) => {
                     if (response.length) {
                         response = response.filter(district => {
@@ -151,6 +151,7 @@ export const ShopListHandler: RequestHandler = {
                     host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,
                     data: districtParams,
+                    auth: true,
                     onSuccess: (response: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED]) => {
                         if (response.length) {
                             response = response.filter(municipality => {
@@ -220,12 +221,13 @@ export const ShopListHandler: RequestHandler = {
             }
         }
         else {
+            const system = handlerInput.requestEnvelope.context.System;
             // Get the events by coordinates when no specific district was telled
-            const accessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-            const deviceId = handlerInput.requestEnvelope.context.System.device.deviceId;
-            const apiEndpoint = handlerInput.requestEnvelope.context.System.apiEndpoint;
+            const accessToken = system.apiAccessToken;
+            const apiEndpoint = system.apiEndpoint;
 
             if (accessToken !== undefined) {
+                const deviceId = system.device.deviceId;
                 const device = new AlexaDeviceAddressClient(apiEndpoint, deviceId, accessToken);
                 const address = await device.getFullAddress();
 
@@ -235,7 +237,7 @@ export const ShopListHandler: RequestHandler = {
                 }
             }
         }
-      
+
         // Disable period slots until api natively supports to filter shops by opening time
         if (periodSlot.value !== "" || (fromdateSlot.value !== "" && todateSlot.value !== "")) {
             // Return the message to alexa
@@ -297,6 +299,7 @@ export const ShopListHandler: RequestHandler = {
             host: ApiUrl,
             url: ApiCallTypes.POI_LOCALIZED,
             data,
+            auth: true,
             onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                 // If records exists
                 if (response.Items[0] !== null && response.Items.length) {
@@ -345,7 +348,7 @@ export const ShopListHandler: RequestHandler = {
                     else if (data.subtype !== undefined) {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.SHOPS_SUBTYPE, { "type": poiTypeSlot.resolved })}</p>`;
                     }
-                    else{
+                    else {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.SHOP_GENERAL)}</p>`;
                     }
 

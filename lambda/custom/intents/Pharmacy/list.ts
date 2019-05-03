@@ -66,6 +66,7 @@ export const PharmacyListHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.DISTRICT_LOCALIZED,
                 data: districtParams,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.DISTRICT_LOCALIZED]) => {
                     if (response.length) {
                         response = response.filter(district => {
@@ -137,6 +138,7 @@ export const PharmacyListHandler: RequestHandler = {
                     host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,
                     data: districtParams,
+                    auth: true,
                     onSuccess: (response: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED]) => {
                         if (response.length) {
                             response = response.filter(municipality => {
@@ -207,11 +209,12 @@ export const PharmacyListHandler: RequestHandler = {
         }
         else {
             // Get the events by coordinates when no specific district was telled
-            const accessToken = handlerInput.requestEnvelope.context.System.apiAccessToken;
-            const deviceId = handlerInput.requestEnvelope.context.System.device.deviceId;
-            const apiEndpoint = handlerInput.requestEnvelope.context.System.apiEndpoint;
+            const system = handlerInput.requestEnvelope.context.System;
+            const accessToken = system.apiAccessToken;
+            const apiEndpoint = system.apiEndpoint;
 
             if (accessToken !== undefined) {
+                const deviceId = system.device.deviceId;
                 const device = new AlexaDeviceAddressClient(apiEndpoint, deviceId, accessToken);
                 const address = await device.getFullAddress();
 
@@ -221,7 +224,7 @@ export const PharmacyListHandler: RequestHandler = {
                 }
             }
         }
-        
+
         if (periodSlot.value !== "") {
             // parse the amazon date to a valid date range
             const awsDate = AmazonDateParser(periodSlot.value);
@@ -269,12 +272,22 @@ export const PharmacyListHandler: RequestHandler = {
             host: ApiUrl,
             url: ApiCallTypes.POI_LOCALIZED,
             data,
+            auth: true,
             onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                 // If records exists
                 if (response.Items[0] !== null && response.Items.length) {
                     if (fromdate !== undefined || todate !== undefined) {
                         response = removeUnopenedPharmacies(response, new Date(fromdate), new Date(todate));
-                        if (response.Items.length) {
+                        if (data.locfilter !== undefined) {
+                            // If from- and todate are the same
+                            if (fromdate === todate) {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_SINGLE_DATE_WITH_DISTRICT, { "date": todateSpeech, "municipality": municipality.Name })}</p>`;
+                            }
+                            else {
+                                responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_MULTIPLE_DATES_WITH_DISTRICT, { "fromdate": fromdateSpeech, "todate": todateSpeech, "municipality": municipality.Name })}</p>`;
+                            }
+                        }
+                        else {
                             // If from- and todate are the same
                             if (fromdate === todate) {
                                 responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_SINGLE_DATE, { "date": todateSpeech })}</p>`;
@@ -283,18 +296,11 @@ export const PharmacyListHandler: RequestHandler = {
                                 responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_MSG_MULTIPLE_DATES, { "fromdate": fromdateSpeech, "todate": todateSpeech })}</p>`;
                             }
                         }
-                        else {
-                            responseSpeech = {
-                                speechText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                                promptText: t(TranslationTypes.NO_PHARMACIES_FOUND),
-                                status: HandlerResponseStatus.Failure
-                            }
-                        }
                     }
                     else if (data.locfilter !== undefined) {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_LOCATION, { "municipality": municipality.Name })}</p>`;
                     }
-                    else{
+                    else {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.PHARMACY_GENERAL)}</p>`;
                     }
 

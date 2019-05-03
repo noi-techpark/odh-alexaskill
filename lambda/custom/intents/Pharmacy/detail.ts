@@ -38,6 +38,7 @@ export const PharmacyDetailHandler: RequestHandler = {
                 host: ApiUrl,
                 url: ApiCallTypes.POI_LOCALIZED,
                 data,
+                auth: true,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.POI_LOCALIZED]) => {
                     // If records exists
                     if (response.Items[0] !== null && response.Items.length) {

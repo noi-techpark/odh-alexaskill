@@ -52,7 +52,9 @@ export enum TranslationTypes {
     GASTRONOMY_REPROMPT = "GASTRONOMY_REPROMPT",
     NO_GASTRONOMY_FOUND = "NO_GASTRONOMY_FOUND",
     PHARMACY_MSG_SINGLE_DATE = "PHARMACY_MSG_SINGLE_DATE",
+    PHARMACY_MSG_SINGLE_DATE_WITH_DISTRICT = "PHARMACY_MSG_SINGLE_DATE_WITH_DISTRICT",
     PHARMACY_MSG_MULTIPLE_DATES = "PHARMACY_MSG_MULTIPLE_DATES",
+    PHARMACY_MSG_MULTIPLE_DATES_WITH_DISTRICT = "PHARMACY_MSG_MULTIPLE_DATES_WITH_DISTRICT",
     PHARMACY_NO_OPENING_TIMES_AVAILABLE = "PHARMACY_NO_OPENING_TIMES_AVAILABLE",
     PHARMACY_REPROMPT = "PHARMACY_REPROMPT",
     PHARMACY_MORE_INFO = "PHARMACY_MORE_INFO",
@@ -102,9 +104,13 @@ export enum TranslationTypes {
 }
 
 export const ApiUrl = "https://tourism.opendatahub.bz.it/api/";
-export const AuthToken = "XAwGIjNcgN6TBXvB9gbFKCpETluUevq15KzSjh5Pw4rhmMGRHrZjcUdV9lyuJ0oz_jsmAM6iiwPzvUe01EIpAx7MLBZnzKcJKZ-jRLquZQUjqAnzCUANO1xpNHjs-coOxsQNHRo8XbpvWX1mwYXXkFyOHRpcfop5HhwLJA7E2b98kc-jzsXyLZefYxQdaohdRUlbX8ZShFgmW_jTw4ir0UqkhGv-wr46MOmFp7HkH3uwCL_Hf_ZTTs7B84YItb39ckCc6NfiDs0-dmIomMyOyIrsqUmb4qUHKB2OEo57D20RX2P9RSe_FQVzhmcgKCYZAsAct42Ae0gpV1kG4AxgTvOfG23T9ABx4tKLI6G4zpCuEatu9iQn_9H2yTxNc97XXC2Y14hsI3M6lB4TfHzfwpwQU9o2z2yqFT5oSiUXWVopSGf17B75sb5yA2vXkbplo6XrXMMNa8otlN2g0UOjop2MJS5-FEoH-yqFnVEIPxoW6DHnsPEP5sMGdzLfTBU5lanXhvqxiT0r0zwFp5DVqh3oORvd02YN2SbJn_FFfKc";
+export const ApiAuthentication = {
+    user: "ivan.sieder@simedia.com",
+    password: "R12yYExHaHkU!plKrn3"
+}
 
 export const ApiUrlChannel = "http://ipchannels.integreen-life.bz.it";
+export const ApiUrlGeoReverse = "https://nominatim.openstreetmap.org";
 
 export enum ApiCallTypes {
     EVENT_REDUCED = "EventReduced",
@@ -113,7 +119,8 @@ export enum ApiCallTypes {
     MUNICIPALITY_REDUCED = "MunicipalityReduced",
     POI_LOCALIZED = "PoiLocalized",
     GASTRONOMY_LOCALIZED = "GastronomyLocalized",
-    CAR_STATIONS = "/carsharing/rest/get-station-details"
+    CAR_STATIONS = "/carsharing/rest/get-station-details",
+    REVERSE_GEOCODING = "/reverse"
 }
 
 export enum HandlerResponseStatus {

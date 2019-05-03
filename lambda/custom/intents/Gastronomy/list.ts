@@ -98,6 +98,7 @@ export const GastronomyListHandler: RequestHandler = {
             await RouteGenerate({
                 host: ApiUrl,
                 url: ApiCallTypes.DISTRICT_LOCALIZED,
+                auth: true,
                 data: districtParams,
                 onSuccess: (response: IResponseApiStructure[ApiCallTypes.DISTRICT_LOCALIZED]) => {
                     if (response.length) {
@@ -169,6 +170,7 @@ export const GastronomyListHandler: RequestHandler = {
                 await RouteGenerate({
                     host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,
+                    auth: true,
                     data: districtParams,
                     onSuccess: (response: IResponseApiStructure[ApiCallTypes.MUNICIPALITY_REDUCED]) => {
                         if (response.length) {
@@ -242,7 +244,7 @@ export const GastronomyListHandler: RequestHandler = {
             // Get the events by coordinates when no specific district was telled
             const system = handlerInput.requestEnvelope.context.System;
             const accessToken = system.apiAccessToken;
-            
+
             const apiEndpoint = system.apiEndpoint;
 
             if (accessToken !== undefined && system.device !== undefined) {
@@ -265,6 +267,7 @@ export const GastronomyListHandler: RequestHandler = {
         await RouteGenerate({
             host: ApiUrl,
             url: ApiCallTypes.GASTRONOMY_LOCALIZED,
+            auth: true,
             data,
             onSuccess: (response: IResponseApiStructure[ApiCallTypes.GASTRONOMY_LOCALIZED]) => {
                 // If records exists
@@ -275,11 +278,8 @@ export const GastronomyListHandler: RequestHandler = {
                     }).join(", "), t);
 
                     if (data.cuisinecodefilter !== undefined || data.facilitycodefilter !== undefined) {
-                        console.log("Type"+ JSON.stringify(gastronomyTypeSlot));
-                        console.log("municipality"+ JSON.stringify(municipality));
-                        console.log("ceremonyTypeSlot"+ JSON.stringify(ceremonyTypeSlot));
                         if (data.locfilter !== undefined && data.ceremonycodefilter !== undefined) {
-                            responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_TYPE_WITH_MUNICIPALITY_AND_CEREMONY, { "type": gastronomyTypeSlot.resolved, "municipality": municipality.Name,  "ceremony": ceremonyTypeSlot.resolved })}</p>`;
+                            responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_TYPE_WITH_MUNICIPALITY_AND_CEREMONY, { "type": gastronomyTypeSlot.resolved, "municipality": municipality.Name, "ceremony": ceremonyTypeSlot.resolved })}</p>`;
                         }
                         else if (data.locfilter !== undefined) {
                             responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_TYPE_WITH_MUNICIPALITY, { "type": gastronomyTypeSlot.resolved, "municipality": municipality.Name })}</p>`;
@@ -297,7 +297,7 @@ export const GastronomyListHandler: RequestHandler = {
                     else if (data.ceremonycodefilter !== undefined) {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_CEREMONY, { "ceremony": ceremonyTypeSlot.resolved })}</p>`;
                     }
-                    else{
+                    else {
                         responseSpeech.speechText = `<p>${t(TranslationTypes.GASTRONOMY_GENERAL)}</p>`;
                     }
 
