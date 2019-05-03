@@ -23,7 +23,7 @@
             "codeUri": "dist/custom",
             "functionName": "ask-odh-voice-assistant",
             "handler": "index.handler",
-            "revisionId": "8347f2d9-d647-42f9-9f82-4a9aa2dd4462",
+            "revisionId": "b9286a35-e382-49cd-b02a-d619431835e4",
             "runtime": "nodejs8.10"
           }
         ]

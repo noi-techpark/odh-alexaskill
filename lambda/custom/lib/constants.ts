@@ -1,3 +1,6 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+
 export enum RequestTypes {
     Launch = "LaunchRequest",
     Intent = "IntentRequest",
@@ -104,9 +107,10 @@ export enum TranslationTypes {
 }
 
 export const ApiUrl = "https://tourism.opendatahub.bz.it/api/";
+
 export const ApiAuthentication = {
-    user: "ivan.sieder@simedia.com",
-    password: "R12yYExHaHkU!plKrn3"
+    user: process.env.API_USERNAME,
+    password: process.env.API_PASSWORD
 }
 
 export const ApiUrlChannel = "http://ipchannels.integreen-life.bz.it";

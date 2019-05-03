@@ -9,10 +9,12 @@
   "author": "IDM Südtirol",
   "license": "MIT",
   "dependencies": {
+    "@types/dotenv": "^6.1.1",
     "amazon-date-parser": "^0.2.0",
     "ask-sdk-core": "^2.3.0",
     "ask-sdk-model": "^1.11.2",
     "date-and-time": "^0.6.3",
+    "dotenv": "^8.0.0",
     "es6-promise": "^4.2.6",
     "i18next": "^11.3.5",
     "i18next-sprintf-postprocessor": "^0.2.2",
