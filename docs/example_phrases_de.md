@@ -83,22 +83,22 @@
   
 ## Shops
 
--Welche Shops es für {poiType} gibt
--Welche Geschäfte es für {poiType} gibt
--Welche Shops gibt für {poiType}
--Welche Geschäfte haben {period} geöffnet
--Welche Shops gibt es in {district} für {poiType}
--Welche Shops gibt es in {district} mit {poiType}
--Schlag mir Shops vor wo es {poiType} gibt
--In welchen Geschäften gibt es {poiType}
--Welche Shops gibt es in {district}
--Welche Geschäfte haben {period} in {district} geöffnet
--Welche Geschäfte haben von {fromdate} bis {todate} in {district} geöffnet
--Welche Shops haben von {fromdate} bis {todate} in {district} geöffnet
--Welche Shops haben {period} in {district} geöffnet
--Welche Geschäfte gibt es in {district}
--Welche Shops haben {period} geöffnet
--Welche Geschäfte sind in meiner Nähe (funktioniert nur wenn die Berechtigung erteilt worden ist)
+- Welche Shops es für {poiType} gibt
+- Welche Geschäfte es für {poiType} gibt
+- Welche Shops gibt für {poiType}
+- Welche Geschäfte haben {period} geöffnet
+- Welche Shops gibt es in {district} für {poiType}
+- Welche Shops gibt es in {district} mit {poiType}
+- Schlag mir Shops vor wo es {poiType} gibt
+- In welchen Geschäften gibt es {poiType}
+- Welche Shops gibt es in {district}
+- Welche Geschäfte haben {period} in {district} geöffnet
+- Welche Geschäfte haben von {fromdate} bis {todate} in {district} geöffnet
+- Welche Shops haben von {fromdate} bis {todate} in {district} geöffnet
+- Welche Shops haben {period} in {district} geöffnet
+- Welche Geschäfte gibt es in {district}
+- Welche Shops haben {period} geöffnet
+- Welche Geschäfte sind in meiner Nähe (funktioniert nur wenn die Berechtigung erteilt worden ist)
 - Welche Shops haben von {fromdate} bis {todate} geöffnet
   
 | key |values|
