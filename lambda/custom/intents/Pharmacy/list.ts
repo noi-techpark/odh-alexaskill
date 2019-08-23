@@ -134,6 +134,11 @@ export const PharmacyListHandler: RequestHandler = {
 
             // If a municipality was found
             if (district_id !== "") {
+                console.log({
+                    host: ApiUrl,
+                    url: ApiCallTypes.MUNICIPALITY_REDUCED,
+                    data: districtParams,
+                })
                 await RouteGenerate({
                     host: ApiUrl,
                     url: ApiCallTypes.MUNICIPALITY_REDUCED,

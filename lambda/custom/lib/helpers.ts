@@ -263,7 +263,7 @@ const getToken = async () => {
     // @ts-ignore
     authToken = response.access_token;
 
-    console.log("API TOKEN generated" + authToken);
+    console.info("API TOKEN generated " + authToken);
 }
 
 /**
