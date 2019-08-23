@@ -18,8 +18,8 @@
 - Welche Events sind von {fromdate} bis {todate}
 - Welche Events sind am {period}
 - Welche Events sind {period}
-- Welche Veranstaltungen sind in meiner Nähe (funktioniert nur wenn die - Berechtigung erteilt worden ist)
-- Welche Events sind in meiner Nähe (funktioniert nur wenn die Berechtigung erteilt worden ist)
+- Welche Veranstaltungen sind in meiner Nähe (is only working when the permission for the poi localization is granted)
+- Welche Events sind in meiner Nähe (is only working when the permission for the poi localization is granted)
 
 | key |values|
 |:--|:--|
@@ -98,7 +98,7 @@
 - Welche Shops haben {period} in {district} geöffnet
 - Welche Geschäfte gibt es in {district}
 - Welche Shops haben {period} geöffnet
-- Welche Geschäfte sind in meiner Nähe (funktioniert nur wenn die Berechtigung erteilt worden ist)
+- Welche Geschäfte sind in meiner Nähe (is only working when the permission for the poi localization is granted)
 - Welche Shops haben von {fromdate} bis {todate} geöffnet
   
 | key |values|
@@ -115,11 +115,11 @@
 - Welche Car Sharing Angebote findest du in {city}
 - Welche Car Sharing Angebote kannst du finden
 - Welche Car Sharing Angebote sind in {city}
-- Welche Car Sharing Angebote sind in meiner Nähe (funktioniert nur wenn die Berechtigung erteilt worden ist)
+- Welche Car Sharing Angebote sind in meiner Nähe (is only working when the permission for the poi localization is granted)
 
 | key |values|
 |:--|:--|
-| city| Meran, Bozen, Bruneck, Toblach usw… (Die GPS Koordinaten des gesagten Ortes werden ermittelt und im Anschluss werden die Car Sharing Orte sortiert nach der Distanz zu diesem Ort)|
+| city| Meran, Bozen, Bruneck, Toblach usw… (The gps coordinates from the location are determined and then the car sharing locations are sorted by the distance to this location.)|
 
 &nbsp;
 **If you would like to receive further suggestions to the entries, it is sufficient to reply with the following words "Mehr, Weitere, Mehr Events, Mehr Shops…"**
